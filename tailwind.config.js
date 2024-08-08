@@ -5,8 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        KoHo: ["KoHo", "sans-serif"],
+      }
+    },
   },
-  plugins: [],
+  plugins: ["prettier-plugin-tailwindcss"],
 }
 
