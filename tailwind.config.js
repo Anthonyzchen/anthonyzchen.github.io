@@ -8,6 +8,9 @@ export default {
     extend: {
       fontFamily: {
         KoHo: ["KoHo", "sans-serif"],
+      },
+      backgroundImage: {
+        'painting': "url('/src/assets/images/background.png')",
       }
     },
   },
