@@ -22,9 +22,9 @@ export default function App() {
   return (
     <div className="relative">
       <div id="preloader" className="absolute left-0 top-0 z-10 flex h-screen w-full flex-col gap-10 bg-gray-50 p-10 font-KoHo tracking-tight">
-        <h1 className="text-9xl" id="">Software Engineer</h1>
-        <h1 className="text-9xl">Welcome to my page</h1>
-        <h1 className="text-9xl">Software Engineer</h1>
+        {/* <h1 className="text-9xl" id="title-1">陳兆偉</h1> */}
+        <h1 className="text-9xl" id="title-1">Software Engineer</h1>
+        <h1 className="text-xs" id="title-2">Welcome to my page</h1>
       </div>
       <div className="flex h-screen place-items-center justify-center bg-gray-950">
         <div className="font-KoHo text-9xl font-bold text-gray-100">
