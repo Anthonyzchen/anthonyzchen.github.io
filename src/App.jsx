@@ -7,6 +7,9 @@ import {
 } from "react-router-dom";
 import gsap from "gsap";
 import Home from "./components/pages/Home";
+import { progressAnimation, exitAnimation, heroAnimation } from "./components/animations/animations";
+
+import Preloader from "./components/organisms/Preloader";
 
 export default function App() {
   // Creates a reference to the root level element, for scoping
@@ -20,33 +23,11 @@ export default function App() {
     let ctx = gsap.context(() => {
       // Gsap timeline helps sequence complex animations without dealing with animation timings.
       const tl = gsap.timeline();
-      tl.from("#title-1", {
-        opacity: "0",
-        y: "+=30",
-      })
-        .from("#title-2", {
-          opacity: "0",
-          y: "+=30",
-        })
-        .to("#title-1", {
-          opacity: "0",
-          y: "-=30",
-          delay: 0.3,
-        })
-        .to("#title-2", {
-          opacity: "0",
-          y: "-=30",
-          delay: 0.3,
-        })
-        .to("#preloader", {
-          yPercent: "-100",
-          duration: 1.3,
-          delay: 0.3,
-        })
-        .from("#welcome", {
-          opacity: "0",
-          duration: 0.5,
-        });
+
+      // Add the progress animation to the timeline.
+      tl.add(progressAnimation);
+
+
     }, comp);
 
     // When the effect function is about to be unmounted or cleaned up, revert all animations. (to prevent memory leaks, etc.)
@@ -58,7 +39,7 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/about" element={<About />} /> */}
+          <Route path="/Preloader" element={<Preloader />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
