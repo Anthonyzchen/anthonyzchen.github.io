@@ -6,15 +6,15 @@ const Home = () => {
   return (
     <>
       <Preloader />
-      <div className="bg-painting flex h-screen flex-col items-center justify-center bg-cover">
+      <div className="bg-painting flex h-screen w-full flex-col items-center justify-center bg-cover">
         <div
           id="welcome"
           className="flex flex-grow items-center font-KoHo text-9xl font-bold text-gray-100"
         >
           Welcome.
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 };

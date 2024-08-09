@@ -1,7 +1,11 @@
 import { useLayoutEffect, useRef } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import gsap from "gsap";
-import Footer from "./components/organisms/Footer";
-import Preloader from "./components/organisms/Preloader";
 import Home from "./components/pages/Home";
 
 export default function App() {
@@ -51,7 +55,13 @@ export default function App() {
 
   return (
     <div className="relative" ref={comp}>
-      <Home />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/about" element={<About />} /> */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

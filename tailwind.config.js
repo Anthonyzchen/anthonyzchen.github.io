@@ -11,6 +11,10 @@ export default {
       },
       backgroundImage: {
         'painting': "url('/src/assets/images/background.png')",
+      },
+      colors: {
+        'beige': '#E2D7BB',
+        'brown': '#564E41'
       }
     },
   },
