@@ -27,7 +27,6 @@ export default function App() {
       // Add the progress animation to the timeline.
       tl.add(progressAnimation);
 
-
     }, comp);
 
     // When the effect function is about to be unmounted or cleaned up, revert all animations. (to prevent memory leaks, etc.)
