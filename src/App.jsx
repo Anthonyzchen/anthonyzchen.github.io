@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,21 +10,16 @@ import Home from "./components/pages/Home";
 import Preloader from "./components/organisms/Preloader";
 
 export default function App() {
-  // Creates a reference to the root level element, for scoping
-  const comp = useRef(null);
-
   // State to keep track of the loader.
   const [loaderFinished, setLoaderFinished] = useState(false);
 
   // State to keep track of the timeline.
   const [timeline, setTimeline] = useState(null);
 
-  // Fires after all the DOM mutations have been done.
-  // The function passed into useLayoutEffect will run once after the component mounts and once again after it unmounts due to the empty dependency array.
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Record all gsap animations that are setup during the context execution for easy cleanup.
     // comp is used here for scoping, so that all the animations we create only affect children of the comp.
-    let ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       // Gsap timeline helps sequence complex animations without dealing with animation timings.
       const tl = gsap.timeline({
         onComplete: () =>
@@ -34,14 +29,14 @@ export default function App() {
 
       // Master timeline so animations can be within their own context.
       setTimeline(tl);
-    }, comp);
+    });
 
     // When the effect function is about to be unmounted or cleaned up, revert all animations. (to prevent memory leaks, etc.)
     return () => ctx.revert();
   }, []);
 
   return (
-    <div className="relative" ref={comp}>
+    <main>
       <Router>
         <Routes>
           <Route
@@ -54,9 +49,13 @@ export default function App() {
             path="/Preloader"
             element={<Preloader timeline={timeline} />}
           />
+          <Route
+            path="/Home"
+            element={<Home />}
+          />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
-    </div>
+    </main>
   );
 }
