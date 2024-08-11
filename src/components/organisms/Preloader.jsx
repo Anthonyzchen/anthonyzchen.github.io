@@ -1,25 +1,57 @@
-import React from "react";
+import React, { useEffect } from "react";
+import {
+  counterAnimation,
+  progressAnimation,
+  progressTextAnimation
+} from "../animations/animations";
+import { col1, col2, col3 } from "../../assets/counterData";
 
-const Preloader = () => {
+const Preloader = ({ timeline }) => {
+  useEffect(() => {
+    timeline && timeline.add(counterAnimation()).add(progressTextAnimation(), 0).add(progressAnimation(), 0);
+  }, [timeline]);
   return (
     <div
       id="preloader"
-      className="bg-beige text-brown absolute z-10 flex h-screen w-full flex-col items-center justify-between gap-10 font-KoHo tracking-tight"
+      className="absolute z-10 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige font-KoHo tracking-tight text-brown"
     >
       <div className="flex flex-grow items-center justify-center">
-        <h1 className="text-9xl" id="counter">
-          0 0 0
-        </h1>
-        {/* <h1 className="text-9xl" id="title-1">
-          陳兆偉
-        </h1> */}
+        <div className="flex flex-row h-32 overflow-hidden">
+          <div className="flex flex-col items-center" id="counter">
+            {col1.map((n, i) => {
+              return (
+                <span key={i} className="text-9xl">
+                  {n + " "}
+                </span>
+              );
+            })}
+          </div>
+          <div className="flex flex-col items-center" id="counter">
+            {col2.map((n, i) => {
+              return (
+                <span key={i} className="text-9xl">
+                  {n + " "}
+                </span>
+              );
+            })}
+          </div>
+          <div className="flex flex-col items-center" id="counter">
+            {col3.map((n, i) => {
+              return (
+                <span key={i} className="text-9xl">
+                  {n + " "}
+                </span>
+              );
+            })}
+          </div>
+        </div>
       </div>
       <div className="w-full">
-        <h1 className="mb-4 flex justify-center text-base" id="title-2">
+        <h1 className="relative mb-4 flex justify-center text-base" id="progress-text">
           Welcome to my page
         </h1>
         <div
-          className="bg-brown h-1 w-full origin-left scale-x-0"
+          className="h-1 w-full origin-left scale-x-0 bg-brown"
           id="progress"
         ></div>
       </div>

@@ -1,11 +1,9 @@
 import React from "react";
-import Preloader from "../organisms/Preloader";
 import Footer from "../organisms/Footer";
 
 const Home = () => {
   return (
     <>
-      <Preloader />
       <div className="bg-painting flex h-screen w-full flex-col items-center justify-center bg-cover">
         <div
           id="welcome"

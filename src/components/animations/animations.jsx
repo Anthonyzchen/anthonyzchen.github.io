@@ -1,27 +1,33 @@
 import { gsap } from "gsap";
 
-export const preloaderAnimation = () => {
+// Preloader Animations
+export const counterAnimation = () => {
   const tl = gsap.timeline();
 
-  tl.from("#counter", {
-    opacity: "0",
-    y: "+=30",
+  tl.to("#counter", {
+    yPercent: -10000,
+    duration: 5,
+    ease: "expo.inOut",
+  }).to("#counter", {
+    yPercent: -10100,
+    duration: 1,
   });
 
   return tl;
 };
-// tl.from("#counter", {
-//   opacity: "0",
-//   y: "+=30",
-// })
-//   .from("#title-1", {
-//     opacity: "0",
-//     y: "+=30",
-//   })
-//   .from("#title-2", {
-//     opacity: "0",
-//     y: "+=30",
-//   })
+
+export const progressTextAnimation = () => {
+  const tl = gsap.timeline();
+
+  tl.to("#progress-text", {
+    opacity: 1,
+    y: "-=30",
+    duration: 1,
+    ease: "power1.out",
+  });
+
+  return tl;
+};
 
 export const progressAnimation = () => {
   const tl = gsap.timeline();
@@ -35,7 +41,7 @@ export const progressAnimation = () => {
   return tl;
 };
 
-export const exitAnimation = () => {
+export const preloaderExitAnimations = () => {
   const tl = gsap.timeline();
 
   tl.to("#title-1", {
@@ -57,13 +63,14 @@ export const exitAnimation = () => {
   return tl;
 };
 
+// Hero Animations
 export const heroAnimation = () => {
-    const tl = gsap.timeline();
-  
-    tl.from("#welcome", {
-        opacity: "0",
-        duration: 0.5,
-      });
-  
-    return tl;
-  };
+  const tl = gsap.timeline();
+
+  tl.from("#welcome", {
+    opacity: "0",
+    duration: 0.5,
+  });
+
+  return tl;
+};
