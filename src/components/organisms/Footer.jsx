@@ -2,17 +2,20 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer id="footer" className="bg-beige text-brown w-full px-8 font-KoHo">
-      <div id="ft_top" className="flex place-content-between border-b-4 py-3">
-        <div id="ft-info" className="flex space-x-8">
-          <div id="ft_region">
+    <footer className="flex h-screen w-full flex-col bg-beige px-8 font-KoHo text-brown">
+      <div className="flex flex-grow items-center justify-center">
+        placeholder
+      </div>
+      <div className="flex place-content-between border-b-2 border-brown py-2">
+        <div className="flex space-x-8">
+          <div>
             <p>
               Boston, United States
               <br />
               New York, United States
             </p>
           </div>
-          <div id="ft_contact">
+          <div>
             <p>
               anthonyzchen@yahoo.com
               <br />
@@ -20,7 +23,7 @@ const Footer = () => {
             </p>
           </div>
         </div>
-        <div id="ft_socials" className="place-content-center">
+        <div className="place-content-center">
           <ul className="space-x-3">
             <a href="https://www.facebook.com/anthonyzchen.03" target="_blank">
               <button>
@@ -53,7 +56,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div id="ft_bottom" className="flex place-content-between pt-4">
+      <div className="flex place-content-between py-2">
         <div id="copyright">
           <span>&#169;</span>2024 anthonyzchen
         </div>

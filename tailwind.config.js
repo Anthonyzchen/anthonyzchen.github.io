@@ -14,7 +14,8 @@ export default {
       },
       colors: {
         'beige': '#E2D7BB',
-        'brown': '#564E41'
+        'brown': '#564E41',
+        'transparent-beige': '#E2D7BB7A',
       }
     },
   },
