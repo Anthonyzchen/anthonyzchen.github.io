@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import gsap from "gsap";
 import Home from "./components/pages/Home";
-import Hero from "./components/organisms/Hero";
 import Preloader from "./components/organisms/Preloader";
 import Navbar from "./components/organisms/Navbar";
 
@@ -41,17 +40,8 @@ export default function App() {
     <main>
       <Router>
         <Routes>
-          <Route
-            path="/"
-            element={
-              loaderFinished ? <Home /> : <Preloader timeline={timeline} />
-            }
-          />
-          <Route
-            path="/preloader"
-            element={<Preloader timeline={timeline} />}
-          />
-          <Route path="/hero" element={<Hero />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/preloader" element={<Preloader />} />
           <Route path="/nav" element={<Navbar />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

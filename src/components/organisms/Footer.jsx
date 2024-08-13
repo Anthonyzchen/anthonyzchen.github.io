@@ -25,34 +25,36 @@ const Footer = () => {
         </div>
         <div className="place-content-center">
           <ul className="space-x-3">
-            <a href="https://www.facebook.com/anthonyzchen.03" target="_blank">
-              <button>
-                <i className="fa-brands fa-facebook"></i>
-              </button>
-            </a>
-            <a href="https://github.com/Anzchen" target="_blank">
-              <button>
-                <i className="fa-brands fa-github"></i>
-              </button>
-            </a>
-            <a href="https://www.instagram.com/anthonyzchen/" target="_blank">
-              <button>
-                <i className="fa-brands fa-instagram"></i>
-              </button>
-            </a>
-            <a href="https://www.linkedin.com/in/anthonyzchen/" target="_blank">
-              <button>
-                <i className="fa-brands fa-linkedin"></i>
-              </button>
-            </a>
-            <a
-              href="https://open.spotify.com/user/22bsi2i6c5v3vpb2uoxuias2a"
-              target="_blank"
-            >
-              <button>
-                <i className="fa-brands fa-spotify"></i>
-              </button>
-            </a>
+            {[
+              {
+                href: "https://www.facebook.com/anthonyzchen.03",
+                icon: "fa-facebook",
+              },
+              { href: "https://github.com/Anzchen", icon: "fa-github" },
+              {
+                href: "https://www.instagram.com/anthonyzchen/",
+                icon: "fa-instagram",
+              },
+              {
+                href: "https://www.linkedin.com/in/anthonyzchen/",
+                icon: "fa-linkedin",
+              },
+              {
+                href: "https://open.spotify.com/user/22bsi2i6c5v3vpb2uoxuias2a",
+                icon: "fa-spotify",
+              },
+            ].map(({ href, icon }) => (
+              <a
+                key={icon}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button>
+                  <i className={`fa-brands ${icon}`}></i>
+                </button>
+              </a>
+            ))}
           </ul>
         </div>
       </div>

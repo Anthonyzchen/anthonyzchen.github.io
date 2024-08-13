@@ -1,13 +1,8 @@
 import { gsap } from "gsap";
 
 // Preloader Animations
-export const counterAnimation = (counterRef1, counterRef2, counterRef3) => {
-  // Collect all counter references into an array
-  const counters = [
-    counterRef1.current,
-    counterRef2.current,
-    counterRef3.current,
-  ];
+export const counterAnimation = (counterRefs) => {
+  const counters = counterRefs.map((ref) => ref.current);
 
   return gsap
     .timeline()
@@ -61,45 +56,97 @@ export const progressAnimation = (progressRef) => {
 };
 
 export const preloaderExitAnimations = (
-  counterRef1,
-  counterRef2,
-  counterRef3,
+  counterRefs,
   progressTextRef,
   progressRef,
   preloaderRef,
 ) => {
-  // Collect all counter references into an array
-  const counters = [
-    counterRef1.current,
-    counterRef2.current,
-    counterRef3.current,
-  ];
+  const counters = counterRefs.map((ref) => ref.current);
+
+  const fadeOut = (target, delay = 0.3) => ({
+    opacity: 0,
+    y: "-=30",
+    delay,
+    ease: "power1.out",
+  });
 
   return gsap
     .timeline()
-    .to(counters, {
-      opacity: "0",
-      y: "-=30",
-      delay: 0.3,
-      ease: "power1.out",
-    })
-    .to(progressTextRef.current, {
-      opacity: "0",
-      y: "-=30",
-      delay: 0.3,
-      ease: "power1.out",
-    })
-    .to(progressRef.current, {
-      opacity: "0",
-      delay: 0.3,
-      ease: "power1.out",
-    })
+    .to(counters, fadeOut(counters))
+    .to(progressTextRef.current, fadeOut(progressTextRef.current))
+    .to(progressRef.current, fadeOut(progressRef.current))
     .to(preloaderRef.current, {
       yPercent: "-100",
       duration: 1.3,
       delay: 0.3,
       ease: "power1.out",
     });
+};
+
+// Navbar Animations
+export const createMenuAnimation = () => {
+  return gsap
+    .timeline({ paused: true })
+    .to(
+      ".menuLine1",
+      {
+        attr: { d: "M8,2 L2,8" },
+        x: 1,
+        duration: 1,
+        ease: "power2.inOut",
+      },
+      "start",
+    )
+    .to(
+      ".menuLine2",
+      {
+        autoAlpha: 0,
+        duration: 0.5,
+      },
+      "start",
+    )
+    .to(
+      ".menuLine3",
+      {
+        attr: { d: "M8,8 L2,2" },
+        x: 1,
+        duration: 1,
+        ease: "power2.inOut",
+      },
+      "start",
+    );
+};
+
+export const createMenuBackgroundAnimation = (
+  openedMenuRef,
+  openedMenuBGRef,
+  menuLinkRefs,
+) => {
+  const links = menuLinkRefs.map((ref) => ref.current);
+
+  return gsap
+    .timeline({ paused: true })
+    .to(openedMenuRef.current, {
+      display: "block",
+      duration: 0,
+      ease: "expo.inOut",
+    })
+    .from(openedMenuBGRef.current, {
+      duration: 1,
+      autoAlpha: 0,
+      ease: "expo.inOut",
+    })
+    .from(
+      links,
+      {
+        duration: 0.5,
+        yPercent: 100,
+        rotateY: 30,
+        stagger: 0.2,
+        ease: "expo.inOut",
+      },
+      "-=0.5"
+    );
 };
 
 // Hero Animations
