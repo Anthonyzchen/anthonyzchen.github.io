@@ -11,30 +11,6 @@ import Preloader from "./components/organisms/Preloader";
 import Navbar from "./components/organisms/Navbar";
 
 export default function App() {
-  // State to keep track of the loader.
-  const [loaderFinished, setLoaderFinished] = useState(false);
-
-  // State to keep track of the timeline.
-  const [timeline, setTimeline] = useState(null);
-
-  useEffect(() => {
-    // Record all gsap animations that are setup during the context execution for easy cleanup.
-    // comp is used here for scoping, so that all the animations we create only affect children of the comp.
-    const ctx = gsap.context(() => {
-      // Gsap timeline helps sequence complex animations without dealing with animation timings.
-      const tl = gsap.timeline({
-        onComplete: () =>
-          // When the timeline is complete, set the loaderFinished state to true.
-          setLoaderFinished(true),
-      });
-
-      // Master timeline so animations can be within their own context.
-      setTimeline(tl);
-    });
-
-    // When the effect function is about to be unmounted or cleaned up, revert all animations. (to prevent memory leaks, etc.)
-    return () => ctx.revert();
-  }, []);
 
   return (
     <main>
