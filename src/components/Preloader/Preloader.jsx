@@ -40,7 +40,7 @@ const Preloader = () => {
   // Helper function to render counter column items
   const renderCounterColumn = (colData) =>
     colData.map((c, i) => (
-      <span key={i} className="text-9xl">
+      <span key={i} className="text-8xl sm:text-9xl">
         {c + " "}
       </span>
     ));
@@ -49,7 +49,7 @@ const Preloader = () => {
     <div ref={preloaderRef}>
       <div className="preloader absolute z-20 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight text-brown">
         <div className="flex flex-grow items-center justify-center">
-          <div className="flex h-32 flex-row overflow-hidden">
+          <div className="flex h-24 sm:h-32 flex-row overflow-hidden">
             {[col1, col2, col3].map((colData, index) => (
               <div key={index} className="counter flex flex-col items-center">
                 {renderCounterColumn(colData)}

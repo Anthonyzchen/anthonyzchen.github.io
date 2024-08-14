@@ -76,7 +76,7 @@ const Navbar = () => {
                 (text, index) => (
                   <li key={index} className="mt-7 overflow-hidden">
                     <Link
-                      className={`openedMenuLink inline-block text-8xl font-bold uppercase tracking-wider`}
+                      className={`openedMenuLink inline-block text-6xl sm:text-8xl font-bold uppercase tracking-tight sm:tracking-wider`}
                       to={`/${text.toLowerCase()}`}
                       onClick={handleLinkClick}
                     >
