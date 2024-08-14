@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
@@ -16,17 +16,26 @@ const Preloader = () => {
   // Refs to store GSAP timelines
   const preloaderTL = useRef();
 
+  // Initialize animations
   useGSAP(
     () => {
       preloaderTL.current = gsap
         .timeline()
         .add(createCounterAnimation(), "start")
         .add(createProgressTextAnimation(), "<")
-        .add(createProgressBarAnimation(), "<")
-        .add(createPreloaderExitAnimations());
+        .add(createProgressBarAnimation(), "<");
     },
-    { scope: preloaderRef },
+    { scope: preloaderRef }
   );
+
+  // Add exit animations and remove preloader after DOM is fully loaded
+  useEffect(() => {
+    window.addEventListener("load", () => {
+      preloaderTL.current.add(createPreloaderExitAnimations()).eventCallback("onComplete", () => {
+        preloaderRef.current.style.display = "none";
+      });
+    });
+  }, []);
 
   // Helper function to render counter column items
   const renderCounterColumn = (colData) =>

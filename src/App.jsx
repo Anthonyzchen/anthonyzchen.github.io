@@ -4,19 +4,22 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Home from "./components/pages/Home";
-import Preloader from "./components/organisms/Preloader";
-import Navbar from "./components/organisms/Navbar";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import PageLayout from "./pages/pagelayout";
 
 export default function App() {
   return (
     <main>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/preloader" element={<Preloader />} />
-          <Route path="/nav" element={<Navbar />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route element={<PageLayout />}>
+            <Route path="/" element={<Home />} />
+            {/* <Route path="/preloader" element={<Preloader />} /> */}
+            {/* <Route path="/nav" element={<Navbar />} /> */}
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Route>
         </Routes>
       </Router>
     </main>

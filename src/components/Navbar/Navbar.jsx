@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import gsap from "gsap";
 import {
   createMenuAnimation,
   createMenuBackgroundAnimation,
-} from "../animations/animations";
+} from "./animations";
 import { useGSAP } from "@gsap/react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   // Create a ref to scope the GSAP animations within this component
@@ -28,6 +29,12 @@ const Navbar = () => {
   // Function to toggle the menu state
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Function to handle link clicks
+  const handleLinkClick = () => {
+    window.scroll(0, 0);
+    toggleMenu();
   };
 
   // Effect to play or reverse animations based on the menu state
@@ -62,18 +69,19 @@ const Navbar = () => {
 
       <section className="openedMenu fixed h-screen w-full font-KoHo text-brown">
         <div className="flex h-screen items-center justify-center">
-          <div className="openedMenuBackground bg-transparent-beige absolute h-screen w-full backdrop-blur-sm" />
+          <div className="openedMenuBackground absolute h-screen w-full bg-transparent-beige backdrop-blur-sm" />
           <nav className="relative text-center">
             <ul>
               {["Home", "About", "Projects", "Blog", "Contact"].map(
                 (text, index) => (
                   <li key={index} className="mt-7 overflow-hidden">
-                    <a
+                    <Link
                       className={`openedMenuLink inline-block text-8xl font-bold uppercase tracking-wider`}
-                      href=""
+                      to={`/${text.toLowerCase()}`}
+                      onClick={handleLinkClick}
                     >
                       <span>{text}</span>
-                    </a>
+                    </Link>
                   </li>
                 ),
               )}

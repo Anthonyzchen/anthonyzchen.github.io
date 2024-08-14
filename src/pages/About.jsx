@@ -2,12 +2,12 @@ import React from "react";
 import Hero from "../components/Hero/Hero";
 import Footer from "../components/Footer/Footer";
 
-const Home = () => {
+const About = () => {
   return (
     <>
       <Hero />
-      <div> Home </div>
+      <div> About </div>
     </>
   );
 };
-export default Home;
+export default About;
