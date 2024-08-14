@@ -6,7 +6,7 @@ import {
   createProgressTextAnimation,
   createProgressBarAnimation,
   createPreloaderExitAnimations,
-} from "../animations/animations";
+} from "./animations";
 import { col1, col2, col3 } from "../../assets/counterData";
 
 const Preloader = () => {

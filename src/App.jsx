@@ -1,17 +1,14 @@
-import { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import gsap from "gsap";
 import Home from "./components/pages/Home";
 import Preloader from "./components/organisms/Preloader";
 import Navbar from "./components/organisms/Navbar";
 
 export default function App() {
-
   return (
     <main>
       <Router>
