@@ -52,7 +52,7 @@ const Navbar = () => {
     <div ref={navbarRef}>
       <header className="fixed z-10 flex w-full items-center justify-between bg-beige px-8 py-4">
         <button className="cursor-pointer">
-          <img className="h-16" src="/blob/main/src/assets/images/logo.png" alt="logo" />
+          <img className="h-16" src="src/assets/images/logo.png" alt="logo" />
         </button>
 
         <button className="cursor-pointer" onClick={toggleMenu}>
