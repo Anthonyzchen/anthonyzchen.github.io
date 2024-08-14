@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import PageLayout from "./pages/pagelayout";
+import PageLayout from "./pages/PageLayout1";
 
 export default function App() {
   return (

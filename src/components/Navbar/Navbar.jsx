@@ -67,7 +67,7 @@ const Navbar = () => {
         </button>
       </header>
 
-      <section className="openedMenu fixed h-screen w-full font-KoHo text-brown">
+      <section className="openedMenu fixed h-screen w-full text-brown">
         <div className="flex h-screen items-center justify-center">
           <div className="openedMenuBackground absolute h-screen w-full bg-transparent-beige backdrop-blur-sm" />
           <nav className="relative text-center">

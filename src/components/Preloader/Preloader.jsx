@@ -47,7 +47,7 @@ const Preloader = () => {
 
   return (
     <div ref={preloaderRef}>
-      <div className="preloader absolute z-20 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige font-KoHo tracking-tight text-brown">
+      <div className="preloader absolute z-20 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight text-brown">
         <div className="flex flex-grow items-center justify-center">
           <div className="flex h-32 flex-row overflow-hidden">
             {[col1, col2, col3].map((colData, index) => (

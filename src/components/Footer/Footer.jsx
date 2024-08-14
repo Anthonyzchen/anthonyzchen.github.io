@@ -2,12 +2,12 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="flex h-screen w-full flex-col bg-beige px-8 font-KoHo text-brown">
+    <footer className="flex h-screen w-full flex-col bg-beige px-8 text-brown">
       <div className="flex flex-grow items-center justify-center">
         placeholder
       </div>
-      <div className="flex place-content-between border-b-2 border-brown py-2">
-        <div className="flex space-x-8">
+      <div className="flex flex-col justify-between border-b-2 border-brown py-2 sm:flex-row">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-8 sm:space-y-0">
           <div>
             <p>
               Boston, United States
@@ -23,7 +23,7 @@ const Footer = () => {
             </p>
           </div>
         </div>
-        <div className="place-content-center">
+        <div className="mt-4 flex items-center justify-start sm:mt-0 sm:justify-center">
           <ul className="space-x-3">
             {[
               {
@@ -58,7 +58,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div className="flex place-content-between py-2">
+      <div className="flex flex-col justify-between py-2 sm:flex-row">
         <div id="copyright">
           <span>&#169;</span>2024 anthonyzchen
         </div>
