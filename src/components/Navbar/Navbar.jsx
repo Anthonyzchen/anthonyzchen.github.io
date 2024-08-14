@@ -6,6 +6,7 @@ import {
 } from "./animations";
 import { useGSAP } from "@gsap/react";
 import { Link } from "react-router-dom";
+import logoUrl from "../../assets/images/logo.png";
 
 const Navbar = () => {
   // Create a ref to scope the GSAP animations within this component
@@ -52,7 +53,7 @@ const Navbar = () => {
     <div ref={navbarRef}>
       <header className="fixed z-10 flex w-full items-center justify-between bg-beige px-8 py-4">
         <button className="cursor-pointer">
-          <img className="h-16" src="src/assets/images/logo.png" alt="logo" />
+          <img className="h-16" src={logoUrl} alt="logo" />
         </button>
 
         <button className="cursor-pointer" onClick={toggleMenu}>
@@ -76,7 +77,7 @@ const Navbar = () => {
                 (text, index) => (
                   <li key={index} className="mt-7 overflow-hidden">
                     <Link
-                      className={`openedMenuLink inline-block text-6xl sm:text-8xl font-bold uppercase tracking-tight sm:tracking-wider`}
+                      className={`openedMenuLink inline-block text-6xl font-bold uppercase tracking-tight sm:text-8xl sm:tracking-wider`}
                       to={`/${text.toLowerCase()}`}
                       onClick={handleLinkClick}
                     >
