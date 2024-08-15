@@ -2,8 +2,7 @@ import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
-  createCounterAnimation,
-  createProgressTextAnimation,
+  createTextAnimation,
   createProgressBarAnimation,
   createPreloaderExitAnimations,
 } from "./animations";
@@ -12,6 +11,7 @@ import { col1, col2, col3 } from "../../assets/counterData";
 const Preloader = () => {
   // Create a ref to scope the GSAP animations within this component
   const preloaderRef = useRef(null);
+  const bodyRef = useRef(document.body);
 
   // Refs to store GSAP timelines
   const preloaderTL = useRef();
@@ -20,20 +20,21 @@ const Preloader = () => {
   useGSAP(
     () => {
       preloaderTL.current = gsap
-        .timeline()
-        .add(createCounterAnimation(), "start")
-        .add(createProgressTextAnimation(), "<")
+        .timeline({
+          onStart: () => {
+            bodyRef.current.style.overflowY = "hidden";
+          },
+        })
+        .add(createTextAnimation(), "start")
         .add(createProgressBarAnimation(), "<");
     },
-    { scope: preloaderRef }
+    { scope: preloaderRef },
   );
 
   // Add exit animations and remove preloader after DOM is fully loaded
   useEffect(() => {
     window.addEventListener("load", () => {
-      preloaderTL.current.add(createPreloaderExitAnimations()).eventCallback("onComplete", () => {
-        preloaderRef.current.style.display = "none";
-      });
+      preloaderTL.current.add(createPreloaderExitAnimations(preloaderRef, bodyRef));
     });
   }, []);
 
@@ -49,7 +50,7 @@ const Preloader = () => {
     <div ref={preloaderRef}>
       <div className="preloader absolute z-20 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight text-brown">
         <div className="flex flex-grow items-center justify-center">
-          <div className="flex h-24 sm:h-32 flex-row overflow-hidden">
+          <div className="flex h-24 flex-row overflow-hidden sm:h-32">
             {[col1, col2, col3].map((colData, index) => (
               <div key={index} className="counter flex flex-col items-center">
                 {renderCounterColumn(colData)}
