@@ -7,6 +7,7 @@ import {
 import Home from "./pages/Home";
 import About from "./pages/About";
 import PageLayout from "./pages/PageLayout";
+import Projects from "./components/Projects/Projects";
 
 export default function App() {
   return (
@@ -15,8 +16,7 @@ export default function App() {
         <Routes>
           <Route element={<PageLayout />}>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/preloader" element={<Preloader />} /> */}
-            {/* <Route path="/nav" element={<Navbar />} /> */}
+            <Route path="/projects" element={<Projects />} />
             <Route path="/about" element={<About />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>

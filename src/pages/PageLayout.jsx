@@ -6,12 +6,12 @@ import { Outlet } from "react-router-dom";
 
 const PageLayout = () => {
   return (
-    <>
+    <div className="text-brown bg-beige ">
       <Preloader />
       <Navbar />
       <Outlet />
       <Footer />
-    </>
+    </div>
   );
 };
 export default PageLayout;

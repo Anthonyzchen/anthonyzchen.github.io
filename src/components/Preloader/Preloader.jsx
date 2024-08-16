@@ -34,7 +34,9 @@ const Preloader = () => {
   // Add exit animations and remove preloader after DOM is fully loaded
   useEffect(() => {
     window.addEventListener("load", () => {
-      preloaderTL.current.add(createPreloaderExitAnimations(preloaderRef, bodyRef));
+      preloaderTL.current.add(
+        createPreloaderExitAnimations(preloaderRef, bodyRef),
+      );
     });
   }, []);
 
@@ -48,7 +50,7 @@ const Preloader = () => {
 
   return (
     <div ref={preloaderRef}>
-      <div className="preloader absolute z-20 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight text-brown">
+      <div className="preloader absolute z-20 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight">
         <div className="flex flex-grow items-center justify-center">
           <div className="flex h-24 flex-row overflow-hidden sm:h-32">
             {[col1, col2, col3].map((colData, index) => (

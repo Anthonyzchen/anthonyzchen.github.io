@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="flex h-screen w-full flex-col bg-beige px-8 text-brown">
+    <footer className="flex h-screen w-full flex-col bg-beige px-8">
       <div className="flex flex-grow items-center justify-center">
         placeholder
       </div>
