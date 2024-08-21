@@ -1,6 +1,25 @@
 import React from "react";
 
 const Footer = () => {
+  const socialsData = [
+    {
+      href: "https://www.facebook.com/anthonyzchen.03",
+      icon: "fa-facebook",
+    },
+    { href: "https://github.com/Anzchen", icon: "fa-github" },
+    {
+      href: "https://www.instagram.com/anthonyzchen/",
+      icon: "fa-instagram",
+    },
+    {
+      href: "https://www.linkedin.com/in/anthonyzchen/",
+      icon: "fa-linkedin",
+    },
+    {
+      href: "https://open.spotify.com/user/22bsi2i6c5v3vpb2uoxuias2a",
+      icon: "fa-spotify",
+    },
+  ];
   return (
     <footer className="flex h-screen w-full flex-col bg-beige px-8">
       <div className="flex flex-grow items-center justify-center">
@@ -25,33 +44,15 @@ const Footer = () => {
         </div>
         <div className="mt-4 flex items-center justify-start sm:mt-0 sm:justify-center">
           <ul className="space-x-3">
-            {[
-              {
-                href: "https://www.facebook.com/anthonyzchen.03",
-                icon: "fa-facebook",
-              },
-              { href: "https://github.com/Anzchen", icon: "fa-github" },
-              {
-                href: "https://www.instagram.com/anthonyzchen/",
-                icon: "fa-instagram",
-              },
-              {
-                href: "https://www.linkedin.com/in/anthonyzchen/",
-                icon: "fa-linkedin",
-              },
-              {
-                href: "https://open.spotify.com/user/22bsi2i6c5v3vpb2uoxuias2a",
-                icon: "fa-spotify",
-              },
-            ].map(({ href, icon }) => (
+            {socialsData.map((social, index) => (
               <a
-                key={icon}
-                href={href}
+                key={index}
+                href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <button>
-                  <i className={`fa-brands ${icon}`}></i>
+                  <i className={`fa-brands ${social.icon}`}></i>
                 </button>
               </a>
             ))}

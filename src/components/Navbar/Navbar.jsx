@@ -18,6 +18,8 @@ const Navbar = () => {
   const menuIconTL = useRef();
   const menuBackgroundTL = useRef();
 
+  const linkData = ["Home", "About", "Projects", "Blog", "Contact"];
+
   useGSAP(
     () => {
       menuIconTL.current = createMenuAnimation();
@@ -72,7 +74,7 @@ const Navbar = () => {
           <div className="openedMenuBackground absolute h-screen w-full bg-transparent-beige backdrop-blur-lg" />
           <nav className="relative text-center">
             <ul>
-              {["Home", "About", "Projects", "Blog", "Contact"].map(
+              {linkData.map(
                 (text, index) => (
                   <li key={index} className="mt-7 overflow-hidden">
                     <Link

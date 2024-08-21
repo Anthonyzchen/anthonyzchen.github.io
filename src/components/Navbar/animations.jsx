@@ -6,7 +6,6 @@ export const createMenuAnimation = () => {
   return (
     gsap
       .timeline({ paused: true })
-      // Animate the first line to form an 'X'
       .to(
         ".menuLine1",
         {
@@ -17,7 +16,6 @@ export const createMenuAnimation = () => {
         },
         "start",
       )
-      // Fade out the middle line
       .to(
         ".menuLine2",
         {
@@ -26,7 +24,6 @@ export const createMenuAnimation = () => {
         },
         "start",
       )
-      // Animate the third line to form an 'X'
       .to(
         ".menuLine3",
         {
@@ -51,13 +48,11 @@ export const createMenuBackgroundAnimation = () => {
         duration: 0,
         ease: "expo.inOut",
       })
-      // Fade in the background
       .from(".openedMenuBackground", {
         duration: 1,
         autoAlpha: 0,
         ease: "expo.inOut",
       })
-      // Animate the links with staggered effect
       .from(
         ".openedMenuLink",
         {

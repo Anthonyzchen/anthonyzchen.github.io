@@ -17,9 +17,10 @@ const Preloader = () => {
   // Refs to store GSAP timelines
   const preloaderTL = useRef();
 
-  const lenis = new Lenis();
+  const colDatas = [col1, col2, col3];
 
-  // Initialize animations
+  const lenis = new Lenis();
+  
   useGSAP(
     () => {
       preloaderTL.current = gsap
@@ -58,7 +59,7 @@ const Preloader = () => {
       <div className="preloader absolute z-20 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight">
         <div className="flex flex-grow items-center justify-center">
           <div className="flex h-24 flex-row overflow-hidden sm:h-32">
-            {[col1, col2, col3].map((colData, index) => (
+            {colDatas.map((colData, index) => (
               <div key={index} className="counter flex flex-col items-center">
                 {renderCounterColumn(colData)}
               </div>
