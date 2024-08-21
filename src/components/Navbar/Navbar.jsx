@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import gsap from "gsap";
 import {
   createMenuAnimation,
   createMenuBackgroundAnimation,
@@ -68,7 +67,7 @@ const Navbar = () => {
         </button>
       </header>
 
-      <section className="openedMenu fixed h-screen w-full">
+      <section className="openedMenu hidden fixed h-screen w-full">
         <div className="flex h-screen items-center justify-center">
           <div className="openedMenuBackground absolute h-screen w-full bg-transparent-beige backdrop-blur-lg" />
           <nav className="relative text-center">

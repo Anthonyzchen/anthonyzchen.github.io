@@ -1,13 +1,13 @@
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import Lenis from "@studio-freight/lenis";
 import {
   createTextAnimation,
   createProgressBarAnimation,
   createPreloaderExitAnimations,
 } from "./animations";
 import { col1, col2, col3 } from "../../assets/counterData";
-import Lenis from "@studio-freight/lenis";
 
 const Preloader = () => {
   // Create a ref to scope the GSAP animations within this component

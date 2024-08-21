@@ -1,4 +1,4 @@
-import { gsap } from "gsap";
+import gsap from "gsap";
 
 // Navbar Animations
 // Create menu icon animation timeline

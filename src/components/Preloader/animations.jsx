@@ -1,4 +1,4 @@
-import { gsap } from "gsap";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Helper function to create fade animations
@@ -62,12 +62,15 @@ export const createPreloaderExitAnimations = (preloaderRef, bodyRef, lenis) => {
       onComplete: () => {
         preloaderRef.current.style.display = "none";
         bodyRef.current.style.overflowY = "scroll";
+        // Basic Lenis setup: https://github.com/darkroomengineering/lenis?tab=readme-ov-file#basic
         lenis.start();
         lenis.on("scroll", ScrollTrigger.update);
-  
+
         gsap.ticker.add((time) => {
           lenis.raf(time * 1000);
         });
+
+        gsap.ticker.lagSmoothing(0);
       },
     });
 };
