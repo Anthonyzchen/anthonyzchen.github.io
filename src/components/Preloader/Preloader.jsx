@@ -7,6 +7,7 @@ import {
   createPreloaderExitAnimations,
 } from "./animations";
 import { col1, col2, col3 } from "../../assets/counterData";
+import Lenis from "@studio-freight/lenis";
 
 const Preloader = () => {
   // Create a ref to scope the GSAP animations within this component
@@ -16,12 +17,16 @@ const Preloader = () => {
   // Refs to store GSAP timelines
   const preloaderTL = useRef();
 
+  const lenis = new Lenis();
+
   // Initialize animations
   useGSAP(
     () => {
       preloaderTL.current = gsap
         .timeline({
           onStart: () => {
+            // Stop scrolling when the preloader is active
+            lenis.stop();
             bodyRef.current.style.overflowY = "hidden";
           },
         })
@@ -35,7 +40,7 @@ const Preloader = () => {
   useEffect(() => {
     window.addEventListener("load", () => {
       preloaderTL.current.add(
-        createPreloaderExitAnimations(preloaderRef, bodyRef),
+        createPreloaderExitAnimations(preloaderRef, bodyRef, lenis),
       );
     });
   }, []);

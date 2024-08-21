@@ -1,4 +1,5 @@
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Helper function to create fade animations
 const fadeIn = (selector, duration = 1, y = 30) => {
@@ -40,7 +41,7 @@ export const createProgressBarAnimation = () => {
 };
 
 // Creates the preloader exit animation timeline
-export const createPreloaderExitAnimations = (preloaderRef, bodyRef) => {
+export const createPreloaderExitAnimations = (preloaderRef, bodyRef, lenis) => {
   const fadeOut = (selector, y = "-=30", delay = 0.3) => ({
     opacity: 0,
     y,
@@ -61,6 +62,12 @@ export const createPreloaderExitAnimations = (preloaderRef, bodyRef) => {
       onComplete: () => {
         preloaderRef.current.style.display = "none";
         bodyRef.current.style.overflowY = "scroll";
+        lenis.start();
+        lenis.on("scroll", ScrollTrigger.update);
+  
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
       },
     });
 };

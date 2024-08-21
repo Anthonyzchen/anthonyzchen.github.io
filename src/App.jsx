@@ -4,10 +4,14 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import Home from "./pages/Home";
 import About from "./pages/About";
 import PageLayout from "./pages/PageLayout";
 import Projects from "./components/Projects/Projects";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   return (
