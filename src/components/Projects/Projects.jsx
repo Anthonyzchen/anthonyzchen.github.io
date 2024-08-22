@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { projectAnimation } from "./animations";
-import project1Url from "../../assets/images/p1.png";
-import project2Url from "../../assets/images/p2.png";
-import project3Url from "../../assets/images/p3.png";
-// import project4Url from "../../assets/images/p4.png";
+import project1Url from "../../assets/images/Project1_Cover.png";
+import project2Url from "../../assets/images/Project2_Cover.png";
+import project3Url from "../../assets/images/Project3_Cover.png";
+import project4Url from "../../assets/images/Project4_Cover.png";
 
 const Projects = () => {
   const projectData = [
@@ -27,12 +27,15 @@ const Projects = () => {
         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, odio.",
     },
     {
-      url: project2Url,
+      url: project4Url,
       title: "Project 4",
       description:
         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, odio.",
     },
   ];
+
+  // Calculate the dynamic height based on the number of projects
+  const calculatedHeight = projectData.length * 50 + 25;
   const projectsRef = useRef([]);
 
   useGSAP(() => {
@@ -69,8 +72,11 @@ const Projects = () => {
   }, []);
 
   return (
-    // Fixed height to avoid the dynamic height issue
-    <section className="flex h-[225vh] flex-col px-8 py-16">
+    // Fixed height to avoid the dynamic height issue (This needs to be changed if the amount of projects changes -> needs to be made dynamic)
+    <section
+      className="flex flex-col px-8 py-16"
+      style={{ height: `${calculatedHeight}vh` }}
+    >
       <div className="flex w-full justify-center gap-16 sm:justify-start">
         <div className="hidden sm:block sm:flex-[2]"></div>
         <div className="p-4 text-4xl font-medium sm:flex-[5]">
@@ -88,9 +94,9 @@ const Projects = () => {
             <h1 className="text-4xl font-medium">{project.title}</h1>
             <p className="text-lg">{project.description}</p>
           </div>
-          <div className="flex w-full overflow-hidden items-center justify-center h-full sm:flex-[5] sm:items-start sm:justify-start sm:p-4 py-4">
+          <div className="flex h-full w-full items-center justify-center overflow-hidden py-4 sm:flex-[5] sm:items-start sm:justify-start sm:p-4">
             <img
-              className="img h-full w-4/12 overflow-hidden rounded-lg object-cover"
+              className="img h-full w-4/12 overflow-hidden rounded-lg object-contain"
               src={project.url}
             />
           </div>

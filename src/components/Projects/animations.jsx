@@ -30,7 +30,7 @@ export const projectAnimation = (projectRef) => {
     scrub: true,
     onUpdate: (self) => {
       let progress = self.progress;
-      let newWidth = 33 + 67 * progress;
+      let newWidth = 33 + 47 * progress;
       gsap.to(imgRef, {
         width: `${newWidth}%`,
         duration: 0.1,
