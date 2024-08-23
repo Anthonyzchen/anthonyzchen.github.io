@@ -3,38 +3,36 @@ import gsap from "gsap";
 // Navbar Animations
 // Create menu icon animation timeline
 export const createMenuAnimation = () => {
-  return (
-    gsap
-      .timeline({ paused: true })
-      .to(
-        ".menuLine1",
-        {
-          attr: { d: "M8,2 L2,8" },
-          x: 1,
-          duration: 1,
-          ease: "power2.inOut",
-        },
-        "start",
-      )
-      .to(
-        ".menuLine2",
-        {
-          autoAlpha: 0,
-          duration: 0.5,
-        },
-        "start",
-      )
-      .to(
-        ".menuLine3",
-        {
-          attr: { d: "M8,8 L2,2" },
-          x: 1,
-          duration: 1,
-          ease: "power2.inOut",
-        },
-        "start",
-      )
-  );
+  return gsap
+    .timeline({ paused: true })
+    .to(
+      ".menuLine1",
+      {
+        attr: { d: "M8,2 L2,8" },
+        x: 1,
+        duration: 0.5,
+        ease: "power2.inOut",
+      },
+      "start",
+    )
+    .to(
+      ".menuLine2",
+      {
+        autoAlpha: 0,
+        duration: 0.25,
+      },
+      "start",
+    )
+    .to(
+      ".menuLine3",
+      {
+        attr: { d: "M8,8 L2,2" },
+        x: 1,
+        duration: 0.5,
+        ease: "power2.inOut",
+      },
+      "start",
+    );
 };
 
 // Create background and links animation timeline
@@ -49,7 +47,7 @@ export const createMenuBackgroundAnimation = () => {
         ease: "expo.inOut",
       })
       .from(".openedMenuBackground", {
-        duration: 1,
+        duration: 0.5,
         autoAlpha: 0,
         ease: "expo.inOut",
       })
@@ -59,7 +57,7 @@ export const createMenuBackgroundAnimation = () => {
           duration: 0.5,
           yPercent: 100,
           rotateY: 30,
-          stagger: 0.2,
+          stagger: 0.125,
           ease: "expo.inOut",
         },
         "-=0.5",

@@ -10,7 +10,7 @@ export default {
         KoHo: ["KoHo", "sans-serif"],
       },
       backgroundImage: {
-        'painting': "url('/src/assets/images/background.png')",
+        'painting': "url('/src/assets/images/background2560.png')",
       },
       colors: {
         'beige': '#E2D7BB',

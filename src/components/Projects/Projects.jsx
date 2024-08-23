@@ -1,41 +1,68 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { projectAnimation } from "./animations";
-import project1Url from "../../assets/images/Project1_Cover.png";
-import project2Url from "../../assets/images/Project2_Cover.png";
-import project3Url from "../../assets/images/Project3_Cover.png";
-import project4Url from "../../assets/images/Project4_Cover.png";
+import project1Url from "../../assets/images/Project1_Cover1280.png";
+import project2Url from "../../assets/images/Project2_Cover1280.png";
+import project3Url from "../../assets/images/Project3_Cover1280.png";
+import project4Url from "../../assets/images/Project4_Cover1280.png";
 
 const Projects = () => {
-  const projectData = [
+  const projectDataLeft = [
     {
       url: project1Url,
-      title: "Project 1",
+      title: "Fishing Game Addition in Covey.Town",
       description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, odio.",
+        "This project involved integrating an interactive Fishing Game Area into the pre-existing codebase, enhancing virtual exploration with engaging gameplay. In this feature, users are able to fish for rare catches, customize avatars, and compete for the highest score on a global leaderboard.",
+      techstack:
+        "Built using TypeScript, React, and Chakra UI, with real-time leaderboard updates via MongoDB. Sprites crafted with Photoshop, optimized using TexturePacker, and deployed via Netlify with automated testing.",
+      short_techstack: [
+        "TypeScript",
+        "React",
+        "ChakraUI",
+        "MongoDB",
+        "Photoshop",
+        "TexturePacker",
+        "Netlify",
+      ],
     },
     {
       url: project2Url,
-      title: "Project 2",
+      title: "Determining Bias in the Michelin Guide",
       description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, odio.",
+        "This project analyzed Michelin Guide biases in geographic and cuisine trends using machine learning. Results suggested a preference for established cuisines and high-end restaurants, potentially overlooking more diverse options for one star ratings. Insufficient data limited our conclusions for two- and three-star ratings.",
+      techstack:
+        "Built with Python using pandas, numpy, and scikit-learn. Visualizations were created with matplotlib and seaborn, and predictions were generated with K-NN, Random Forest, and SVM algorithms. Data was sourced from Kaggle.",
+      short_techstack: [
+        "Python",
+        "Pandas",
+        "Numpy",
+        "Scikit-learn",
+        "Matplotlib",
+        "Seaborn",
+      ],
     },
+  ];
+  const projectDataRight = [
     {
       url: project3Url,
-      title: "Project 3",
+      title: "NUFind",
       description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, odio.",
+        "NUFind is a platform that facilitates event management and communication at Northeastern University. It connects students, club organizers, and campus management through an integrated system where students can discover and filter events, club organizers can create and manage events, and management can oversee funding requests and approvals.",
+      techstack:
+        "Developed using MySQL for the database, Flask for the backend, Docker for containerization, and AppSmith for the user interface.",
+      short_techstack: ["MySQL", "Flask", "Docker", "AppSmith"],
     },
     {
       url: project4Url,
-      title: "Project 4",
+      title: "NURecs",
       description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, odio.",
+        "NURecs provides curated restaurant recommendations for students in Boston. Recommendations are categorized and can be filtered by specific attributes to help users make informed dining choices.",
+      techstack:
+        "Developed using React and JavaScript for the frontend, with Supabase for the backend and database management. The project includes sample data and features CSS and HTML enhancements for a polished look.",
+      short_techstack: ["React", "Javascript", "Supabase", "CSS", "HTML"],
     },
   ];
 
-  // Calculate the dynamic height based on the number of projects
-  const calculatedHeight = projectData.length * 50 + 25;
   const projectsRef = useRef([]);
 
   useGSAP(() => {
@@ -72,36 +99,76 @@ const Projects = () => {
   }, []);
 
   return (
-    // Fixed height to avoid the dynamic height issue (This needs to be changed if the amount of projects changes -> needs to be made dynamic)
-    <section
-      className="flex flex-col px-8 py-16"
-      style={{ height: `${calculatedHeight}vh` }}
-    >
-      <div className="flex w-full justify-center gap-16 sm:justify-start">
-        <div className="hidden sm:block sm:flex-[2]"></div>
-        <div className="p-4 text-4xl font-medium sm:flex-[5]">
+    <section className="flex flex-col px-8 py-16">
+      <div className="flex w-full justify-center gap-16">
+        <div className="pb-3 text-xl font-medium lg:text-4xl">
           <h1>All Projects</h1>
         </div>
       </div>
-
-      {projectData.map((project, index) => (
-        <div
-          key={index}
-          className="flex h-2/6 flex-col gap-8 border-t-2 border-brown sm:flex-row"
-          ref={(el) => projectsRef.current.push(el)}
-        >
-          <div className="flex w-full flex-col items-center sm:h-full sm:flex-[2] sm:items-start sm:p-4">
-            <h1 className="text-4xl font-medium">{project.title}</h1>
-            <p className="text-lg">{project.description}</p>
+      <div className="flex flex-col lg:flex-row">
+        {projectDataLeft.map((project, index) => (
+          <div
+            key={index}
+            className="flex flex-col sm:flex-row lg:w-1/2"
+            ref={(el) => projectsRef.current.push(el)}
+          >
+            <div className="flex w-full flex-col items-center sm:items-start sm:p-4">
+              <h1 className="pb-2 text-xl font-medium">{project.title}</h1>
+              <p className="leading-tight">{project.description}</p>
+            </div>
+            <div className="flex flex-col items-center justify-center overflow-hidden py-4 sm:items-start sm:justify-start sm:p-4">
+              <div className="relative">
+                <div className="img absolute h-full w-full rounded-lg bg-beige/60"></div>
+                <img
+                  className="w-screen items-center justify-center overflow-hidden rounded-lg border-2 border-brown"
+                  src={project.url}
+                />
+              </div>
+              <ul className="flex flex-wrap pt-4">
+                {project.short_techstack.map((tech, index) => (
+                  <li key={index} className="p-1">
+                    <div className="flex items-center rounded-full bg-brown/10 px-3 py-1">
+                      {tech}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="flex h-full w-full items-center justify-center overflow-hidden py-4 sm:flex-[5] sm:items-start sm:justify-start sm:p-4">
-            <img
-              className="img h-full w-4/12 overflow-hidden rounded-lg object-contain"
-              src={project.url}
-            />
+        ))}
+      </div>
+      <div className="flex flex-col lg:flex-row">
+        {projectDataRight.map((project, index) => (
+          <div
+            key={index}
+            className="flex flex-col sm:flex-row lg:w-1/2"
+            ref={(el) => projectsRef.current.push(el)}
+          >
+            <div className="flex w-full flex-col items-center sm:items-start sm:p-4">
+              <h1 className="pb-2 text-xl font-medium">{project.title}</h1>
+              <p className="leading-tight">{project.description}</p>
+            </div>
+            <div className="flex flex-col items-center justify-center overflow-hidden py-4 sm:items-start sm:justify-start sm:p-4">
+              <div className="relative">
+                <div className="img absolute h-full w-full rounded-lg bg-beige/60"></div>
+                <img
+                  className="w-screen items-center justify-center overflow-hidden rounded-lg border-2 border-brown"
+                  src={project.url}
+                />
+              </div>
+              <ul className="flex flex-wrap pt-4">
+                {project.short_techstack.map((tech, index) => (
+                  <li key={index} className="p-1">
+                    <div className="flex items-center rounded-full bg-brown/10 px-3 py-1">
+                      {tech}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </section>
   );
 };

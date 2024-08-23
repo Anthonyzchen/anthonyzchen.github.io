@@ -23,7 +23,15 @@ const Footer = () => {
   return (
     <footer className="flex h-screen w-full flex-col bg-beige px-8">
       <div className="flex flex-grow items-center justify-center">
-        placeholder
+        <p className="w-1/2 text-center">
+          This personal portfolio, now in its third iteration, strives to best
+          showcase my identity. Developed with the Vite framework in Visual
+          Studio Code, it reflects my deep connection to my Chinese and
+          Taiwanese roots, as well as my American culture. Built with React.js,
+          Tailwind CSS, and GSAP for smooth animations, the site is designed to
+          evolve alongside my growth as a developer. Deployed through GitHub, it
+          features a sleek design with all text set in the modern KoHo typeface.
+        </p>
       </div>
       <div className="flex flex-col justify-between border-b-2 border-brown py-2 sm:flex-row">
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-8 sm:space-y-0">
