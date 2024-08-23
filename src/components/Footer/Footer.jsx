@@ -23,7 +23,7 @@ const Footer = () => {
   return (
     <footer className="flex h-screen w-full flex-col bg-beige px-8">
       <div className="flex flex-grow items-center justify-center">
-        <p className="w-1/2 text-center">
+        <p className="w-4/5 sm:w-1/2 text-center">
           This personal portfolio, now in its third iteration, strives to best
           showcase my identity. Developed with the Vite framework in Visual
           Studio Code, it reflects my deep connection to my Chinese and
