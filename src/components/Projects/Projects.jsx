@@ -5,9 +5,10 @@ import project1Url from "../../assets/images/Project1_Cover1280.png";
 import project2Url from "../../assets/images/Project2_Cover1280.png";
 import project3Url from "../../assets/images/Project3_Cover1280.png";
 import project4Url from "../../assets/images/Project4_Cover1280.png";
+import Experience from "../About/Experience";
 
 const Projects = () => {
-  const projectDataLeft = [
+  const projectData = [
     {
       url: project1Url,
       title: "Fishing Game Addition in Covey.Town",
@@ -41,8 +42,6 @@ const Projects = () => {
         "Seaborn",
       ],
     },
-  ];
-  const projectDataRight = [
     {
       url: project3Url,
       title: "NUFind",
@@ -59,7 +58,7 @@ const Projects = () => {
         "NURecs provides curated restaurant recommendations for students in Boston. Recommendations are categorized and can be filtered by specific attributes to help users make informed dining choices.",
       techstack:
         "Developed using React and JavaScript for the frontend, with Supabase for the backend and database management. The project includes sample data and features CSS and HTML enhancements for a polished look.",
-      short_techstack: ["React", "Javascript", "Supabase", "CSS", "HTML"],
+      short_techstack: ["React", "Javascript", "Supabase"],
     },
   ];
 
@@ -100,74 +99,40 @@ const Projects = () => {
 
   return (
     <section className="flex flex-col px-8 py-16">
-      <div className="flex w-full justify-center gap-16">
-        <div className="pb-3 text-xl font-medium lg:text-4xl">
-          <h1>All Projects</h1>
+      <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col w-full lg:w-3/5">
+          {projectData.map((project, index) => (
+            <div
+              key={index}
+              className="flex flex-col md:flex-row"
+              ref={(el) => projectsRef.current.push(el)}
+            >
+              <div className="flex w-full flex-col items-center sm:items-start sm:p-4 md:max-w-sm">
+                <h1 className="pb-2 text-xl font-medium">{project.title}</h1>
+                <p className="leading-tight">{project.description}</p>
+              </div>
+              <div className="flex flex-col items-center justify-center overflow-hidden py-4 sm:items-start sm:justify-start sm:p-4">
+                <div className="relative">
+                  <div className="imgCover absolute h-full w-full rounded-lg bg-beige/60"></div>
+                  <img
+                    className="w-screen items-center justify-center overflow-hidden rounded-lg border-2 border-brown"
+                    src={project.url}
+                  />
+                </div>
+                <ul className="flex flex-wrap pt-4">
+                  {project.short_techstack.map((tech, index) => (
+                    <li key={index} className="p-1">
+                      <div className="flex items-center rounded-full bg-brown/10 px-3 py-1">
+                        {tech}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-      <div className="flex flex-col lg:flex-row">
-        {projectDataLeft.map((project, index) => (
-          <div
-            key={index}
-            className="flex flex-col sm:flex-row lg:w-1/2"
-            ref={(el) => projectsRef.current.push(el)}
-          >
-            <div className="flex w-full flex-col items-center sm:items-start sm:p-4">
-              <h1 className="pb-2 text-xl font-medium">{project.title}</h1>
-              <p className="leading-tight">{project.description}</p>
-            </div>
-            <div className="flex flex-col items-center justify-center overflow-hidden py-4 sm:items-start sm:justify-start sm:p-4">
-              <div className="relative">
-                <div className="img absolute h-full w-full rounded-lg bg-beige/60"></div>
-                <img
-                  className="w-screen items-center justify-center overflow-hidden rounded-lg border-2 border-brown"
-                  src={project.url}
-                />
-              </div>
-              <ul className="flex flex-wrap pt-4">
-                {project.short_techstack.map((tech, index) => (
-                  <li key={index} className="p-1">
-                    <div className="flex items-center rounded-full bg-brown/10 px-3 py-1">
-                      {tech}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-col lg:flex-row">
-        {projectDataRight.map((project, index) => (
-          <div
-            key={index}
-            className="flex flex-col sm:flex-row lg:w-1/2"
-            ref={(el) => projectsRef.current.push(el)}
-          >
-            <div className="flex w-full flex-col items-center sm:items-start sm:p-4">
-              <h1 className="pb-2 text-xl font-medium">{project.title}</h1>
-              <p className="leading-tight">{project.description}</p>
-            </div>
-            <div className="flex flex-col items-center justify-center overflow-hidden py-4 sm:items-start sm:justify-start sm:p-4">
-              <div className="relative">
-                <div className="img absolute h-full w-full rounded-lg bg-beige/60"></div>
-                <img
-                  className="w-screen items-center justify-center overflow-hidden rounded-lg border-2 border-brown"
-                  src={project.url}
-                />
-              </div>
-              <ul className="flex flex-wrap pt-4">
-                {project.short_techstack.map((tech, index) => (
-                  <li key={index} className="p-1">
-                    <div className="flex items-center rounded-full bg-brown/10 px-3 py-1">
-                      {tech}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
+        <Experience />
       </div>
     </section>
   );

@@ -31,8 +31,8 @@ const Preloader = () => {
             bodyRef.current.style.overflowY = "hidden";
           },
         })
-        .add(createTextAnimation(), "start")
-        .add(createProgressBarAnimation(), "<");
+        // .add(createTextAnimation(), "start")
+        // .add(createProgressBarAnimation(), "<");
     },
     { scope: preloaderRef },
   );
