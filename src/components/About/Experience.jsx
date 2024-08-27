@@ -32,12 +32,11 @@ const Experience = () => {
   ];
 
   return (
-    <ol className="group/list py-16 lg:py-0 lg:col-span-3">
+    <ol className="group/list py-16 lg:col-span-3 lg:py-0">
       {experienceData.map((experience, index) => (
         <li key={index} className="mb-12">
           <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
-            <div className="lg:group-hover:bg-dark-beige/50 absolute inset-0 z-0 hidden rounded-md transition lg:block lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
-
+            <div className="absolute inset-0 hidden rounded-md transition lg:block lg:group-hover:bg-dark-beige/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
             <header
               className="z-10 mb-2 mt-1 font-semibold uppercase tracking-wide sm:col-span-2"
               aria-label={experience.timeframe}
@@ -54,6 +53,7 @@ const Experience = () => {
                   rel="noreferrer noopener"
                   aria-label={`${experience.title} at ${experience.company} (opens in a new tab)`}
                 >
+                  <span className="absolute inset-0 hidden rounded lg:block"></span>
                   {experience.title} ·
                   <span className="ml-1 inline-block">
                     {experience.company}
@@ -61,7 +61,7 @@ const Experience = () => {
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
-                      className="ml-1 inline-block h-4 w-4 shrink-0 translate-y-px transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1 motion-reduce:transition-none"
+                      className="ml-1 inline-block h-4 w-4 shrink-0 translate-y-px transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1"
                       aria-hidden="true"
                     >
                       <path

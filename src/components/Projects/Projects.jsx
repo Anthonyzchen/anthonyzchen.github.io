@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import { projectAnimation } from "./animations";
 import project1Url from "../../assets/images/Project1_Cover1280.png";
@@ -11,6 +12,7 @@ const Projects = () => {
   const projectData = [
     {
       url: project1Url,
+      page: "project1",
       title: "Fishing Game Addition in Covey.Town",
       description:
         "This project involved integrating an interactive Fishing Game Area into the pre-existing codebase, enhancing virtual exploration with engaging gameplay. In this feature, users are able to fish for rare catches, customize avatars, and compete for the highest score on a global leaderboard.",
@@ -28,6 +30,7 @@ const Projects = () => {
     },
     {
       url: project2Url,
+      page: "project2",
       title: "Determining Bias in the Michelin Guide",
       description:
         "This project analyzed Michelin Guide biases in geographic and cuisine trends using machine learning. Results suggested a preference for established cuisines and high-end restaurants, potentially overlooking more diverse options for one star ratings. Insufficient data limited our conclusions for two- and three-star ratings.",
@@ -44,6 +47,7 @@ const Projects = () => {
     },
     {
       url: project3Url,
+      page: "project3",
       title: "NUFind",
       description:
         "NUFind is a platform that facilitates event management and communication at Northeastern University. It connects students, club organizers, and campus management through an integrated system where students can discover and filter events, club organizers can create and manage events, and management can oversee funding requests and approvals.",
@@ -53,6 +57,7 @@ const Projects = () => {
     },
     {
       url: project4Url,
+      page: "project4",
       title: "NURecs",
       description:
         "NURecs provides curated restaurant recommendations for students in Boston. Recommendations are categorized and can be filtered by specific attributes to help users make informed dining choices.",
@@ -103,24 +108,32 @@ const Projects = () => {
         {projectData.map((project, index) => (
           <li
             key={index}
-            className="flex flex-col md:flex-row"
+            className="flex flex-col md:flex-row mb-12"
             ref={(el) => projectsRef.current.push(el)}
           >
             <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
-              <div className="lg:group-hover:bg-dark-beige/50 absolute inset-0 z-0 hidden rounded-md transition lg:block lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+              <div className="absolute inset-0 hidden rounded-md transition lg:block lg:group-hover:bg-dark-beige/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
 
               <header className="z-10 mb-2 mt-1 tracking-wide sm:col-span-3">
                 <h1 className="pb-2 text-xl font-semibold">{project.title}</h1>
                 <p className="leading-tight">{project.description}</p>
               </header>
 
-              <div className="relative z-10 sm:col-span-5 mr-4">
-                <div className="imgCover absolute h-full w-full rounded-lg bg-beige/60"></div>
-                <img
-                  className="overflow-hidden rounded-lg border-2 border-brown"
-                  src={project.url}
-                />
-
+              <div className="relative z-10 mr-4 sm:col-span-5">
+                <Link
+                  to={`/projects/${project.page}`}
+                  onClick={() => {
+                    window.scroll(0, 0);
+                  }}
+                >
+                  <div className="relative">
+                    <div className="imgCover absolute inset-0 rounded-lg bg-beige/60"></div>
+                    <img
+                      className="overflow-hidden rounded-lg border-2 border-brown"
+                      src={project.url}
+                    />
+                  </div>
+                </Link>
                 <ul className="flex flex-wrap pt-4">
                   {project.short_techstack.map((tech, index) => (
                     <li key={index} className="p-0.5">
