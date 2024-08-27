@@ -56,7 +56,7 @@ const Preloader = () => {
 
   return (
     <div ref={preloaderRef}>
-      <div className="preloader absolute z-20 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight">
+      <div className="preloader absolute z-40 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight">
         <div className="flex flex-grow items-center justify-center">
           <div className="flex h-24 flex-row overflow-hidden sm:h-32">
             {colDatas.map((colData, index) => (

@@ -52,7 +52,7 @@ const Navbar = () => {
 
   return (
     <div ref={navbarRef}>
-      <header className="fixed z-10 flex w-full items-center justify-between bg-beige px-8 py-4">
+      <header className="fixed z-30 flex w-full items-center justify-between bg-beige px-8 py-4">
         <button className="cursor-pointer">
           <img
             className="h-16"
@@ -76,7 +76,7 @@ const Navbar = () => {
         </button>
       </header>
 
-      <section className="openedMenu fixed hidden h-screen w-full">
+      <section className="openedMenu z-20 fixed hidden h-screen w-full">
         <div className="flex h-screen items-center justify-center">
           <div className="openedMenuBackground absolute h-screen w-full bg-transparent-beige backdrop-blur-lg" />
           <nav className="relative text-center">

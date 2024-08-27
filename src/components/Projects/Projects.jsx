@@ -98,31 +98,33 @@ const Projects = () => {
   }, []);
 
   return (
-    <section className="flex flex-col px-8 py-16">
-      <div className="flex flex-col lg:flex-row">
-        <div className="flex flex-col w-full lg:w-3/5">
-          {projectData.map((project, index) => (
-            <div
-              key={index}
-              className="flex flex-col md:flex-row"
-              ref={(el) => projectsRef.current.push(el)}
-            >
-              <div className="flex w-full flex-col items-center sm:items-start sm:p-4 md:max-w-sm">
-                <h1 className="pb-2 text-xl font-medium">{project.title}</h1>
+    <section className="grid px-8 py-16 lg:grid-cols-8">
+      <ol className="group/list flex w-full flex-col lg:col-span-5">
+        {projectData.map((project, index) => (
+          <li
+            key={index}
+            className="flex flex-col md:flex-row"
+            ref={(el) => projectsRef.current.push(el)}
+          >
+            <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+              <div className="lg:group-hover:bg-dark-beige/50 absolute inset-0 z-0 hidden rounded-md transition lg:block lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+
+              <header className="z-10 mb-2 mt-1 tracking-wide sm:col-span-3">
+                <h1 className="pb-2 text-xl font-semibold">{project.title}</h1>
                 <p className="leading-tight">{project.description}</p>
-              </div>
-              <div className="flex flex-col items-center justify-center overflow-hidden py-4 sm:items-start sm:justify-start sm:p-4">
-                <div className="relative">
-                  <div className="imgCover absolute h-full w-full rounded-lg bg-beige/60"></div>
-                  <img
-                    className="w-screen items-center justify-center overflow-hidden rounded-lg border-2 border-brown"
-                    src={project.url}
-                  />
-                </div>
+              </header>
+
+              <div className="relative z-10 sm:col-span-5 mr-4">
+                <div className="imgCover absolute h-full w-full rounded-lg bg-beige/60"></div>
+                <img
+                  className="overflow-hidden rounded-lg border-2 border-brown"
+                  src={project.url}
+                />
+
                 <ul className="flex flex-wrap pt-4">
                   {project.short_techstack.map((tech, index) => (
-                    <li key={index} className="p-1">
-                      <div className="flex items-center rounded-full bg-brown/10 px-3 py-1">
+                    <li key={index} className="p-0.5">
+                      <div className="flex items-center rounded-full bg-red-800/10 px-3 py-1 text-red-700">
                         {tech}
                       </div>
                     </li>
@@ -130,10 +132,10 @@ const Projects = () => {
                 </ul>
               </div>
             </div>
-          ))}
-        </div>
-        <Experience />
-      </div>
+          </li>
+        ))}
+      </ol>
+      <Experience />
     </section>
   );
 };
