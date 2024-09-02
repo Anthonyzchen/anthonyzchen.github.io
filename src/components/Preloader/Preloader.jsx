@@ -69,7 +69,7 @@ const Preloader = () => {
           >
             {/* Top Gradient Layer */}
             <div
-              className="flex h-24 flex-row sm:h-40"
+              className="flex h-[7.5rem] flex-row sm:h-40"
               style={{
                 WebkitMaskImage:
                   "linear-gradient(to top, black 85%, transparent 100%)",
