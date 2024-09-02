@@ -1,6 +1,32 @@
 import gsap from "gsap";
 
 // Navbar Animations
+export const createEnterNavbarAnimation = () => {
+  return gsap
+    .timeline()
+    .from(
+      ".logo",
+      {
+        opacity: 0,
+        y: "-100",
+      },
+      "start",
+    )
+    .from(
+      [".menuLine3", ".menuLine2", ".menuLine1"],
+      {
+        opacity: 0,
+        y: "-200",
+        duration: 1.5,
+        stagger: {
+          amount: .4
+        },
+        ease: "power4.out"
+      },
+      "start",
+    );
+};
+
 // Create menu icon animation timeline
 export const createMenuAnimation = () => {
   return gsap

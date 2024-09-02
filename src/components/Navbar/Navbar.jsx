@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   createMenuAnimation,
   createMenuBackgroundAnimation,
+  createEnterNavbarAnimation
 } from "./animations";
 import { useGSAP } from "@gsap/react";
 import { Link } from "react-router-dom";
@@ -24,6 +25,7 @@ const Navbar = () => {
     () => {
       menuIconTL.current = createMenuAnimation();
       menuBackgroundTL.current = createMenuBackgroundAnimation();
+      createEnterNavbarAnimation().delay(9)
     },
     { scope: navbarRef },
   );
@@ -53,7 +55,7 @@ const Navbar = () => {
   return (
     <div ref={navbarRef}>
       <header className="fixed z-30 flex w-full items-center justify-between bg-beige px-8 py-4">
-        <button className="cursor-pointer">
+        <button className="logo cursor-pointer">
           <img
             className="h-16"
             src={logoUrl}
@@ -64,7 +66,7 @@ const Navbar = () => {
           />
         </button>
 
-        <button className="cursor-pointer" onClick={toggleMenu}>
+        <button className="menu cursor-pointer" onClick={toggleMenu}>
           <svg
             viewBox="0 0 12 10"
             className="stroke h-12 fill-none stroke-brown"

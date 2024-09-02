@@ -18,13 +18,17 @@ export const createTextAnimation = () => {
   return gsap
     .timeline()
     .add(fadeIn(counterSelector, 0.5))
-    .to(counterSelector, {
-      yPercent: -10000,
+    .fromTo(counterSelector, {
+      yPercent: 10,
+      duration: 3.5,
+      ease: "power3.inOut",
+    },{
+      yPercent: -8000,
       duration: 3.5,
       ease: "power3.inOut",
     })
     .to(counterSelector, {
-      yPercent: -10100,
+      yPercent: -8153,
       duration: 1,
       ease: "power1.out",
     })
@@ -55,10 +59,10 @@ export const createPreloaderExitAnimations = (preloaderRef, bodyRef, lenis) => {
     .to(".progressText", fadeOut(".progressText"))
     .to(".progressBar", fadeOut(".progressBar", "0"))
     .to(".preloader", {
-      yPercent: "-100",
+      yPercent: -88,
       duration: 1.3,
       delay: 0.3,
-      ease: "power1.out",
+      ease: "power1.inOut",
       onComplete: () => {
         preloaderRef.current.style.display = "none";
         bodyRef.current.style.overflowY = "scroll";

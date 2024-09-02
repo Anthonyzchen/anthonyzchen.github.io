@@ -20,7 +20,7 @@ const Preloader = () => {
   const colDatas = [col1, col2, col3];
 
   const lenis = new Lenis();
-  
+
   useGSAP(
     () => {
       preloaderTL.current = gsap
@@ -58,12 +58,31 @@ const Preloader = () => {
     <div ref={preloaderRef}>
       <div className="preloader absolute z-40 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight">
         <div className="flex flex-grow items-center justify-center">
-          <div className="flex h-24 flex-row overflow-hidden sm:h-32">
-            {colDatas.map((colData, index) => (
-              <div key={index} className="counter flex flex-col items-center">
-                {renderCounterColumn(colData)}
-              </div>
-            ))}
+          {/* Bottom Gradient Layer */}
+          <div
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to bottom, black 75%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to bottom, black 85%, transparent 100%)",
+            }}
+          >
+            {/* Top Gradient Layer */}
+            <div
+              className="flex h-24 flex-row sm:h-40"
+              style={{
+                WebkitMaskImage:
+                  "linear-gradient(to top, black 85%, transparent 100%)",
+                maskImage:
+                  "linear-gradient(to top, black 85%, transparent 100%)",
+              }}
+            >
+              {colDatas.map((colData, index) => (
+                <div key={index} className="counter flex flex-col items-center">
+                  {renderCounterColumn(colData)}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         <div className="w-full">
