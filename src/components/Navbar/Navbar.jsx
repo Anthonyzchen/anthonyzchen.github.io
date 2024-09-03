@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useLayoutEffect, useState, useRef } from "react";
 import {
   createMenuAnimation,
   createMenuBackgroundAnimation,
-  createEnterNavbarAnimation
+  createEnterNavbarAnimation,
 } from "./animations";
 import { useGSAP } from "@gsap/react";
 import { Link } from "react-router-dom";
@@ -25,7 +25,8 @@ const Navbar = () => {
     () => {
       menuIconTL.current = createMenuAnimation();
       menuBackgroundTL.current = createMenuBackgroundAnimation();
-      createEnterNavbarAnimation().delay(12)
+      // The animation is delayed by 11.5 seconds to play after the Preloader has finished
+      createEnterNavbarAnimation().delay(11.5);
     },
     { scope: navbarRef },
   );
@@ -35,22 +36,24 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Function to handle link clicks
+  // Function to handle link clicks, scrolls to the top, and closes the menu
   const handleLinkClick = () => {
     window.scroll(0, 0);
     toggleMenu();
   };
 
-  // Effect to play or reverse animations based on the menu state
-  useEffect(() => {
+  // useLayoutEffect hook to control animations based on the menu state
+  useLayoutEffect(() => {
     if (isMenuOpen) {
+      // Play the menu icon and background animations when the menu is open
       menuIconTL.current.play();
       menuBackgroundTL.current.play();
     } else {
+      // Reverse the animations when the menu is closed
       menuIconTL.current.reverse();
       menuBackgroundTL.current.reverse();
     }
-  }, [isMenuOpen]);
+  }, [isMenuOpen]); // Dependency array ensures this effect runs when isMenuOpen changes
 
   return (
     <div ref={navbarRef}>
@@ -69,7 +72,7 @@ const Navbar = () => {
         <button className="menu cursor-pointer" onClick={toggleMenu}>
           <svg
             viewBox="0 0 12 10"
-            className="stroke-[.8px] h-12 fill-none stroke-brown"
+            className="h-12 fill-none stroke-brown stroke-[.8px]"
           >
             <path strokeLinecap="round" d="M10,2 L2,2" className="menuLine1" />
             <path strokeLinecap="round" d="M2,5 L10,5" className="menuLine2" />
@@ -78,7 +81,7 @@ const Navbar = () => {
         </button>
       </header>
 
-      <section className="openedMenu z-20 fixed hidden h-screen w-full">
+      <section className="openedMenu fixed z-20 hidden h-screen w-full">
         <div className="flex h-screen items-center justify-center">
           <div className="openedMenuBackground absolute h-screen w-full bg-transparent-beige backdrop-blur-lg" />
           <nav className="relative text-center">

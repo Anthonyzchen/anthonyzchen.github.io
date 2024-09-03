@@ -1,11 +1,12 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Function to apply animations to a project element
+// Function to apply animations to a project element when scrolling
 export const projectAnimation = (projectRef) => {
+  // Select the image element within the project to animate its width
   const imgRef = projectRef.querySelector(".imgCover");
 
-  // Create a ScrollTrigger for animating the image width
+  // Create a ScrollTrigger instance to control the animation based on scroll position
   ScrollTrigger.create({
     trigger: projectRef,
     start: "bottom bottom",

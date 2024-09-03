@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useLayoutEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Lenis from "@studio-freight/lenis";
@@ -15,11 +15,11 @@ const Preloader = () => {
   const preloaderRef = useRef(null);
   const bodyRef = useRef(document.body);
 
-  // Refs to store text objects
+  // Refs to store text elements for animations
   const counterRef = useRef();
   const progressTextRef = useRef();
 
-  // Refs to store GSAP timelines
+  // Ref to store GSAP timeline for preloader animations
   const preloaderTL = useRef();
 
   const colDatas = [col1, col2, col3];
@@ -36,21 +36,37 @@ const Preloader = () => {
             bodyRef.current.style.overflowY = "hidden";
           },
         })
+        // Add counter animation
         .add(createCounterAnimation(), "start")
-        .delay(2)
+        .delay(2) // Delay before starting this animation
+        // Add progress bar animation
         .add(createProgressBarAnimation(), "<")
+        // Add staggered text animation
         .add(enterStaggerTextAnimation(progressTextRef));
     },
     { scope: preloaderRef },
   );
 
-  // Add exit animations and remove preloader after DOM is fully loaded
-  useEffect(() => {
-    window.addEventListener("load", () => {
+  useLayoutEffect(() => {
+    const handleLoad = () => {
+      // Add preloader exit animations after the page has loaded
       preloaderTL.current.add(
         createPreloaderExitAnimations(preloaderRef, bodyRef, lenis),
       );
-    });
+    };
+
+    // Check if the page has already loaded
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      // Attach the load event listener
+      window.addEventListener("load", handleLoad);
+    }
+
+    // Cleanup the event listener
+    return () => {
+      window.removeEventListener("load", handleLoad);
+    };
   }, []);
 
   // Helper function to render counter column items

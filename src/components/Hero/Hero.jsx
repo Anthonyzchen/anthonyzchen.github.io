@@ -3,10 +3,12 @@ import { useGSAP } from "@gsap/react";
 import { enterStaggerTextAnimation } from "../utils";
 
 const Hero = () => {
-  const nameRef = useRef()
+  // Create a ref for the name element, which will be animated
+  const nameRef = useRef();
 
   useGSAP(() => {
-    enterStaggerTextAnimation(nameRef).delay(11.5)
+    // The animation is delayed by 11 seconds to play after the Preloader has finished
+    enterStaggerTextAnimation(nameRef).delay(11)
   })
   return (
     <section>

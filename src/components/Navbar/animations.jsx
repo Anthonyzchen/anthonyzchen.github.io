@@ -1,6 +1,6 @@
 import gsap from "gsap";
 
-// Navbar Animations
+// Animation for the Navbar elements when it enters view
 export const createEnterNavbarAnimation = () => {
   return gsap
     .timeline()
@@ -28,7 +28,7 @@ export const createEnterNavbarAnimation = () => {
     );
 };
 
-// Create menu icon animation timeline
+// Create a GSAP timeline for the menu icon animation (playable in both directions)
 export const createMenuAnimation = () => {
   return gsap
     .timeline({ paused: true })
@@ -62,32 +62,34 @@ export const createMenuAnimation = () => {
     );
 };
 
-// Create background and links animation timeline
+// Animation for the background and menu links when the menu is opened
 export const createMenuBackgroundAnimation = () => {
   return (
     gsap
-      .timeline({ paused: true })
-      // Ensure the menu is visible
+      .timeline({ paused: true }) // Create a paused timeline, activated when needed
+      // Show the full-screen menu by setting its display to "block"
       .to(".openedMenu", {
         display: "block",
         duration: 0,
         ease: "expo.inOut",
       })
+      // Animate the menu background fading in
       .from(".openedMenuBackground", {
         duration: 0.5,
         autoAlpha: 0,
         ease: "expo.inOut",
       })
+      // Animate the menu links sliding in with a slight rotation
       .from(
         ".openedMenuLink",
         {
-          duration: 0.5,
+          duration: 0.75,
           yPercent: 100,
           rotateY: 30,
           stagger: 0.125,
           ease: "expo.inOut",
         },
-        "-=0.5",
+        "-=0.25",
       )
   );
 };
