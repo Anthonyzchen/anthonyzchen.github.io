@@ -9,7 +9,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Home from "./pages/Home";
 import About from "./pages/About";
 import PageLayout from "./pages/PageLayout";
-import Projects from "./components/Projects/Projects";
+import Projects from "./components/About/Projects";
 
 gsap.registerPlugin(ScrollTrigger);
 

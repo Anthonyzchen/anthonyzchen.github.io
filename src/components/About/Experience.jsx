@@ -1,9 +1,8 @@
-import React from "react";
-
 const Experience = () => {
   const experienceData = [
     {
-      title: "Generative AI Software Developer Intern",
+      title: "Generative AI Software Developer",
+      employment: "Internship",
       company: "UKG",
       timeframe: "Sept 2024 - Dec 2024",
       description:
@@ -12,7 +11,8 @@ const Experience = () => {
       short_techstack: ["Python", "PostgresSQL", "ReactJS"],
     },
     {
-      title: "IT Data Integration & Web Development Co-op",
+      title: "IT Data Integration & Web Developer",
+      employment: "Internship",
       company: "BPSI",
       timeframe: "June 2023 - Dec 2023",
       description:
@@ -21,7 +21,8 @@ const Experience = () => {
       short_techstack: ["Python", "API", "XML", "Wordpress"],
     },
     {
-      title: "Programming & UI/UX Design Intern",
+      title: "UI/UX Developer",
+      employment: "Internship",
       company: "Mobileware",
       timeframe: "July 2019 - Aug 2019",
       description:
@@ -38,16 +39,16 @@ const Experience = () => {
           <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
             <div className="absolute inset-0 hidden rounded-md transition lg:block lg:group-hover:bg-dark-beige/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
             <header
-              className="z-10 mb-2 mt-1 font-semibold uppercase tracking-wide sm:col-span-2"
+              className="z-10 mb-2 mt-1 uppercase tracking-wide sm:col-span-2"
               aria-label={experience.timeframe}
             >
               {experience.timeframe}
             </header>
 
             <div className="z-10 sm:col-span-6">
-              <h3 className="font-medium leading-snug">
+              <h3 className="text-xl">
                 <a
-                  className="group/link inline-flex items-baseline font-medium leading-tight hover:text-red-700 focus-visible:text-red-700"
+                  className="group/link inline-flex items-baseline leading-tight hover:text-red-700 focus-visible:text-red-700"
                   href={experience.link}
                   target="_blank"
                   rel="noreferrer noopener"
@@ -73,6 +74,8 @@ const Experience = () => {
                   </span>
                 </a>
               </h3>
+
+              <h2 className="">{experience.employment}</h2>
 
               <p className="mt-2">{experience.description}</p>
 

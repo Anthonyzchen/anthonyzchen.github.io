@@ -9,6 +9,7 @@ export const createEnterNavbarAnimation = () => {
       {
         opacity: 0,
         y: "-100",
+        duration: 1.5,
       },
       "start",
     )
@@ -19,9 +20,9 @@ export const createEnterNavbarAnimation = () => {
         y: "-200",
         duration: 1.5,
         stagger: {
-          amount: .4
+          amount: 0.4,
         },
-        ease: "power4.out"
+        ease: "power4.out",
       },
       "start",
     );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   createMenuAnimation,
   createMenuBackgroundAnimation,
@@ -25,7 +25,7 @@ const Navbar = () => {
     () => {
       menuIconTL.current = createMenuAnimation();
       menuBackgroundTL.current = createMenuBackgroundAnimation();
-      createEnterNavbarAnimation().delay(9)
+      createEnterNavbarAnimation().delay(12)
     },
     { scope: navbarRef },
   );
@@ -69,7 +69,7 @@ const Navbar = () => {
         <button className="menu cursor-pointer" onClick={toggleMenu}>
           <svg
             viewBox="0 0 12 10"
-            className="stroke h-12 fill-none stroke-brown"
+            className="stroke-[.8px] h-12 fill-none stroke-brown"
           >
             <path strokeLinecap="round" d="M10,2 L2,2" className="menuLine1" />
             <path strokeLinecap="round" d="M2,5 L10,5" className="menuLine2" />

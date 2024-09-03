@@ -1,38 +1,36 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Helper function to create fade animations
-const fadeIn = (selector, duration = 1, y = 30) => {
-  return gsap
-    .timeline()
-    .fromTo(
-      selector,
-      { opacity: 0, y: `+=${y}` },
-      { opacity: 1, y: 0, duration, ease: "power1.out" },
-    );
-};
-
-// Creates the counter & other text animation timeline
-export const createTextAnimation = () => {
+// Creates the counter timeline
+export const createCounterAnimation = () => {
   const counterSelector = ".counter";
-  return gsap
-    .timeline()
-    .add(fadeIn(counterSelector, 0.5))
-    .fromTo(counterSelector, {
-      yPercent: 10,
-      duration: 3.5,
-      ease: "power3.inOut",
-    },{
-      yPercent: -8000,
-      duration: 3.5,
-      ease: "power3.inOut",
-    })
-    .to(counterSelector, {
-      yPercent: -8153,
-      duration: 1,
-      ease: "power1.out",
-    })
-    .add(fadeIn(".progressText", 1), "<");
+  return (
+    gsap
+      .timeline()
+      // Repeat of enterStaggerTextAnimation from "../utils" but doesn't use SplitTextJS
+      .from(counterSelector, {
+        opacity: 0,
+        y: 80,
+        stagger: 0.03,
+      })
+      .fromTo(
+        counterSelector,
+        {
+          duration: 3.5,
+          ease: "power3.inOut",
+        },
+        {
+          yPercent: -8010,
+          duration: 3.5,
+          ease: "power3.inOut",
+        },
+      )
+      .to(counterSelector, {
+        yPercent: -8163,
+        duration: 1,
+        ease: "power1.out",
+      })
+  );
 };
 
 // Creates the progress bar animation timeline

@@ -1,18 +1,23 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Lenis from "@studio-freight/lenis";
 import {
-  createTextAnimation,
+  createCounterAnimation,
   createProgressBarAnimation,
   createPreloaderExitAnimations,
 } from "./animations";
+import { enterStaggerTextAnimation } from "../utils";
 import { col1, col2, col3 } from "../../assets/counterData";
 
 const Preloader = () => {
   // Create a ref to scope the GSAP animations within this component
   const preloaderRef = useRef(null);
   const bodyRef = useRef(document.body);
+
+  // Refs to store text objects
+  const counterRef = useRef();
+  const progressTextRef = useRef();
 
   // Refs to store GSAP timelines
   const preloaderTL = useRef();
@@ -31,8 +36,10 @@ const Preloader = () => {
             bodyRef.current.style.overflowY = "hidden";
           },
         })
-        .add(createTextAnimation(), "start")
-        .add(createProgressBarAnimation(), "<");
+        .add(createCounterAnimation(), "start")
+        .delay(2)
+        .add(createProgressBarAnimation(), "<")
+        .add(enterStaggerTextAnimation(progressTextRef));
     },
     { scope: preloaderRef },
   );
@@ -49,14 +56,14 @@ const Preloader = () => {
   // Helper function to render counter column items
   const renderCounterColumn = (colData) =>
     colData.map((c, i) => (
-      <span key={i} className="text-8xl sm:text-9xl">
+      <span key={i} className="text-8xl font-light sm:text-9xl">
         {c + " "}
       </span>
     ));
 
   return (
     <div ref={preloaderRef}>
-      <div className="preloader absolute z-40 flex h-screen w-full flex-col items-center justify-between gap-10 bg-beige tracking-tight">
+      <div className="preloader absolute z-40 flex h-screen w-full flex-col items-center justify-between bg-beige">
         <div className="flex flex-grow items-center justify-center">
           {/* Bottom Gradient Layer */}
           <div
@@ -69,6 +76,7 @@ const Preloader = () => {
           >
             {/* Top Gradient Layer */}
             <div
+              ref={counterRef}
               className="flex h-[7.5rem] flex-row sm:h-40"
               style={{
                 WebkitMaskImage:
@@ -78,7 +86,10 @@ const Preloader = () => {
               }}
             >
               {colDatas.map((colData, index) => (
-                <div key={index} className="counter flex flex-col items-center">
+                <div
+                  key={index}
+                  className="counter flex translate-y-[10%] flex-col items-center"
+                >
                   {renderCounterColumn(colData)}
                 </div>
               ))}
@@ -86,7 +97,10 @@ const Preloader = () => {
           </div>
         </div>
         <div className="w-full">
-          <h1 className="progressText relative mb-4 flex justify-center text-base">
+          <h1
+            ref={progressTextRef}
+            className="progressText relative mb-4 flex justify-center text-base"
+          >
             Welcome to my page
           </h1>
           <div className="progressBar h-1 w-full origin-left scale-x-0 bg-brown"></div>

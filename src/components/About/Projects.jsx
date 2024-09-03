@@ -6,7 +6,7 @@ import project1Url from "../../assets/images/Project1_Cover1280.png";
 import project2Url from "../../assets/images/Project2_Cover1280.png";
 import project3Url from "../../assets/images/Project3_Cover1280.png";
 import project4Url from "../../assets/images/Project4_Cover1280.png";
-import Experience from "../About/Experience";
+import Experience from "./Experience";
 
 const Projects = () => {
   const projectData = [
@@ -115,8 +115,8 @@ const Projects = () => {
               <div className="absolute inset-0 hidden rounded-md transition lg:block lg:group-hover:bg-dark-beige/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
 
               <header className="z-10 mb-2 mt-1 tracking-wide sm:col-span-3">
-                <h1 className="pb-2 text-xl font-semibold">{project.title}</h1>
-                <p className="leading-tight">{project.description}</p>
+                <h1 className="pb-2 text-xl">{project.title}</h1>
+                <p>{project.description}</p>
               </header>
 
               <div className="relative z-10 mr-4 sm:col-span-5">
@@ -129,7 +129,7 @@ const Projects = () => {
                   <div className="relative">
                     <div className="imgCover absolute inset-0 rounded-lg bg-beige/60"></div>
                     <img
-                      className="overflow-hidden rounded-lg border-2 border-brown"
+                      className="overflow-hidden rounded-lg border-y-2 border-brown"
                       src={project.url}
                     />
                   </div>
