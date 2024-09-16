@@ -57,7 +57,7 @@ const Navbar = () => {
 
   return (
     <div ref={navbarRef}>
-      <header className="fixed z-30 flex w-full items-center justify-between bg-beige px-8 py-4">
+      <header className="fixed z-30 flex w-full items-center justify-between bg-beige sm:bg-transparent px-8 py-4">
         <button className="logo cursor-pointer">
           <img
             className="h-16"

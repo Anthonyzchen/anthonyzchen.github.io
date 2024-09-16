@@ -59,7 +59,9 @@ export const createPreloaderExitAnimations = (preloaderRef, bodyRef, lenis) => {
     .to(
       ".preloader",
       {
-        yPercent: -88,
+        yPercent: -100,
+        // For small screens?!
+        // yPercent: -88,
         duration: 1,
         delay: 0.3,
         ease: "power1.inOut",

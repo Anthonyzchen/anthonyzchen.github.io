@@ -70,69 +70,37 @@ const Projects = () => {
   const projectsRef = useRef([]);
 
   useGSAP(() => {
-    const observerOptions = {
-      // The root to use for intersection. If not provided, use the top-level document’s viewport
-      root: null,
-      // Margin around the root. Values are similar to CSS margin property
-      rootMargin: "0px",
-      // Threshold of 0.1 means that 10% of the observed element must be visible for the callback to be invoked
-      threshold: 0.1,
-    };
-
-    // This function is executed whenever an observed element's visibility changes
-    const observerCallback = (entries, observer) => {
-      entries.forEach((entry) => {
-        // Check if the element is intersecting (visible in viewport)
-        if (entry.isIntersecting) {
-          const projectRef = entry.target;
-          projectAnimation(projectRef);
-          observer.unobserve(projectRef);
-        }
-      });
-    };
-
-    // Creating the observer and applying it to each project
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-
-    projectsRef.current.forEach((project) => {
-      observer.observe(project);
-    });
+    projectAnimation(projectsRef);
   }, []);
 
   return (
-    <section className="grid px-8 py-16 lg:grid-cols-8">
-      <ol className="group/list flex w-full flex-col lg:col-span-5">
+    <section className="px-8 py-16 sm:px-32">
+      <ol className="group/list flex flex-col lg:col-span-5">
         {projectData.map((project, index) => (
           <li
             key={index}
-            className="flex flex-col md:flex-row mb-12"
+            className="mb-12 flex h-screen flex-col items-center justify-center bg-dark-beige md:flex-row"
             ref={(el) => projectsRef.current.push(el)}
           >
-            <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
-              <div className="absolute inset-0 hidden rounded-md transition lg:block lg:group-hover:bg-dark-beige/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
-
+            <div className="grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4">
               <header className="z-10 mb-2 mt-1 tracking-wide sm:col-span-3">
-                <h1 className="pb-2 text-xl">{project.title}</h1>
+                <h1 className="pb-2 text-3xl font-medium leading-relaxed">
+                  {project.title}
+                </h1>
                 <p>{project.description}</p>
               </header>
 
-              <div className="relative z-10 mr-4 sm:col-span-5">
+              <div className="z-10 mr-4 sm:col-span-5">
                 <Link
                   to={`/projects/${project.page}`}
                   onClick={() => {
                     window.scroll(0, 0);
                   }}
                 >
-                  <div className="relative">
-                    <div className="imgCover absolute inset-0 rounded-lg bg-beige/60"></div>
-                    <img
-                      className="overflow-hidden rounded-lg border-y-2 border-brown"
-                      src={project.url}
-                    />
-                  </div>
+                  <img
+                    className="overflow-hidden rounded-lg border-y-2 border-brown"
+                    src={project.url}
+                  />
                 </Link>
                 <ul className="flex flex-wrap pt-4">
                   {project.short_techstack.map((tech, index) => (

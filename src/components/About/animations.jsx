@@ -2,24 +2,19 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Function to apply animations to a project element when scrolling
-export const projectAnimation = (projectRef) => {
-  // Select the image element within the project to animate its width
-  const imgRef = projectRef.querySelector(".imgCover");
+export const projectAnimation = (projectsRef) => {
 
-  // Create a ScrollTrigger instance to control the animation based on scroll position
-  ScrollTrigger.create({
-    trigger: projectRef,
-    start: "bottom bottom",
-    end: "top 30%",
-    scrub: true,
-    onUpdate: (self) => {
-      let progress = self.progress;
-      let newWidth = 100 + -100 * progress;
-      gsap.to(imgRef, {
-        width: `${newWidth}%`,
-        duration: 0.5,
-        ease: "slow.inOut",
-      });
-    },
+  projectsRef.current.forEach((project, index) => {
+    // Set up ScrollTrigger for each project section
+    ScrollTrigger.create({
+      trigger: project, 
+      start: "top top", // When the top of the project hits the top of the viewport
+      end: "bottom top", // When the bottom of the project hits the top of the viewport
+      pin: true, // Pin the section during scroll
+      pinSpacing: false, // Prevent additional spacing after pinning
+      scrub: true, // Smooth transition during scroll
+      snap: 1 / (projectsRef.current.length - 1), // Define snap positions between sections
+      markers: true,
+    });
   });
 };
