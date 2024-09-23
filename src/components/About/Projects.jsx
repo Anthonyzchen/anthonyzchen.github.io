@@ -79,7 +79,7 @@ const Projects = () => {
         {projectData.map((project, index) => (
           <li
             key={index}
-            className="mb-12 flex h-screen flex-col items-center justify-center bg-dark-beige md:flex-row"
+            className="mb-12 flex h-screen flex-col items-center justify-center bg-beige md:flex-row"
             ref={(el) => projectsRef.current.push(el)}
           >
             <div className="grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4">

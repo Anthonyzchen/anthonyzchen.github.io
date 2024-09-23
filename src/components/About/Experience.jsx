@@ -33,7 +33,7 @@ const Experience = () => {
   ];
 
   return (
-    <ol className="group/list py-16 lg:col-span-3 lg:py-0">
+    <ol className="group/list relative bg-beige py-16 lg:col-span-3 lg:py-0">
       {experienceData.map((experience, index) => (
         <li key={index} className="mb-12">
           <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
