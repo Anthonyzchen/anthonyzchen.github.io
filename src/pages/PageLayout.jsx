@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 const PageLayout = () => {
   return (
     <div className="bg-beige font-light text-brown">
-      {/* <Preloader /> */}
+      <Preloader />
       <Navbar />
       <Outlet />
       <Footer />
