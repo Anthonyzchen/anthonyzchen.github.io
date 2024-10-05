@@ -12,14 +12,16 @@ gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin, GSDevTools);
 const Experience2 = () => {
   const experienceData = [
     {
-      title: "Generative AI Software Developer",
+      title: "UI/UX Developer",
       employment: "Internship",
-      company: "UKG",
-      timeframe: "Sept 2024 - Dec 2024",
+      company: "Mobileware",
+      timeframe: "May 2019 - Aug 2019",
       description:
-        "Anticipating developing and optimizing prompts for NLP and integrated data solutions using Python, PostgresSQL, and ReactJS, enhancing AI-driven applications and feature development.",
-      link: "https://www.ukg.com/",
-      short_techstack: ["Python", "PostgresSQL", "ReactJS"],
+        "Collaboratively developed a user-friendly weather application by using an API, enabling real-time data retrieval for accurate and up-to-date weather information. Designed and implemented a group scheduling application using Swift and SwiftUI, fostering efficient coordination by preventing scheduling conflicts and enhancing overall scheduling management.",
+      link: "https://www.mobilewareinc.com/",
+      techstack: ["SwiftUI", "API"],
+      x: 600,
+      y: 200,
     },
     {
       title: "IT Data Integration & Web Developer",
@@ -29,22 +31,25 @@ const Experience2 = () => {
       description:
         "Integrated a cloud-based database of 5000+ records with a dynamic webpage through API and Plugin utilization, enabling automated real-time updates. Independently created 8+ Python scripts tailored for non-technical colleagues streamlining the filtering and sorting of XML files with 400+ data points, thus optimizing data processing and organization. Completed a comprehensive overhaul of web-page structure, integrating user feedback to drive improvements in performance, navigation, and overall user experience, resulting in an enhanced and user-friendly platform. Authored 20+ pages of detailed documentation, providing for a crucial foundation in understanding, implementation, troubleshooting, and maintenance of the complex systems and technical processes.",
       link: "https://bpsi.org/",
-      short_techstack: ["Python", "API", "XML", "Wordpress"],
+      techstack: ["Python", "API", "XML", "Wordpress"],
+      x: 2900,
+      y: 300,
     },
     {
-      title: "UI/UX Developer",
+      title: "Generative AI Software Developer",
       employment: "Internship",
-      company: "Mobileware",
-      timeframe: "July 2019 - Aug 2019",
+      company: "UKG",
+      timeframe: "Sept 2024 - Dec 2024",
       description:
-        "Collaboratively developed a user-friendly weather application by using an API, enabling real-time data retrieval for accurate and up-to-date weather information. Designed and implemented a group scheduling application using Swift and SwiftUI, fostering efficient coordination by preventing scheduling conflicts and enhancing overall scheduling management.",
-      link: "https://www.mobilewareinc.com/",
-      short_techstack: ["SwiftUI", "API"],
+        "Anticipating developing and optimizing prompts for NLP and integrated data solutions using Python, PostgresSQL, and ReactJS, enhancing AI-driven applications and feature development.",
+      link: "https://www.ukg.com/",
+      techstack: ["Python", "PostgresSQL", "ReactJS"],
+      x: 3650,
+      y: 300,
     },
   ];
 
   const experiencesRef = useRef(null);
-  const speed = useState(3);
 
   useGSAP(() => {
     const experiences = experiencesRef.current;
@@ -63,31 +68,82 @@ const Experience2 = () => {
     ScrollTrigger.create({
       trigger: ".experienceWrapper",
       start: "top",
-      end: () => `+=${getScrollAmount() * -1}`,
+      end: () => `+=${getScrollAmount() * 0.735 * -1}`,
       pin: true,
       animation: tween,
       scrub: 1,
       invalidateOnRefresh: true,
-      markers: true,
     });
 
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: "#svg",
-        scrub: true,
-        start: "top center",
-        end: () => `+=${getScrollAmount() * speed * -1}`,
-      }
-    })
-    .to(".ball01", {autoAlpha:1, duration:0.05})
-    .from(".theLine", {drawSVG:0, duration:4}, 0)
-    .to(".ball01", {motionPath:{
-      path:".theLine",
-      align:".theLine",
-      alignOrigin:[0.5, 0.5],
-    }, duration:4}, 0)
-    // .add(pulses, 0)
+    const pulseAnimation = (
+      element,
+      scaleFrom = 1,
+      scaleTo = 1.5,
+      duration = 0.2,
+      ease = "elastic(2.5, .5)",
+    ) => {
+      return gsap.fromTo(
+        element,
+        { scale: scaleFrom, autoAlpha: 0, transformOrigin: "center" }, // From this scale
+        { scale: scaleTo, autoAlpha: 1, duration: duration, ease: ease }, // To this scale
+      );
+    };
+
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: "#svg",
+          scrub: true,
+          start: "top top",
+          end: () => `+=${getScrollAmount() * -1}`,
+        },
+      })
+      .from(".theLine", { drawSVG: 0, duration: 4 }, 0)
+      // Start of first experience
+      .add(pulseAnimation(".ball01"), 0.2)
+      .add(pulseAnimation(".text08"), 0.2)
+      .add(pulseAnimation(".experience1"), 0.2)
+      // End of first experience
+      .add(pulseAnimation(".ball02"), 0.235)
+      .add(pulseAnimation(".text09"), 0.235)
+      // Start of second experience
+      .add(pulseAnimation(".ball03"), 2.184)
+      .add(pulseAnimation(".text10"), 2.184)
+      .add(pulseAnimation(".experience2"), 2.184)
+      // End of second experience
+      .add(pulseAnimation(".ball04"), 2.376)
+      .add(pulseAnimation(".text11"), 2.376)
+      // Start of third experience
+      .add(pulseAnimation(".ball05"), 2.683)
+      .add(pulseAnimation(".text12"), 2.683)
+      .add(pulseAnimation(".experience3"), 2.683)
+      // End of third experience
+      .add(pulseAnimation(".ball06"), 2.756)
+      .add(pulseAnimation(".text13"), 2.756);
   }, {});
+
+  // Utility function to split the description into multiple lines
+  const wrapText = (text, maxLineLength) => {
+    const words = text.split(" ");
+    const lines = [];
+    let currentLine = "";
+
+    words.forEach((word) => {
+      if ((currentLine + word).length <= maxLineLength) {
+        currentLine += word + " ";
+      } else {
+        lines.push(currentLine.trim());
+        currentLine = word + " ";
+      }
+    });
+
+    if (currentLine.length > 0) {
+      lines.push(currentLine.trim());
+    }
+
+    return lines;
+  };
+  const maxLineLength = 40;
 
   return (
     <div className="">
@@ -97,11 +153,6 @@ const Experience2 = () => {
           className="experiences flex h-screen w-max flex-nowrap"
           ref={experiencesRef}
         >
-          {/* {experienceData.map((experience, index) => (
-            <h2 key={index} className="h-screen w-full text-9xl">
-              {experience.title}
-            </h2>
-          ))} */}
           <svg
             id="svg"
             xmlns="http://www.w3.org/2000/svg"
@@ -166,6 +217,52 @@ const Experience2 = () => {
             <text className="text13" x="3840" y="540">
               DEC
             </text>
+
+            {experienceData.map((experience, index) => (
+              <svg key={index} className={`experience${index + 1}`}>
+                <rect
+                  x={experience.x}
+                  y={experience.y}
+                  rx="20"
+                  ry="20"
+                  width="240"
+                  height="160"
+                  className="fill-transparent-beige"
+                />
+                <text
+                  className="text-xs"
+                  x={experience.x + 120}
+                  y={experience.y + 20}
+                >
+                  {experience.title} · {experience.company}
+                </text>
+                <text
+                  className="text-xs"
+                  x={experience.x + 120}
+                  y={experience.y + 40}
+                >
+                  {experience.employment} | {experience.techstack}
+                </text>
+                <text
+                  className="text-xs"
+                  y={experience.y + 60}
+                >
+                  {/* {experience.description} */}
+                  {wrapText(experience.description, maxLineLength).map(
+                    (line, lineIndex) => (
+                      <tspan
+                        key={lineIndex}
+                        x={experience.x + 120}
+                        dy={lineIndex === 0 ? 0 : 15}
+                      >
+                        {line}
+                      </tspan>
+                    ),
+                  )}
+                </text>
+              </svg>
+            ))}
+
             {/* line */}
             <path
               className="theLine stroke-[5px]"
@@ -182,20 +279,21 @@ const Experience2 = () => {
               C 2100 500 2200 550 2350 550 
               C 2500 550 2550 500 2450 450 
               C 2100 250 0 300 2700 350 
-              C 2800 350 2950 300 3000 250 
-              C 3150 150 3200 50 3250 200 
-              C 3350 350 3500 100 3600 50 
-              C 3700 0 3700 200 3900 150 
-              C 4450 100 3950 550 4500 300"
+              C 2900 350 2950 250 3050 150 
+              C 3150 50 3100 400 3200 300 
+              C 3300 200 3300 200 3400 100 
+              C 3500 0 3500 350 3800 250 
+              C 4450 50 3400 600 4550 350"
               fill="none"
             />
+            
             {/* Balls */}
             <circle className="ball ball01" r="10" cx="760" cy="130"></circle>
             <circle className="ball ball02" r="10" cx="880" cy="222"></circle>
-            <circle className="ball ball03" r="10" cx="3040" cy="223"></circle>
-            <circle className="ball ball04" r="10" cx="3280" cy="230"></circle>
-            <circle className="ball ball05" r="10" cx="3720" cy="107"></circle>
-            <circle className="ball ball06" r="10" cx="3840" cy="156"></circle>
+            <circle className="ball ball03" r="10" cx="3040" cy="160"></circle>
+            <circle className="ball ball04" r="10" cx="3280" cy="220"></circle>
+            <circle className="ball ball05" r="10" cx="3720" cy="267"></circle>
+            <circle className="ball ball06" r="10" cx="3840" cy="238"></circle>
           </svg>
         </div>
       </div>
