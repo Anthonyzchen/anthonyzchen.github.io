@@ -10,6 +10,8 @@ import GSDevTools from "gsap-trial/GSDevTools";
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin, GSDevTools);
 
 const Experience2 = () => {
+  const [activeExperience, setActiveExperience] = useState(null);
+
   const experienceData = [
     {
       title: "UI/UX Developer",
@@ -20,8 +22,8 @@ const Experience2 = () => {
         "Collaboratively developed a user-friendly weather application by using an API, enabling real-time data retrieval for accurate and up-to-date weather information. Designed and implemented a group scheduling application using Swift and SwiftUI, fostering efficient coordination by preventing scheduling conflicts and enhancing overall scheduling management.",
       link: "https://www.mobilewareinc.com/",
       techstack: ["SwiftUI", "API"],
-      x: 600,
-      y: 200,
+      x: 800,
+      y: 250,
     },
     {
       title: "IT Data Integration & Web Developer",
@@ -102,21 +104,21 @@ const Experience2 = () => {
       // Start of first experience
       .add(pulseAnimation(".ball01"), 0.2)
       .add(pulseAnimation(".text08"), 0.2)
-      .add(pulseAnimation(".experience1"), 0.2)
+      // .add(pulseAnimation(".experience1"), 0.2)
       // End of first experience
       .add(pulseAnimation(".ball02"), 0.235)
       .add(pulseAnimation(".text09"), 0.235)
       // Start of second experience
       .add(pulseAnimation(".ball03"), 2.184)
       .add(pulseAnimation(".text10"), 2.184)
-      .add(pulseAnimation(".experience2"), 2.184)
+      // .add(pulseAnimation(".experience2"), 2.184)
       // End of second experience
       .add(pulseAnimation(".ball04"), 2.376)
       .add(pulseAnimation(".text11"), 2.376)
       // Start of third experience
       .add(pulseAnimation(".ball05"), 2.683)
       .add(pulseAnimation(".text12"), 2.683)
-      .add(pulseAnimation(".experience3"), 2.683)
+      // .add(pulseAnimation(".experience3"), 2.683)
       // End of third experience
       .add(pulseAnimation(".ball06"), 2.756)
       .add(pulseAnimation(".text13"), 2.756);
@@ -150,9 +152,72 @@ const Experience2 = () => {
       <div className="h-screen w-full"></div>
       <div className="experienceWrapper overflow-x-hidden">
         <div
-          className="experiences flex h-screen w-max flex-nowrap"
+          className="experiences relative flex h-screen w-max flex-nowrap"
           ref={experiencesRef}
         >
+          {experienceData.map((experience, index) => (
+            <div
+              key={index}
+              className={`experience${index + 1} absolute h-1/2 w-96`}
+              style={{
+                transform: `translate(${experience.x}px, ${experience.y}px)`, // Dynamic translation using inline style
+              }}
+            >
+              {/* Main Card Container */}
+              <div className="lg:group-hover:list:opacity-50 group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:opacity-100">
+                <div className="absolute inset-0 hidden rounded-md transition lg:block lg:group-hover:bg-dark-beige/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+
+                {/* Experience Title and Company Link */}
+                <div className="z-10 sm:col-span-6">
+                  <h3 className="text-xl">
+                    <a
+                      className="group/link inline-flex items-baseline leading-tight hover:text-red-700 focus-visible:text-red-700"
+                      href={experience.link}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label={`${experience.title} at ${experience.company} (opens in a new tab)`}
+                    >
+                      <span className="absolute inset-0 hidden rounded lg:block"></span>
+                      {experience.title} ·
+                      <span className="ml-1 inline-block">
+                        {experience.company}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          className="ml-1 inline-block h-4 w-4 shrink-0 translate-y-px transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
+                            clipRule="evenodd"
+                          ></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </h3>
+
+                  {/* Descriptions */}
+                  <h2 className="">{experience.employment}</h2>
+
+                  <p className="mt-2">{experience.description}</p>
+
+                  {/* Tech Stack Tags */}
+                  <ul className="flex flex-wrap pt-4">
+                    {experience.techstack.map((tech, techIndex) => (
+                      <li key={techIndex} className="p-0.5">
+                        <div className="flex items-center rounded-full bg-red-800/10 px-3 py-1 text-red-700">
+                          {tech}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+
           <svg
             id="svg"
             xmlns="http://www.w3.org/2000/svg"
@@ -218,51 +283,6 @@ const Experience2 = () => {
               DEC
             </text>
 
-            {experienceData.map((experience, index) => (
-              <svg key={index} className={`experience${index + 1}`}>
-                <rect
-                  x={experience.x}
-                  y={experience.y}
-                  rx="20"
-                  ry="20"
-                  width="240"
-                  height="160"
-                  className="fill-transparent-beige"
-                />
-                <text
-                  className="text-xs"
-                  x={experience.x + 120}
-                  y={experience.y + 20}
-                >
-                  {experience.title} · {experience.company}
-                </text>
-                <text
-                  className="text-xs"
-                  x={experience.x + 120}
-                  y={experience.y + 40}
-                >
-                  {experience.employment} | {experience.techstack}
-                </text>
-                <text
-                  className="text-xs"
-                  y={experience.y + 60}
-                >
-                  {/* {experience.description} */}
-                  {wrapText(experience.description, maxLineLength).map(
-                    (line, lineIndex) => (
-                      <tspan
-                        key={lineIndex}
-                        x={experience.x + 120}
-                        dy={lineIndex === 0 ? 0 : 15}
-                      >
-                        {line}
-                      </tspan>
-                    ),
-                  )}
-                </text>
-              </svg>
-            ))}
-
             {/* line */}
             <path
               className="theLine stroke-[5px]"
@@ -286,7 +306,6 @@ const Experience2 = () => {
               C 4450 50 3400 600 4550 350"
               fill="none"
             />
-            
             {/* Balls */}
             <circle className="ball ball01" r="10" cx="760" cy="130"></circle>
             <circle className="ball ball02" r="10" cx="880" cy="222"></circle>
@@ -300,5 +319,48 @@ const Experience2 = () => {
     </div>
   );
 };
+
+// SVG option for displaying experience
+// {experienceData.map((experience, index) => (
+//   <svg key={index} className={`experience${index + 1}`}>
+//   <rect
+//     x={experience.x}
+//     y={experience.y}
+//     rx="20"
+//     ry="20"
+//     width="240"
+//     height="160"
+//     className="fill-transparent-beige"
+//   />
+//   <text
+//     className="text-xs"
+//     x={experience.x + 120}
+//     y={experience.y + 20}
+//   >
+//     {experience.title} · {experience.company}
+//   </text>
+//   <text
+//     className="text-xs"
+//     x={experience.x + 120}
+//     y={experience.y + 40}
+//   >
+//     {experience.employment} | {experience.techstack}
+//   </text>
+//   <text className="text-xs" y={experience.y + 60}>
+//     {/* {experience.description} */}
+//     {wrapText(experience.description, maxLineLength).map(
+//       (line, lineIndex) => (
+//         <tspan
+//           key={lineIndex}
+//           x={experience.x + 120}
+//           dy={lineIndex === 0 ? 0 : 15}
+//         >
+//           {line}
+//         </tspan>
+//       ),
+//     )}
+//   </text>
+// </svg>
+// ))}
 
 export default Experience2;
