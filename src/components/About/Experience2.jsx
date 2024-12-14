@@ -19,10 +19,11 @@ const Experience2 = () => {
       company: "Mobileware",
       timeframe: "May 2019 - Aug 2019",
       description:
-        "Collaboratively developed a user-friendly weather application by using an API, enabling real-time data retrieval for accurate and up-to-date weather information. Designed and implemented a group scheduling application using Swift and SwiftUI, fostering efficient coordination by preventing scheduling conflicts and enhancing overall scheduling management.",
+        "• Collaboratively developed a user-friendly weather application by using an API, enabling real-time data retrieval for accurate and up-to-date weather information.\n" +
+        "• Designed and implemented a group scheduling application using Swift and SwiftUI, fostering efficient coordination by preventing scheduling conflicts and enhancing overall scheduling management.",
       link: "https://www.mobilewareinc.com/",
       techstack: ["SwiftUI", "API"],
-      x: 800,
+      x: 760,
       y: 250,
     },
     {
@@ -31,10 +32,13 @@ const Experience2 = () => {
       company: "BPSI",
       timeframe: "June 2023 - Dec 2023",
       description:
-        "Integrated a cloud-based database of 5000+ records with a dynamic webpage through API and Plugin utilization, enabling automated real-time updates. Independently created 8+ Python scripts tailored for non-technical colleagues streamlining the filtering and sorting of XML files with 400+ data points, thus optimizing data processing and organization. Completed a comprehensive overhaul of web-page structure, integrating user feedback to drive improvements in performance, navigation, and overall user experience, resulting in an enhanced and user-friendly platform. Authored 20+ pages of detailed documentation, providing for a crucial foundation in understanding, implementation, troubleshooting, and maintenance of the complex systems and technical processes.",
+        "• Integrated a cloud-based database of 5000+ records with a dynamic webpage through API and Plugin utilization, enabling automated real-time updates.\n" +
+        "• Independently created 8+ Python scripts tailored for non-technical colleagues streamlining the filtering and sorting of XML files with 400+ data points, thus optimizing data processing and organization.\n" +
+        "• Completed a comprehensive overhaul of web-page structure, integrating user feedback to drive improvements in performance, navigation, and overall user experience, resulting in an enhanced and user-friendly platform.\n" +
+        "• Authored 20+ pages of detailed documentation, providing for a crucial foundation in understanding, implementation, troubleshooting, and maintenance of the complex systems and technical processes.",
       link: "https://bpsi.org/",
       techstack: ["Python", "API", "XML", "Wordpress"],
-      x: 3650,
+      x: 3800,
       y: 300,
     },
     {
@@ -43,10 +47,13 @@ const Experience2 = () => {
       company: "UKG",
       timeframe: "Sept 2024 - Dec 2024",
       description:
-        "Redesigned and developed a company-wide innovation platform located on SharePoint, improving accessibility and user satisfaction while driving adoption of generative AI initiatives.  The platform's documentation, viewed over 23,000 times, ensures smooth implementation and maintenance. Built and deployed a Generative AI Assistant with Azure AI, streamlining knowledge management, optimizing NLP prompts, and enhancing user support. Designed and implemented an interactive product tour using ReactJS, improving user onboarding to internal generative AI tools and aligning with corporate branding standards. Collaborated with cross-functional teams in an Agile environment to deliver scalable solutions, utilizing tools like Jira for sprint planning and task management.",
+        "• Redesigned and developed a company-wide innovation platform located on SharePoint, improving accessibility and user satisfaction while driving adoption of generative AI initiatives.\n" +
+        "• Built and deployed a Generative AI Assistant with Azure AI, streamlining knowledge management, optimizing NLP prompts, and enhancing user support.\n" +
+        "• Designed and implemented an interactive product tour using ReactJS, improving user onboarding to internal generative AI tools and aligning with corporate branding standards.\n" +
+        "• Collaborated with cross-functional teams in an Agile environment to deliver scalable solutions, utilizing tools like Jira for sprint planning and task management.",
       link: "https://www.ukg.com/",
       techstack: ["Python", "PostgresSQL", "ReactJS"],
-      x: 4500,
+      x: 4800,
       y: 300,
     },
   ];
@@ -158,17 +165,17 @@ const Experience2 = () => {
           {experienceData.map((experience, index) => (
             <div
               key={index}
-              className={`experience${index + 1} absolute h-1/2 w-96`}
+              className={`experience${index + 1} absolute h-auto min-w-[24rem] max-w-[32rem]`}
               style={{
                 transform: `translate(${experience.x}px, ${experience.y}px)`, // Dynamic translation using inline style
               }}
             >
               {/* Main Card Container */}
-              <div className="lg:group-hover:list:opacity-50 group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:opacity-100">
+              <div className="lg:group-hover:list:opacity-50 group relative pb-1 transition-all lg:hover:opacity-100">
                 <div className="absolute inset-0 hidden rounded-md transition lg:block lg:group-hover:bg-dark-beige/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
 
                 {/* Experience Title and Company Link */}
-                <div className="z-10 sm:col-span-6">
+                <div className="z-10">
                   <h3 className="text-xl">
                     <a
                       className="group/link inline-flex items-baseline leading-tight hover:text-red-700 focus-visible:text-red-700"
@@ -201,7 +208,9 @@ const Experience2 = () => {
                   {/* Descriptions */}
                   <h2 className="">{experience.employment}</h2>
 
-                  <p className="mt-2">{experience.description}</p>
+                  <div className="mt-2 whitespace-pre-line">
+                    {experience.description}
+                  </div>
 
                   {/* Tech Stack Tags */}
                   <ul className="flex flex-wrap pt-4">
@@ -291,7 +300,7 @@ const Experience2 = () => {
               Q 450 450 550 250 
               Q 650 50 800 150 
               C 1000 300 1050 550 1200 550 
-              C 1400 550 1500 200 1700 50 
+              C 1400 550 1500 200 1700 50
               C 1550 400 1650 525 1700 550 
               C 1800 600 1900 150 1800 550 
               C 2050 150 1950 500 1950 550 
