@@ -34,7 +34,7 @@ const Experience2 = () => {
         "Integrated a cloud-based database of 5000+ records with a dynamic webpage through API and Plugin utilization, enabling automated real-time updates. Independently created 8+ Python scripts tailored for non-technical colleagues streamlining the filtering and sorting of XML files with 400+ data points, thus optimizing data processing and organization. Completed a comprehensive overhaul of web-page structure, integrating user feedback to drive improvements in performance, navigation, and overall user experience, resulting in an enhanced and user-friendly platform. Authored 20+ pages of detailed documentation, providing for a crucial foundation in understanding, implementation, troubleshooting, and maintenance of the complex systems and technical processes.",
       link: "https://bpsi.org/",
       techstack: ["Python", "API", "XML", "Wordpress"],
-      x: 2900,
+      x: 3650,
       y: 300,
     },
     {
@@ -43,10 +43,10 @@ const Experience2 = () => {
       company: "UKG",
       timeframe: "Sept 2024 - Dec 2024",
       description:
-        "Anticipating developing and optimizing prompts for NLP and integrated data solutions using Python, PostgresSQL, and ReactJS, enhancing AI-driven applications and feature development.",
+        "Redesigned and developed a company-wide innovation platform located on SharePoint, improving accessibility and user satisfaction while driving adoption of generative AI initiatives.  The platform's documentation, viewed over 23,000 times, ensures smooth implementation and maintenance. Built and deployed a Generative AI Assistant with Azure AI, streamlining knowledge management, optimizing NLP prompts, and enhancing user support. Designed and implemented an interactive product tour using ReactJS, improving user onboarding to internal generative AI tools and aligning with corporate branding standards. Collaborated with cross-functional teams in an Agile environment to deliver scalable solutions, utilizing tools like Jira for sprint planning and task management.",
       link: "https://www.ukg.com/",
       techstack: ["Python", "PostgresSQL", "ReactJS"],
-      x: 3650,
+      x: 4500,
       y: 300,
     },
   ];
