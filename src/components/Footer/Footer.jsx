@@ -4,7 +4,7 @@ const Footer = () => {
       href: "https://www.facebook.com/anthonyzchen.03",
       icon: "fa-facebook",
     },
-    { href: "https://github.com/Anzchen", icon: "fa-github" },
+    { href: "https://github.com/anthonyzchen", icon: "fa-github" },
     {
       href: "https://www.instagram.com/anthonyzchen/",
       icon: "fa-instagram",

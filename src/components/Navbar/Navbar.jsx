@@ -19,7 +19,7 @@ const Navbar = () => {
   const menuIconTL = useRef();
   const menuBackgroundTL = useRef();
 
-  const linkData = ["Home", "About", "Projects", "Blog", "Contact"];
+  const linkData = ["Home", "Blog"];
 
   useGSAP(
     () => {
@@ -57,7 +57,7 @@ const Navbar = () => {
 
   return (
     <div ref={navbarRef}>
-      <header className="fixed z-30 flex w-full items-center justify-between bg-beige sm:bg-transparent px-8 py-4">
+      <header className="fixed z-30 flex w-full items-center justify-between bg-beige px-8 py-4 sm:bg-transparent">
         <button className="logo cursor-pointer">
           <img
             className="h-16"
