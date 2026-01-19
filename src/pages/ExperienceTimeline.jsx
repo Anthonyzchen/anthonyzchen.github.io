@@ -1,0 +1,639 @@
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { TechBadge } from "../components/ui";
+import experienceData from "../data/experience.json";
+
+gsap.registerPlugin(ScrollTrigger);
+
+// Sort by start date (oldest first for left to right chronological)
+// Parse the timeframe to get start date for sorting
+const parseStartDate = (timeframe) => {
+  const months = {
+    'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+    'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+  };
+  const match = timeframe.match(/(\w+)\s+(\d{4})/);
+  if (match) {
+    return new Date(parseInt(match[2]), months[match[1]] || 0);
+  }
+  return new Date(0);
+};
+
+const sortedExperiences = [...experienceData].sort((a, b) =>
+  parseStartDate(a.timeframe) - parseStartDate(b.timeframe)
+);
+
+// Check if experience is ongoing (contains "Present")
+const isOngoing = (timeframe) => timeframe.toLowerCase().includes('present');
+
+// Get all years from experiences
+const experienceYears = [...new Set(sortedExperiences.map((exp) => exp.year))].sort();
+const minYear = Math.min(...experienceYears);
+const maxYear = Math.max(...experienceYears);
+
+// Create a combined timeline with experiences and missing year markers
+const timelineData = [];
+for (let year = minYear; year <= maxYear; year++) {
+  const experiencesForYear = sortedExperiences.filter((exp) => exp.year === year);
+  if (experiencesForYear.length > 0) {
+    // Add all experiences for this year
+    experiencesForYear.forEach((exp) => {
+      timelineData.push({ ...exp, isYearMarker: false });
+    });
+  } else {
+    // Add a placeholder for missing year
+    timelineData.push({
+      id: `year-marker-${year}`,
+      year: year,
+      isYearMarker: true,
+    });
+  }
+}
+
+// Category colors and icons
+const categoryStyles = {
+  engineering: {
+    accent: "text-blue-700",
+    bg: "bg-blue-800/10",
+    border: "border-blue-700/30",
+    badge: "bg-blue-700/20 text-blue-800 border-blue-700/30",
+    icon: (
+      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+      </svg>
+    ),
+  },
+  leadership: {
+    accent: "text-purple-700",
+    bg: "bg-purple-800/10",
+    border: "border-purple-700/30",
+    badge: "bg-purple-700/20 text-purple-800 border-purple-700/30",
+    icon: (
+      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    ),
+  },
+  service: {
+    accent: "text-amber-700",
+    bg: "bg-amber-800/10",
+    border: "border-amber-700/30",
+    badge: "bg-amber-700/20 text-amber-800 border-amber-700/30",
+    icon: (
+      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    ),
+  },
+  education: {
+    accent: "text-emerald-700",
+    bg: "bg-emerald-800/10",
+    border: "border-emerald-700/30",
+    badge: "bg-emerald-700/20 text-emerald-800 border-emerald-700/30",
+    icon: (
+      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+      </svg>
+    ),
+  },
+};
+
+/**
+ * ExperienceTimeline - Horizontal scrolling timeline page
+ * Scrolls vertically but translates content horizontally
+ * Features an animated SVG path that draws as you scroll
+ */
+const ExperienceTimeline = () => {
+  const containerRef = useRef(null);
+  const horizontalRef = useRef(null);
+  const pathRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  useGSAP(() => {
+    const container = containerRef.current;
+    const horizontal = horizontalRef.current;
+    const path = pathRef.current;
+
+    // Calculate dimensions
+    const scrollWidth = horizontal.scrollWidth - window.innerWidth;
+    const numCards = timelineData.length;
+    const totalWidth = horizontal.scrollWidth;
+
+    // Calculate where intro and outro screens end/start as percentages
+    const introEndPercent = window.innerWidth / totalWidth;
+    const outroStartPercent = 1 - (window.innerWidth / totalWidth);
+    const timelineRange = outroStartPercent - introEndPercent;
+
+    // Path starts at 70% of intro and ends at 30% into outro
+    const pathStartPercent = (window.innerWidth * 0.7) / totalWidth;
+    const pathEndPercent = 1 - (window.innerWidth * 0.7) / totalWidth;
+    const pathRange = pathEndPercent - pathStartPercent;
+
+    // Pre-calculate path length once
+    let pathLength = 0;
+    if (path) {
+      pathLength = path.getTotalLength();
+      path.style.strokeDasharray = pathLength;
+      path.style.strokeDashoffset = pathLength;
+    }
+
+    // Main horizontal scroll animation with optimized onUpdate
+    const mainTrigger = ScrollTrigger.create({
+      trigger: container,
+      start: "top top",
+      end: () => `+=${scrollWidth}`,
+      pin: true,
+      scrub: 0.5,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        const prog = self.progress;
+
+        // Update horizontal position directly on style for performance
+        horizontal.style.transform = `translate3d(${-scrollWidth * prog}px, 0, 0)`;
+
+        // Update path drawing - synced with where the path actually starts/ends
+        if (path && pathLength > 0) {
+          const pathProgress = Math.min(1, Math.max(0, (prog - pathStartPercent) / pathRange));
+          path.style.strokeDashoffset = pathLength * (1 - pathProgress);
+        }
+
+        // Animate cards - each card should be fully visible by the time it reaches center of screen
+        const cardSectionStart = introEndPercent;
+        const cardSectionRange = timelineRange;
+
+        cardsRef.current.forEach((card, index) => {
+          if (!card) return;
+
+          // Calculate when this card's CENTER reaches the CENTER of the screen
+          // The horizontal container scrolls from 0 to scrollWidth
+          // Each card is at position: (index * segmentWidth) + (segmentWidth / 2) for its center
+          // Card center is at screen center when: scrollX = cardCenterX - (screenWidth / 2)
+          // As a fraction of total scroll: scrollX / scrollWidth
+
+          const screenWidth = window.innerWidth;
+          const cardCenterX = screenWidth + (index + 0.5) * 480; // 480 = segmentWidth, intro screen + card position
+          const scrollWhenCentered = cardCenterX - (screenWidth / 2);
+          const totalScrollWidth = horizontal.scrollWidth - screenWidth;
+          const cardCenterProgress = scrollWhenCentered / totalScrollWidth;
+
+          // Animation window: complete exactly when card center hits screen center
+          const animationDuration = 0.04; // 4% of scroll for smooth animation
+          const cardStart = cardCenterProgress - animationDuration;
+          const cardEnd = cardCenterProgress; // Fully visible exactly when centered
+          const cardProgress = Math.min(1, Math.max(0, (prog - cardStart) / (cardEnd - cardStart)));
+
+          // Easing function for smoother animation
+          const eased = cardProgress < 0.5
+            ? 4 * cardProgress * cardProgress * cardProgress
+            : 1 - Math.pow(-2 * cardProgress + 2, 3) / 2;
+
+          // Cards slide in from their respective sides (top cards from above, bottom from below)
+          const yOffset = index % 2 === 0 ? -50 : 50;
+          // Slight rotation that straightens out
+          const rotation = index % 2 === 0 ? -3 : 3;
+
+          card.style.opacity = eased;
+          card.style.transform = `translate3d(0, ${yOffset * (1 - eased)}px, 0) rotate(${rotation * (1 - eased)}deg)`;
+          card.style.filter = `blur(${(1 - eased) * 4}px)`;
+        });
+      },
+    });
+
+    return () => {
+      mainTrigger.kill();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, []);
+
+  // Generate SVG path for the timeline
+  const generateTimelinePath = () => {
+    const segmentWidth = 480;
+    const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const midY = 200; // Center of the 400px SVG
+    const waveHeight = 50; // Height of wave from center
+
+    // Start at right edge of My Journey page (with some padding into the page)
+    const fadeInStart = screenWidth * 0.7; // Start 70% through intro page
+    let path = `M ${fadeInStart} ${midY}`;
+
+    // Timeline section boundaries
+    const timelineStart = screenWidth;
+    const timelineEnd = screenWidth + (timelineData.length * segmentWidth);
+
+    // Full path from fade in to fade out
+    const pathEnd = timelineEnd + screenWidth * 0.3;
+
+    // Generate smooth sine wave
+    const numPoints = timelineData.length * 40; // Many points for smoothness
+
+    for (let i = 0; i <= numPoints; i++) {
+      const t = i / numPoints;
+      const x = fadeInStart + ((pathEnd - fadeInStart) * t);
+
+      // Calculate where we are relative to the timeline section
+      const timelineT = (x - timelineStart) / (timelineEnd - timelineStart);
+
+      // Ease amplitude: ramp up at start, ramp down at end
+      let amplitude = waveHeight;
+      if (x < timelineStart) {
+        // Before timeline - ease in
+        amplitude = waveHeight * ((x - fadeInStart) / (timelineStart - fadeInStart));
+      } else if (x > timelineEnd) {
+        // After timeline - ease out
+        amplitude = waveHeight * (1 - (x - timelineEnd) / (pathEnd - timelineEnd));
+      }
+
+      // Wave goes through the center (midY) at each card position
+      // Cards are at positions (index + 0.5) / numCards through the timeline
+      // Wave should pass through midY at those points, with peaks/troughs between cards
+      const wavePhase = timelineT * Math.PI * timelineData.length;
+      const y = midY + Math.sin(wavePhase) * amplitude;
+
+      path += ` L ${x} ${y}`;
+    }
+
+    return path;
+  };
+
+  const segmentWidth = 480;
+  // Two full screens (intro + end) plus all experience cards
+  const totalWidth = (2 * window.innerWidth) + (timelineData.length * segmentWidth);
+
+  // Get unique years for the legend
+  const uniqueYears = [...new Set(timelineData.map((item) => item.year))].sort();
+
+  return (
+    <section
+      ref={containerRef}
+      className="relative min-h-screen overflow-hidden bg-beige"
+    >
+      {/* Bottom floating bubbles */}
+      <div className="fixed bottom-6 left-0 right-0 z-30 hidden justify-center gap-4 px-8 lg:flex">
+        {/* Timeline years bubble */}
+        <div className="rounded-full bg-dark-beige/90 px-4 py-2 shadow-lg backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-medium uppercase tracking-wider text-brown/60">
+              Timeline
+            </span>
+            {uniqueYears.map((year) => (
+              <div key={year} className="flex items-center gap-1">
+                <div className="h-1.5 w-1.5 rounded-full bg-brown/40" />
+                <span className="text-xs text-brown">{year}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Categories bubble */}
+        <div className="rounded-full bg-dark-beige/90 px-4 py-2 shadow-lg backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-medium uppercase tracking-wider text-brown/60">
+              Categories
+            </span>
+            <div className="flex items-center gap-1 text-blue-700">
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+              <span className="text-xs text-brown">Engineering</span>
+            </div>
+            <div className="flex items-center gap-1 text-purple-700">
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <span className="text-xs text-brown">Leadership</span>
+            </div>
+            <div className="flex items-center gap-1 text-amber-700">
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <span className="text-xs text-brown">Service</span>
+            </div>
+            <div className="flex items-center gap-1 text-emerald-700">
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+              </svg>
+              <span className="text-xs text-brown">Education</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Experience count bubble */}
+        <div className="rounded-full bg-dark-beige/90 px-4 py-2 shadow-lg backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-medium text-brown">
+              {timelineData.length}
+            </span>
+            <span className="text-xs text-brown/60">Experiences</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Horizontal scrolling container */}
+      <div
+        ref={horizontalRef}
+        className="flex h-screen items-center"
+        style={{ width: `${totalWidth}px` }}
+      >
+        {/* Intro section - full screen width */}
+        <div className="flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-8">
+          <h1 className="mb-6 text-center text-5xl font-medium text-brown md:text-7xl">
+            My Professional Journey
+          </h1>
+          <p className="mb-4 text-center text-2xl text-brown/70">
+            {uniqueYears[0]} - Present
+          </p>
+          <p className="max-w-[400px] text-center text-lg text-brown/60">
+            A timeline of growth through education, leadership, and engineering.
+          </p>
+        </div>
+
+        {/* Timeline SVG */}
+        <svg
+          className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2"
+          width={totalWidth}
+          height="400"
+          style={{ zIndex: 0 }}
+        >
+          {/* Gradient definitions for fading effect */}
+          <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#564E41" stopOpacity="0" />
+              <stop offset="5%" stopColor="#564E41" stopOpacity="1" />
+              <stop offset="95%" stopColor="#564E41" stopOpacity="1" />
+              <stop offset="100%" stopColor="#564E41" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="lineGradientFaded" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#564E41" stopOpacity="0" />
+              <stop offset="5%" stopColor="#564E41" stopOpacity="0.12" />
+              <stop offset="95%" stopColor="#564E41" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="#564E41" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          {/* Background path (faded) */}
+          <path
+            d={generateTimelinePath()}
+            fill="none"
+            stroke="url(#lineGradientFaded)"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          {/* Animated foreground path */}
+          <path
+            ref={pathRef}
+            d={generateTimelinePath()}
+            fill="none"
+            stroke="url(#lineGradient)"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+
+        </svg>
+
+        {/* Experience cards */}
+        {timelineData.map((item, index) => {
+          // Handle year-only markers (missing years)
+          if (item.isYearMarker) {
+            return (
+              <div
+                key={item.id}
+                ref={(el) => (cardsRef.current[index] = el)}
+                className="relative z-10 flex h-[550px] flex-shrink-0 flex-col items-center justify-center"
+                style={{
+                  width: `${segmentWidth - 30}px`,
+                  marginLeft: index === 0 ? "30px" : "15px",
+                  marginRight: "15px",
+                }}
+              >
+                {/* Year badge positioned to align with experience year badges on the SVG line */}
+                {/* Experience cards are at bottom-[290px] with year badge at bottom-[-80px], so year is at 290-80=210px from center */}
+                {/* For even index cards (above timeline), year badge goes below; for odd (below timeline), year badge goes above */}
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 rounded-full bg-brown px-3 py-1 text-sm font-medium text-beige"
+                  style={{ bottom: index % 2 === 0 ? '210px' : 'auto', top: index % 2 === 0 ? 'auto' : '210px' }}
+                >
+                  {item.year}
+                </div>
+              </div>
+            );
+          }
+
+          // Regular experience card
+          const experience = item;
+          const ongoing = isOngoing(experience.timeframe);
+          const style = categoryStyles[experience.category] || categoryStyles.engineering;
+
+          return (
+            <div
+              key={experience.id}
+              ref={(el) => (cardsRef.current[index] = el)}
+              className="relative z-10 flex h-[550px] flex-shrink-0 flex-col"
+              style={{
+                width: `${segmentWidth - 30}px`,
+                marginLeft: index === 0 ? "30px" : "15px",
+                marginRight: "15px",
+              }}
+            >
+              {/* Card positioned above or below timeline based on index */}
+              <div
+                className={`absolute w-full ${
+                  index % 2 === 0 ? "bottom-[290px]" : "top-[290px]"
+                }`}
+              >
+                <div
+                  className={`rounded-xl border-2 ${style.border} bg-dark-beige/95 p-5 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl`}
+                >
+                  {/* Header with category icon and employment type */}
+                  <div className="mb-3 flex items-start justify-between">
+                    <div className={`flex items-center gap-2 ${style.accent}`}>
+                      {style.icon}
+                      <span className="text-sm font-medium uppercase tracking-wider">
+                        {experience.category}
+                      </span>
+                    </div>
+                    <span
+                      className={`rounded-full border px-3 py-1 text-sm font-medium ${style.badge}`}
+                    >
+                      {experience.employment}
+                    </span>
+                  </div>
+
+                  {/* Title and company */}
+                  <h3 className="mb-2 text-xl font-medium leading-tight text-brown">
+                    {experience.title}
+                  </h3>
+                  {experience.link ? (
+                    <a
+                      href={experience.link}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="mb-2 inline-flex items-center text-base text-red-700 transition-colors hover:text-red-800"
+                    >
+                      {experience.company}
+                      <svg
+                        className="ml-1 h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </svg>
+                    </a>
+                  ) : (
+                    <p className="mb-2 text-base text-brown/80">
+                      {experience.company}
+                    </p>
+                  )}
+
+                  {/* Timeframe and location */}
+                  <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-brown/60">
+                    <span>{experience.timeframe}</span>
+                    <span>|</span>
+                    <span className="flex items-center gap-1">
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                      {experience.location}
+                    </span>
+                  </div>
+
+                  {/* Short description */}
+                  <p className="mb-3 text-sm leading-relaxed text-brown/80">
+                    {experience.shortDescription}
+                  </p>
+
+                  {/* Highlights */}
+                  {experience.highlights && experience.highlights.length > 0 && (
+                    <ul className="mb-3 space-y-1">
+                      {experience.highlights.slice(0, 3).map((highlight, hIndex) => (
+                        <li
+                          key={hIndex}
+                          className="flex items-start gap-2 text-sm text-brown/70"
+                        >
+                          <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-brown/40" />
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {/* Tech stack */}
+                  <ul className="flex flex-wrap gap-1.5">
+                    {experience.technologies.slice(0, 5).map((tech, techIndex) => (
+                      <li key={techIndex}>
+                        <TechBadge name={tech} />
+                      </li>
+                    ))}
+                    {experience.technologies.length > 5 && (
+                      <li className="flex items-center rounded-full bg-brown/10 px-2 py-0.5 text-xs text-brown/60">
+                        +{experience.technologies.length - 5}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+
+                {/* Connector line to timeline - extends through SVG */}
+                <div
+                  className={`absolute left-1/2 w-[2px] -translate-x-1/2 bg-brown/30 ${
+                    index % 2 === 0
+                      ? "bottom-[-70px] h-[70px]"
+                      : "top-[-70px] h-[70px]"
+                  }`}
+                />
+
+                {/* Year badge on the SVG line */}
+                <div
+                  className={`absolute left-1/2 -translate-x-1/2 rounded-full bg-brown px-3 py-1 text-sm font-medium text-beige ${
+                    index % 2 === 0 ? "bottom-[-80px]" : "top-[-80px]"
+                  }`}
+                >
+                  {experience.year}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* End section - full screen width */}
+        <div className="flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-8">
+          <div className="mb-6 rounded-full bg-green-700/20 p-5">
+            <svg
+              className="h-10 w-10 text-green-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <h2 className="mb-4 text-center text-5xl font-medium text-brown md:text-6xl">
+            Present Day
+          </h2>
+          <p className="mb-3 text-center text-2xl text-brown/70">
+            Software Engineer at UKG
+          </p>
+          <p className="max-w-[400px] text-center text-lg text-brown/60">
+            Building enterprise solutions and continuing to grow as a developer.
+          </p>
+          <div className="mt-8 flex gap-4">
+            <a
+              href="https://www.linkedin.com/in/anthonyzchen/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center gap-2 rounded-full bg-brown px-5 py-2.5 text-base text-beige transition-colors hover:bg-brown/80"
+            >
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg>
+              LinkedIn
+            </a>
+            <a
+              href="https://github.com/anthonyzchen"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center gap-2 rounded-full border-2 border-brown px-5 py-2.5 text-base text-brown transition-colors hover:bg-brown/10"
+            >
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+              </svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  );
+};
+
+export default ExperienceTimeline;

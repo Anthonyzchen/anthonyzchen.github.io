@@ -1,7 +1,7 @@
 import { useRef, useLayoutEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import Lenis from "@studio-freight/lenis";
+import Lenis from "lenis";
 import {
   createCounterAnimation,
   createProgressBarAnimation,
@@ -38,7 +38,7 @@ const Preloader = () => {
         })
         // Add counter animation
         .add(createCounterAnimation(), "start")
-        .delay(2) // Delay before starting this animation
+        .delay(0.5) // Delay before starting this animation
         // Add progress bar animation
         .add(createProgressBarAnimation(), "<")
         // Add staggered text animation

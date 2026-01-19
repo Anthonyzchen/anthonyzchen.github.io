@@ -11,23 +11,23 @@ export const createCounterAnimation = () => {
       .from(counterSelector, {
         opacity: 0,
         y: 80,
-        stagger: 0.03,
+        stagger: 0.02,
       })
       .fromTo(
         counterSelector,
         {
-          duration: 3.5,
+          duration: 1.2,
           ease: "power3.inOut",
         },
         {
           yPercent: -8010,
-          duration: 3.5,
+          duration: 1.2,
           ease: "power3.inOut",
         },
       )
       .to(counterSelector, {
         yPercent: -8163,
-        duration: 1,
+        duration: 0.3,
         ease: "power1.out",
       })
   );
@@ -37,7 +37,7 @@ export const createCounterAnimation = () => {
 export const createProgressBarAnimation = () => {
   return gsap.timeline().to(".progressBar", {
     scaleX: 1,
-    duration: 5,
+    duration: 1.8,
     ease: "power3.inOut",
   });
 };

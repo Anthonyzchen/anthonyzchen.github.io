@@ -1,0 +1,245 @@
+[
+  {
+    "id": "ukg-fulltime",
+    "title": "Software Engineer",
+    "employment": "Full-time",
+    "company": "UKG",
+    "location": "Lowell, Massachusetts",
+    "workType": "Hybrid",
+    "timeframe": "May 2025 - Present",
+    "year": 2025,
+    "description": "Built real-time background job processing system using WebSocket-based JobManager with polling fallbacks, enabling non-blocking document downloads that persist across page navigation and user sessions. Delivered 4 major Document Hub features including TFN Declaration and T4 form integrations with database synchronization, centralized permission controls, and comprehensive BDD test infrastructure. Implemented secure OAuth grant revocation endpoints with ownership validation, company scope checks, and soft-delete persistence. Engineered Legal Hold functionality with document lock/unlock capabilities, API services, and observer pattern for dynamic tab switching.",
+    "shortDescription": "Building real-time job processing systems and major Document Hub features with comprehensive testing infrastructure.",
+    "highlights": [
+      "WebSocket-based JobManager with polling fallbacks",
+      "4 major Document Hub features delivered",
+      "OAuth grant revocation with ownership validation",
+      "Legal Hold functionality with observer pattern"
+    ],
+    "link": "https://www.ukg.com/",
+    "technologies": ["React", "TypeScript", "WebSocket", "Playwright", "Jest", "Datadog"],
+    "category": "engineering"
+  },
+  {
+    "id": "nutasa-vp",
+    "title": "Vice President",
+    "employment": "Volunteer",
+    "company": "NU Taiwanese American Student Association",
+    "location": "Boston, Massachusetts",
+    "workType": "On-site",
+    "timeframe": "May 2024 - May 2025",
+    "year": 2024,
+    "description": "Led executive board operations and strategic planning for one of Northeastern's cultural organizations. Managed event planning, member relations, and organizational growth initiatives.",
+    "shortDescription": "Led executive board operations and strategic planning for cultural organization.",
+    "highlights": [
+      "Executive board leadership",
+      "Event planning and coordination",
+      "Member relations management"
+    ],
+    "link": "https://www.linkedin.com/company/northeastern-university-taiwanese-american-student-association/",
+    "technologies": ["Leadership", "Event Planning", "Public Speaking"],
+    "category": "leadership"
+  },
+  {
+    "id": "ukg-intern",
+    "title": "Software Engineer",
+    "employment": "Internship",
+    "company": "UKG",
+    "location": "Lowell, Massachusetts",
+    "workType": "Hybrid",
+    "timeframe": "Sep 2024 - Dec 2024",
+    "year": 2024,
+    "description": "Enhanced user onboarding and adoption of internal AI tools through developing an in-app interactive product tour system using React-joyride. Refactored database models to support user metadata, ensuring scalability and seamless integration with new API endpoints. Deployed a Generative AI Assistant using Azure AI, reducing knowledge retrieval time and improving user support. Redesigned and launched a SharePoint innovation platform with documentation viewed 25,000+ times.",
+    "shortDescription": "Built interactive product tours and deployed Generative AI Assistant using Azure AI.",
+    "highlights": [
+      "React-joyride product tour system",
+      "Azure AI Generative Assistant deployment",
+      "SharePoint platform with 25,000+ views",
+      "Database model refactoring for scalability"
+    ],
+    "link": "https://www.ukg.com/",
+    "technologies": ["React", "TypeScript", "Azure AI", "CSS", "SharePoint"],
+    "category": "engineering"
+  },
+  {
+    "id": "nutasa-coordinator",
+    "title": "Program Coordinator",
+    "employment": "Volunteer",
+    "company": "NU Taiwanese American Student Association",
+    "location": "Boston, Massachusetts",
+    "workType": "On-site",
+    "timeframe": "Sep 2023 - May 2024",
+    "year": 2023,
+    "description": "Coordinated cultural programming and events for the student organization. Developed public speaking skills through event hosting and community engagement.",
+    "shortDescription": "Coordinated cultural programming and community events.",
+    "highlights": [
+      "Event coordination",
+      "Community engagement",
+      "Public speaking"
+    ],
+    "link": "https://www.linkedin.com/company/northeastern-university-taiwanese-american-student-association/",
+    "technologies": ["Event Planning", "Public Speaking", "Community Building"],
+    "category": "leadership"
+  },
+  {
+    "id": "paris-baguette",
+    "title": "Cashier / Barista",
+    "employment": "Part-time",
+    "company": "Paris Baguette",
+    "location": "Cambridge, Massachusetts",
+    "workType": "On-site",
+    "timeframe": "Mar 2024 - May 2024",
+    "year": 2024,
+    "description": "Provided excellent customer service, stocking pastries, and preparing food and beverages on demand. Operated POS system accurately, handling cash and credit transactions.",
+    "shortDescription": "Customer service and food preparation in fast-paced bakery environment.",
+    "highlights": [
+      "POS system operation",
+      "Food and beverage preparation",
+      "Customer service excellence"
+    ],
+    "link": "https://www.parisbaguette.com/",
+    "technologies": ["Customer Service", "POS Systems", "Food Preparation"],
+    "category": "service"
+  },
+  {
+    "id": "bpsi",
+    "title": "IT Data Integration & Web Developer",
+    "employment": "Internship",
+    "company": "Boston Psychoanalytic Society and Institute",
+    "location": "Boston, Massachusetts",
+    "workType": "Hybrid",
+    "timeframe": "Jun 2023 - Dec 2023",
+    "year": 2023,
+    "description": "Integrated a cloud-based database of 5000+ records with a dynamic webpage through API and Plugin utilization, enabling automated real-time updates. Independently created 8+ Python scripts tailored for non-technical colleagues streamlining the filtering and sorting of XML files with 400+ data points. Completed a comprehensive overhaul of web-page structure, integrating user feedback. Authored 20+ pages of detailed documentation.",
+    "shortDescription": "Integrated cloud databases with web platforms and built Python automation scripts.",
+    "highlights": [
+      "5000+ record database integration",
+      "8+ Python automation scripts",
+      "Web platform overhaul",
+      "20+ pages technical documentation"
+    ],
+    "link": "https://bpsi.org/",
+    "technologies": ["Python", "WordPress", "API", "XML", "Documentation"],
+    "category": "engineering"
+  },
+  {
+    "id": "slurp-ramen",
+    "title": "Kitchen Team",
+    "employment": "Part-time",
+    "company": "Slurp Ramen",
+    "location": "Port Jefferson, New York",
+    "workType": "On-site",
+    "timeframe": "May 2023 - Jun 2023",
+    "year": 2023,
+    "description": "Collaborated with other staff members to cook several orders simultaneously. Operated large-scale cooking equipment such as noodle boiler and stovetops in a fast-paced kitchen environment.",
+    "shortDescription": "Kitchen operations and food preparation in fast-paced restaurant.",
+    "highlights": [
+      "High-volume order preparation",
+      "Large-scale equipment operation"
+    ],
+    "link": null,
+    "technologies": ["Cooking", "Food Preparation", "Teamwork"],
+    "category": "service"
+  },
+  {
+    "id": "tjmaxx",
+    "title": "Associate",
+    "employment": "Part-time",
+    "company": "TJ Maxx",
+    "location": "New York",
+    "workType": "On-site",
+    "timeframe": "Apr 2021 - Aug 2021",
+    "year": 2021,
+    "description": "Responded to customer inquiries using appropriate resources to deliver accurate information. Collaborated on special projects geared toward customizing support for emerging products. Tracked customer satisfaction levels and assisted in determining ways to improve customer service.",
+    "shortDescription": "Customer service and special project collaboration in retail environment.",
+    "highlights": [
+      "Customer inquiry resolution",
+      "Special project collaboration",
+      "Customer satisfaction tracking"
+    ],
+    "link": "https://www.tjmaxx.com/",
+    "technologies": ["Customer Service", "Retail Operations", "Problem Solving"],
+    "category": "service"
+  },
+  {
+    "id": "mobileware",
+    "title": "UI/UX Developer",
+    "employment": "Internship",
+    "company": "Mobileware Inc.",
+    "location": "Mount Sinai, New York",
+    "workType": "On-site",
+    "timeframe": "Jul 2019 - Aug 2019",
+    "year": 2019,
+    "description": "Collaboratively developed a user-friendly weather application by using an API, enabling real-time data retrieval for accurate and up-to-date weather information. Designed and implemented a group scheduling application using Swift and SwiftUI, fostering efficient coordination by preventing scheduling conflicts.",
+    "shortDescription": "Designed weather and scheduling apps using Swift and SwiftUI.",
+    "highlights": [
+      "Weather app with real-time API",
+      "Group scheduling application",
+      "SwiftUI implementation"
+    ],
+    "link": "https://www.mobilewareinc.com/",
+    "technologies": ["Swift", "SwiftUI", "API", "UI/UX Design"],
+    "category": "engineering"
+  },
+  {
+    "id": "ibps-temple",
+    "title": "Summer Camp Counselor",
+    "employment": "Volunteer",
+    "company": "IBPS Temple",
+    "location": "New York",
+    "workType": "On-site",
+    "timeframe": "Jun 2019 - Jul 2019",
+    "year": 2019,
+    "description": "Arranged recreational activities centered around Buddhism's Three Acts of Goodness by collaborating with fellow counselors. Supervised and remedied camper behavioral issues of over 200 campers by reporting concerns to camp leadership and communicating frequently with parents.",
+    "shortDescription": "Led recreational activities and supervised 200+ campers.",
+    "highlights": [
+      "Supervised 200+ campers",
+      "Recreational activity planning",
+      "Parent communication"
+    ],
+    "link": null,
+    "technologies": ["Childcare", "Leadership", "Communication", "Event Planning"],
+    "category": "leadership"
+  },
+  {
+    "id": "northeastern-graduation",
+    "title": "Bachelor of Science",
+    "employment": "Graduation",
+    "company": "Northeastern University",
+    "location": "Boston, Massachusetts",
+    "workType": "On-site",
+    "timeframe": "Sep 2021 - May 2025",
+    "year": 2025,
+    "description": "Graduated with a double major in Business Administration and Computer Science. Achieved Magna Cum Laude honors with a 3.75 GPA. Made Dean's List all semesters while balancing academics with leadership roles and internships.",
+    "shortDescription": "BS in Business Administration and Computer Science with Magna Cum Laude honors.",
+    "highlights": [
+      "Magna Cum Laude, 3.75 GPA",
+      "Dean's List all semesters",
+      "Double major: Business & CS"
+    ],
+    "link": "https://www.northeastern.edu/",
+    "technologies": ["Java", "Python", "Mathematics", "Data Structures", "Algorithms"],
+    "category": "education"
+  },
+  {
+    "id": "high-school-graduation",
+    "title": "High School Diploma",
+    "employment": "Graduation",
+    "company": "Mount Sinai High School",
+    "location": "Mount Sinai, New York",
+    "workType": "On-site",
+    "timeframe": "Sep 2017 - Jun 2021",
+    "year": 2021,
+    "description": "Graduated in the top 2% of class with AP Scholar with Distinction honors. Active member of National Honor Society, Student Council, and Track & Field team. Received academic scholarship and made Superintendent's List for four consecutive years.",
+    "shortDescription": "Graduated top 2% of class with AP Scholar with Distinction honors.",
+    "highlights": [
+      "Ranked in Top 2% of class",
+      "AP Scholar with Distinction",
+      "Superintendent's List 2018-2021",
+      "Academic Scholarship Recipient"
+    ],
+    "link": null,
+    "technologies": ["Mathematics", "C++", "National Honor Society", "Student Council"],
+    "category": "education"
+  }
+]

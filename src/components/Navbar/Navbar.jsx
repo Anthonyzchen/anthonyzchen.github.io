@@ -19,14 +19,14 @@ const Navbar = () => {
   const menuIconTL = useRef();
   const menuBackgroundTL = useRef();
 
-  const linkData = ["Home", "About", "Projects", "Blog", "Contact"];
+  const linkData = ["Home", "Experience", "Projects"];
 
   useGSAP(
     () => {
       menuIconTL.current = createMenuAnimation();
       menuBackgroundTL.current = createMenuBackgroundAnimation();
-      // The animation is delayed by 11.5 seconds to play after the Preloader has finished
-      createEnterNavbarAnimation().delay(11.5);
+      // The animation is delayed to play after the Preloader has finished
+      createEnterNavbarAnimation().delay(3.5);
     },
     { scope: navbarRef },
   );

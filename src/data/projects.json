@@ -1,0 +1,49 @@
+[
+  {
+    "id": "project1",
+    "title": "Fishing Game Addition in Covey.Town",
+    "description": "This project involved integrating an interactive Fishing Game Area into the pre-existing codebase, enhancing virtual exploration with engaging gameplay. In this feature, users are able to fish for rare catches, customize avatars, and compete for the highest score on a global leaderboard.",
+    "techstack": "Built using TypeScript, React, and Chakra UI, with real-time leaderboard updates via MongoDB. Sprites crafted with Photoshop, optimized using TexturePacker, and deployed via Netlify with automated testing.",
+    "technologies": [
+      "TypeScript",
+      "React",
+      "ChakraUI",
+      "MongoDB",
+      "Photoshop",
+      "TexturePacker",
+      "Netlify"
+    ],
+    "image": "Project1_Cover1280.png"
+  },
+  {
+    "id": "project2",
+    "title": "Determining Bias in the Michelin Guide",
+    "description": "This project analyzed Michelin Guide biases in geographic and cuisine trends using machine learning. Results suggested a preference for established cuisines and high-end restaurants, potentially overlooking more diverse options for one star ratings. Insufficient data limited our conclusions for two- and three-star ratings.",
+    "techstack": "Built with Python using pandas, numpy, and scikit-learn. Visualizations were created with matplotlib and seaborn, and predictions were generated with K-NN, Random Forest, and SVM algorithms. Data was sourced from Kaggle.",
+    "technologies": [
+      "Python",
+      "Pandas",
+      "Numpy",
+      "Scikit-learn",
+      "Matplotlib",
+      "Seaborn"
+    ],
+    "image": "Project2_Cover1280.png"
+  },
+  {
+    "id": "project3",
+    "title": "NUFind",
+    "description": "NUFind is a platform that facilitates event management and communication at Northeastern University. It connects students, club organizers, and campus management through an integrated system where students can discover and filter events, club organizers can create and manage events, and management can oversee funding requests and approvals.",
+    "techstack": "Developed using MySQL for the database, Flask for the backend, Docker for containerization, and AppSmith for the user interface.",
+    "technologies": ["MySQL", "Flask", "Docker", "AppSmith"],
+    "image": "Project3_Cover1280.png"
+  },
+  {
+    "id": "project4",
+    "title": "NURecs",
+    "description": "NURecs provides curated restaurant recommendations for students in Boston. Recommendations are categorized and can be filtered by specific attributes to help users make informed dining choices.",
+    "techstack": "Developed using React and JavaScript for the frontend, with Supabase for the backend and database management. The project includes sample data and features CSS and HTML enhancements for a polished look.",
+    "technologies": ["React", "JavaScript", "Supabase"],
+    "image": "Project4_Cover1280.png"
+  }
+]

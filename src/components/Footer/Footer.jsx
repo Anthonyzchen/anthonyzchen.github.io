@@ -3,19 +3,27 @@ const Footer = () => {
     {
       href: "https://www.facebook.com/anthonyzchen.03",
       icon: "fa-facebook",
+      label: "Facebook",
     },
-    { href: "https://github.com/Anzchen", icon: "fa-github" },
+    {
+      href: "https://github.com/Anzchen",
+      icon: "fa-github",
+      label: "GitHub",
+    },
     {
       href: "https://www.instagram.com/anthonyzchen/",
       icon: "fa-instagram",
+      label: "Instagram",
     },
     {
       href: "https://www.linkedin.com/in/anthonyzchen/",
       icon: "fa-linkedin",
+      label: "LinkedIn",
     },
     {
       href: "https://open.spotify.com/user/22bsi2i6c5v3vpb2uoxuias2a",
       icon: "fa-spotify",
+      label: "Spotify",
     },
   ];
   return (
@@ -56,9 +64,10 @@ const Footer = () => {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Visit Anthony's ${social.label} profile`}
               >
-                <button>
-                  <i className={`fa-brands ${social.icon}`}></i>
+                <button aria-label={social.label}>
+                  <i className={`fa-brands ${social.icon}`} aria-hidden="true"></i>
                 </button>
               </a>
             ))}
@@ -67,7 +76,7 @@ const Footer = () => {
       </div>
       <div className="flex flex-col justify-between py-2 sm:flex-row">
         <div id="copyright">
-          <span>&#169;</span>2024 anthonyzchen
+          <span>&#169;</span>{new Date().getFullYear()} anthonyzchen
         </div>
         <p id="ft_career">Software Engineering & Finance</p>
       </div>

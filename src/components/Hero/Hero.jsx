@@ -13,13 +13,13 @@ const Hero = () => {
   const heroTL = useRef();
 
   useGSAP(() => {
-    // The animation is delayed by 11 seconds to play after the Preloader has finished
+    // The animation is delayed to play after the Preloader has finished
     heroTL.current = gsap
       .timeline()
       .add(enterStaggerTextAnimation(nameRef))
       .add(enterStaggerTextAnimation(titleRef))
       .add(enterStaggerTextAnimation(aboutRef))
-      .delay(11);
+      .delay(3);
   });
   return (
     <section>
@@ -32,7 +32,7 @@ const Hero = () => {
           CS & Finance at Northeastern University
         </h2>
         <p className="mt-4 max-w-xs leading-normal" ref={aboutRef}>
-          im passionate about creating accessible, aesthetic, and adaptable
+          I'm passionate about creating accessible, aesthetic, and adaptable
           solutions through software engineering.
         </p>
       </div>
