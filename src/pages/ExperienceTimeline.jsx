@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -6,6 +6,36 @@ import { TechBadge } from "../components/ui";
 import experienceData from "../data/experience.json";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Custom hook to detect if we're on mobile (below lg breakpoint)
+const useIsMobile = () => {
+  const isMobile = typeof window !== "undefined" ? window.innerWidth < 1024 : false;
+  return isMobile;
+};
+
+// Hook to refresh page on resize (debounced)
+const useRefreshOnResize = () => {
+  useEffect(() => {
+    const initialWidth = window.innerWidth;
+    let timeoutId;
+
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        // Refresh if width changed significantly (more than 50px to avoid minor fluctuations)
+        if (Math.abs(window.innerWidth - initialWidth) > 50) {
+          window.location.reload();
+        }
+      }, 300);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+};
 
 // Sort by start date (oldest first for left to right chronological)
 // Parse the timeframe to get start date for sorting
@@ -107,19 +137,273 @@ const categoryStyles = {
  * Scrolls vertically but translates content horizontally
  * Features an animated SVG path that draws as you scroll
  */
-const ExperienceTimeline = () => {
+// Parse the end date from timeframe (e.g., "May 2025 - Present" -> current date, "Sep 2021 - May 2025" -> May 2025)
+const parseEndDate = (timeframe) => {
+  const months = {
+    'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+    'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+  };
+
+  // If ongoing, treat as most recent
+  if (timeframe.toLowerCase().includes('present')) {
+    return new Date();
+  }
+
+  // Match the second date in the timeframe (end date)
+  const matches = [...timeframe.matchAll(/(\w+)\s+(\d{4})/g)];
+  if (matches.length >= 2) {
+    const endMatch = matches[1];
+    return new Date(parseInt(endMatch[2]), months[endMatch[1]] || 0);
+  } else if (matches.length === 1) {
+    // Single date format
+    return new Date(parseInt(matches[0][2]), months[matches[0][1]] || 0);
+  }
+  return new Date(0);
+};
+
+// Sort experiences by end date (newest first for vertical timeline)
+const sortedExperiencesDescending = [...experienceData].sort((a, b) =>
+  parseEndDate(b.timeframe) - parseEndDate(a.timeframe)
+);
+
+/**
+ * VerticalTimeline - Mobile-friendly vertical timeline component
+ * Displays experiences in a stacked vertical layout
+ */
+const VerticalTimeline = () => {
+  return (
+    <section className="min-h-screen bg-beige px-3 py-8 sm:px-6 sm:py-12">
+      {/* Header */}
+      <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
+        <h1 className="text-2xl font-medium text-brown sm:text-4xl md:text-5xl">
+          My Professional Journey
+        </h1>
+      </div>
+
+      {/* Category Legend */}
+      <div className="mx-auto mb-6 max-w-2xl sm:mb-8">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 rounded-full bg-dark-beige/80 px-2 py-1 sm:gap-1.5 sm:px-3 sm:py-1.5">
+            <span className="text-blue-700">
+              <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </span>
+            <span className="text-[10px] text-brown sm:text-xs">Engineering</span>
+          </div>
+          <div className="flex items-center gap-1 rounded-full bg-dark-beige/80 px-2 py-1 sm:gap-1.5 sm:px-3 sm:py-1.5">
+            <span className="text-purple-700">
+              <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </span>
+            <span className="text-[10px] text-brown sm:text-xs">Leadership</span>
+          </div>
+          <div className="flex items-center gap-1 rounded-full bg-dark-beige/80 px-2 py-1 sm:gap-1.5 sm:px-3 sm:py-1.5">
+            <span className="text-amber-700">
+              <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </span>
+            <span className="text-[10px] text-brown sm:text-xs">Service</span>
+          </div>
+          <div className="flex items-center gap-1 rounded-full bg-dark-beige/80 px-2 py-1 sm:gap-1.5 sm:px-3 sm:py-1.5">
+            <span className="text-emerald-700">
+              <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+              </svg>
+            </span>
+            <span className="text-[10px] text-brown sm:text-xs">Education</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Vertical Timeline */}
+      <div className="relative mx-auto max-w-2xl">
+        {/* Timeline line */}
+        <div className="absolute left-3 top-0 h-full w-0.5 bg-brown/20 sm:left-6" />
+
+        {/* Experience cards */}
+        <div className="space-y-4 sm:space-y-6">
+          {sortedExperiencesDescending.map((experience, index) => {
+            const style = categoryStyles[experience.category] || categoryStyles.engineering;
+            const ongoing = isOngoing(experience.timeframe);
+
+            return (
+              <div key={experience.id} className="relative pl-8 sm:pl-14">
+                {/* Timeline dot */}
+                <div
+                  className={`absolute top-5 h-2.5 w-2.5 rounded-full border-2 border-beige sm:top-6 sm:h-3 sm:w-3 ${
+                    ongoing ? "bg-green-600" : "bg-brown"
+                  }`}
+                  style={{ left: "6px" }}
+                />
+
+                {/* Year badge - show on first item of each year */}
+                {(index === 0 || sortedExperiencesDescending[index - 1].year !== experience.year) && (
+                  <div
+                    className="absolute top-3 rounded-full bg-brown px-1.5 py-0.5 text-[10px] font-medium text-beige sm:top-4 sm:px-2 sm:text-xs"
+                    style={{ left: "12px", transform: "translateX(-50%)" }}
+                  >
+                    {experience.year}
+                  </div>
+                )}
+
+                {/* Card */}
+                <div
+                  className={`rounded-lg border-2 sm:rounded-xl ${style.border} bg-dark-beige/95 p-3 shadow-md sm:p-4`}
+                >
+                  {/* Header with category icon and employment type */}
+                  <div className="mb-1.5 flex flex-wrap items-start justify-between gap-1.5 sm:mb-2 sm:gap-2">
+                    <div className={`flex items-center gap-1 sm:gap-1.5 ${style.accent}`}>
+                      <span className="[&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5">
+                        {style.icon}
+                      </span>
+                      <span className="text-[10px] font-medium uppercase tracking-wider sm:text-xs">
+                        {experience.category}
+                      </span>
+                    </div>
+                    <span
+                      className={`rounded-full border px-1.5 py-0.5 text-[10px] font-medium sm:px-2 sm:text-xs ${style.badge}`}
+                    >
+                      {experience.employment}
+                    </span>
+                  </div>
+
+                  {/* Title and company */}
+                  <h3 className="mb-0.5 text-base font-medium leading-tight text-brown sm:mb-1 sm:text-lg">
+                    {experience.title}
+                  </h3>
+                  {experience.link ? (
+                    <a
+                      href={experience.link}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="mb-1.5 inline-flex items-center text-xs text-red-700 transition-colors hover:text-red-800 sm:mb-2 sm:text-sm"
+                    >
+                      {experience.company}
+                      <svg
+                        className="ml-1 h-3 w-3 sm:h-3.5 sm:w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </svg>
+                    </a>
+                  ) : (
+                    <p className="mb-1.5 text-xs text-brown/80 sm:mb-2 sm:text-sm">
+                      {experience.company}
+                    </p>
+                  )}
+
+                  {/* Timeframe and location */}
+                  <div className="mb-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[10px] text-brown/60 sm:mb-2 sm:gap-x-2 sm:gap-y-1 sm:text-xs">
+                    <span>{experience.timeframe}</span>
+                    <span>|</span>
+                    <span className="flex items-center gap-0.5 sm:gap-1">
+                      <svg
+                        className="h-3 w-3 sm:h-3.5 sm:w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                      {experience.location}
+                    </span>
+                  </div>
+
+                  {/* Short description */}
+                  <p className="mb-2 text-xs leading-relaxed text-brown/80 sm:mb-3 sm:text-sm">
+                    {experience.shortDescription}
+                  </p>
+
+                  {/* Highlights */}
+                  {experience.highlights && experience.highlights.length > 0 && (
+                    <ul className="mb-2 space-y-0.5 sm:mb-3 sm:space-y-1">
+                      {experience.highlights.slice(0, 2).map((highlight, hIndex) => (
+                        <li
+                          key={hIndex}
+                          className="flex items-start gap-1.5 text-[10px] text-brown/70 sm:gap-2 sm:text-xs"
+                        >
+                          <span className="mt-1 h-1 w-1 flex-shrink-0 rounded-full bg-brown/40 sm:mt-1.5" />
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {/* Tech stack */}
+                  <ul className="flex flex-wrap gap-1">
+                    {experience.technologies.slice(0, 4).map((tech, techIndex) => (
+                      <li key={techIndex}>
+                        <TechBadge name={tech} />
+                      </li>
+                    ))}
+                    {experience.technologies.length > 4 && (
+                      <li className="flex items-center rounded-full bg-brown/10 px-1.5 py-0.5 text-[10px] text-brown/60 sm:px-2 sm:text-xs">
+                        +{experience.technologies.length - 4}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+    </section>
+  );
+};
+
+/**
+ * HorizontalTimeline - Desktop horizontal scrolling timeline
+ * Scrolls vertically but translates content horizontally
+ * Features an animated SVG path that draws as you scroll
+ */
+const HorizontalTimeline = () => {
   const containerRef = useRef(null);
   const horizontalRef = useRef(null);
   const pathRef = useRef(null);
   const cardsRef = useRef([]);
+
+  // Store initial screen width for layout calculations (doesn't change on resize)
+  const initialScreenWidth = useRef(
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  ).current;
 
   useGSAP(() => {
     const container = containerRef.current;
     const horizontal = horizontalRef.current;
     const path = pathRef.current;
 
+    // Safety check - don't initialize if elements aren't ready
+    if (!container || !horizontal) return;
+
     // Calculate dimensions
     const scrollWidth = horizontal.scrollWidth - window.innerWidth;
+
+    // Safety check - scrollWidth should be positive
+    if (scrollWidth <= 0) return;
+
     const numCards = timelineData.length;
     const totalWidth = horizontal.scrollWidth;
 
@@ -213,20 +497,20 @@ const ExperienceTimeline = () => {
   // Generate SVG path for the timeline
   const generateTimelinePath = () => {
     const segmentWidth = 480;
-    const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const screenW = initialScreenWidth;
     const midY = 200; // Center of the 400px SVG
     const waveHeight = 50; // Height of wave from center
 
     // Start at right edge of My Journey page (with some padding into the page)
-    const fadeInStart = screenWidth * 0.7; // Start 70% through intro page
+    const fadeInStart = screenW * 0.7; // Start 70% through intro page
     let path = `M ${fadeInStart} ${midY}`;
 
     // Timeline section boundaries
-    const timelineStart = screenWidth;
-    const timelineEnd = screenWidth + (timelineData.length * segmentWidth);
+    const timelineStart = screenW;
+    const timelineEnd = screenW + (timelineData.length * segmentWidth);
 
     // Full path from fade in to fade out
-    const pathEnd = timelineEnd + screenWidth * 0.3;
+    const pathEnd = timelineEnd + screenW * 0.3;
 
     // Generate smooth sine wave
     const numPoints = timelineData.length * 40; // Many points for smoothness
@@ -262,7 +546,7 @@ const ExperienceTimeline = () => {
 
   const segmentWidth = 480;
   // Two full screens (intro + end) plus all experience cards
-  const totalWidth = (2 * window.innerWidth) + (timelineData.length * segmentWidth);
+  const totalWidth = (2 * initialScreenWidth) + (timelineData.length * segmentWidth);
 
   // Get unique years for the legend
   const uniqueYears = [...new Set(timelineData.map((item) => item.year))].sort();
@@ -634,6 +918,20 @@ const ExperienceTimeline = () => {
 
     </section>
   );
+};
+
+/**
+ * ExperienceTimeline - Main component that renders either
+ * vertical (mobile) or horizontal (desktop) timeline based on screen size
+ */
+const ExperienceTimeline = () => {
+  const isMobile = useIsMobile();
+
+  // Refresh page on resize to ensure clean GSAP state
+  useRefreshOnResize();
+
+  // Render vertical timeline on mobile, horizontal on desktop
+  return isMobile ? <VerticalTimeline /> : <HorizontalTimeline />;
 };
 
 export default ExperienceTimeline;
