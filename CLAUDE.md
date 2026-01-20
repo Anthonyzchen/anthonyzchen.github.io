@@ -39,7 +39,7 @@ src/
 │   └── experience.json      # Work experience data
 ├── pages/
 │   ├── Home.jsx             # Main page (Hero + Projects)
-│   ├── ExperienceTimeline.jsx # Horizontal scroll experience timeline
+│   ├── ExperienceTimeline.jsx # Responsive timeline (vertical mobile, horizontal desktop)
 │   └── PageLayout.jsx       # Layout wrapper
 ├── assets/
 │   ├── images/              # Project covers, backgrounds
@@ -89,7 +89,7 @@ src/
 | Path | Page | Description |
 |------|------|-------------|
 | `/` | Home.jsx | Hero section + Projects |
-| `/experience` | ExperienceTimeline.jsx | Horizontal scroll timeline |
+| `/experience` | ExperienceTimeline.jsx | Responsive timeline (vertical < 1024px, horizontal desktop) |
 | `/projects` | Projects.jsx | Projects with ScrollTrigger pinning |
 
 ## Common Issues
