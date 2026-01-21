@@ -13,7 +13,10 @@
       "TexturePacker",
       "Netlify"
     ],
-    "image": "Project1_Cover1280.png"
+    "image": "Project1_Cover1280.png",
+    "github": "https://github.com/anthonyzchen/covey-town-fishing",
+    "demo": null,
+    "theme": "fishing"
   },
   {
     "id": "project2",
@@ -28,22 +31,9 @@
       "Matplotlib",
       "Seaborn"
     ],
-    "image": "Project2_Cover1280.png"
-  },
-  {
-    "id": "project3",
-    "title": "NUFind",
-    "description": "NUFind is a platform that facilitates event management and communication at Northeastern University. It connects students, club organizers, and campus management through an integrated system where students can discover and filter events, club organizers can create and manage events, and management can oversee funding requests and approvals.",
-    "techstack": "Developed using MySQL for the database, Flask for the backend, Docker for containerization, and AppSmith for the user interface.",
-    "technologies": ["MySQL", "Flask", "Docker", "AppSmith"],
-    "image": "Project3_Cover1280.png"
-  },
-  {
-    "id": "project4",
-    "title": "NURecs",
-    "description": "NURecs provides curated restaurant recommendations for students in Boston. Recommendations are categorized and can be filtered by specific attributes to help users make informed dining choices.",
-    "techstack": "Developed using React and JavaScript for the frontend, with Supabase for the backend and database management. The project includes sample data and features CSS and HTML enhancements for a polished look.",
-    "technologies": ["React", "JavaScript", "Supabase"],
-    "image": "Project4_Cover1280.png"
+    "image": "Project2_Cover1280.png",
+    "github": "https://github.com/anthonyzchen/michelin-bias-analysis",
+    "demo": null,
+    "theme": "michelin"
   }
 ]

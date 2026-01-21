@@ -4,7 +4,7 @@ This file provides context for Claude Code when working on this project.
 
 ## Project Overview
 
-Personal portfolio website for Anthony Chen (anthonyzchen.com). Built with React, Vite, and Tailwind CSS, featuring GSAP animations and smooth scrolling.
+Personal portfolio website for Anthony Chen (anthonyzchen.com). Built with React, Vite, and Tailwind CSS, featuring GSAP animations, smooth scrolling, and a water ripple preloader effect.
 
 ## Quick Commands
 
@@ -30,9 +30,12 @@ src/
 │   │   ├── Experience.jsx   # Work experience list
 │   │   └── animations.jsx   # ScrollTrigger animations
 │   ├── Hero/                # Full-screen intro section
-│   ├── Navbar/              # Navigation with hamburger menu
+│   ├── Logo/                # Fixed logo component (scrolls to top on click)
+│   │   └── Logo.jsx
 │   ├── Footer/              # Social links and contact
-│   ├── Preloader/           # Loading animation
+│   ├── Preloader/           # Water ripple reveal animation
+│   │   ├── Preloader.jsx    # Main preloader component
+│   │   └── WaterReveal.jsx  # Canvas-based water ripple effect
 │   └── utils.jsx            # Shared animation utilities
 ├── data/
 │   ├── projects.json        # Project data (edit here to add/update projects)
@@ -40,10 +43,9 @@ src/
 ├── pages/
 │   ├── Home.jsx             # Main page (Hero + Projects)
 │   ├── ExperienceTimeline.jsx # Responsive timeline (vertical mobile, horizontal desktop)
-│   └── PageLayout.jsx       # Layout wrapper
+│   └── PageLayout.jsx       # Layout wrapper (Preloader + Logo + Content + Footer)
 ├── assets/
-│   ├── images/              # Project covers, backgrounds
-│   └── counterData.jsx      # Preloader animation data
+│   └── images/              # Project covers, backgrounds, logo
 └── App.jsx                  # React Router configuration
 ```
 
@@ -67,9 +69,19 @@ src/
 
 ## Animation Timing
 
-- **Preloader duration**: ~3 seconds
-- **Hero text delay**: 3s (after preloader)
-- **Navbar entrance**: 3.5s delay
+- **Preloader duration**: ~5 seconds (water ripple reveal)
+- **Preloader fade out**: 800ms smooth fade after ripples complete
+- **Logo entrance**: 5.5s delay (after preloader completes)
+- **Hero text delay**: After preloader
+
+## Preloader - Water Ripple Effect
+
+The preloader uses a canvas-based water ripple simulation:
+- Beige cover starts fully opaque
+- Raindrops fall randomly, creating expanding ripple circles
+- Ripples gradually reveal the content underneath
+- Rain pacing: slow start → speeds up → slows down at end
+- Smooth 800ms fade out for remaining cover
 
 ## Adding New Content
 
@@ -88,15 +100,20 @@ src/
 
 | Path | Page | Description |
 |------|------|-------------|
-| `/` | Home.jsx | Hero section + Projects |
-| `/experience` | ExperienceTimeline.jsx | Responsive timeline (vertical < 1024px, horizontal desktop) |
-| `/projects` | Projects.jsx | Projects with ScrollTrigger pinning |
+| `/` | Home.jsx | Hero section + Projects (single-page flow) |
+
+## UI Notes
+
+- **No navigation menu** - Single page flow design
+- **Logo** - Fixed top-left, clicking scrolls to top
+- **Scrollbars hidden** - Clean look, Lenis handles smooth scrolling
+- **No horizontal scroll** - `overflow-x: hidden` on html/body
 
 ## Common Issues
 
 - **Animations not triggering**: Check GSAP ScrollTrigger registration in App.jsx
 - **Smooth scroll issues**: Lenis integration in PageLayout.jsx
-- **Menu toggle broken**: Check useState in Navbar.jsx
+- **Preloader not showing**: Check WaterReveal.jsx canvas rendering
 
 ## Deployment
 
