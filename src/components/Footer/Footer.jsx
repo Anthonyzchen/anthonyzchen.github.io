@@ -1,19 +1,29 @@
+/**
+ * BrushStroke - Decorative ink brush stroke SVG
+ */
+const BrushStroke = ({ className = "" }) => (
+  <svg
+    width="60"
+    height="8"
+    viewBox="0 0 60 8"
+    className={className}
+  >
+    <path
+      d="M0 4 Q10 0 20 4 Q30 8 40 4 Q50 0 60 4"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
 const Footer = () => {
   const socialsData = [
-    {
-      href: "https://www.facebook.com/anthonyzchen.03",
-      icon: "fa-facebook",
-      label: "Facebook",
-    },
     {
       href: "https://github.com/Anzchen",
       icon: "fa-github",
       label: "GitHub",
-    },
-    {
-      href: "https://www.instagram.com/anthonyzchen/",
-      icon: "fa-instagram",
-      label: "Instagram",
     },
     {
       href: "https://www.linkedin.com/in/anthonyzchen/",
@@ -21,66 +31,95 @@ const Footer = () => {
       label: "LinkedIn",
     },
     {
+      href: "https://www.instagram.com/anthonyzchen/",
+      icon: "fa-instagram",
+      label: "Instagram",
+    },
+    {
+      href: "https://www.facebook.com/anthonyzchen.03",
+      icon: "fa-facebook",
+      label: "Facebook",
+    },
+    {
       href: "https://open.spotify.com/user/22bsi2i6c5v3vpb2uoxuias2a",
       icon: "fa-spotify",
       label: "Spotify",
     },
   ];
+
   return (
-    <footer className="flex h-screen w-full flex-col bg-beige px-8">
-      <div className="flex flex-grow items-center justify-center">
-        <p className="w-4/5 sm:w-1/2 text-center text-brown">
-          This personal portfolio, now in its third iteration, strives to best
-          showcase my identity. Developed with the Vite framework in Visual
-          Studio Code, it reflects my deep connection to my Chinese and
-          Taiwanese roots, as well as my American culture. Built with React.js,
-          Tailwind CSS, and GSAP for smooth animations, the site is designed to
-          evolve alongside my growth as a developer. Deployed through GitHub, it
-          features a sleek design with all text set in the modern KoHo typeface.
+    <footer className="relative w-full overflow-hidden bg-beige">
+      {/* Faded painting background overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-painting bg-cover bg-center opacity-[0.04]"
+        style={{ backgroundPosition: "center 30%" }}
+      />
+
+      {/* Main content section */}
+      <div className="relative flex min-h-[70vh] flex-col items-center justify-center px-6 py-16 sm:px-8">
+        {/* Decorative brush stroke */}
+        <BrushStroke className="mb-6 text-vermillion/40" />
+
+        {/* Heading */}
+        <h2 className="mb-4 text-center text-3xl font-light uppercase tracking-widest text-ink sm:text-4xl">
+          Let's Connect
+        </h2>
+
+        {/* Decorative line */}
+        <div className="mb-8 h-px w-16 bg-vermillion/50" />
+
+        {/* About text */}
+        <p className="max-w-xl text-center text-sm leading-relaxed text-brown/80 sm:text-base">
+          This portfolio reflects my journey as a developer and my connection to
+          my Chinese and Taiwanese roots. Built with React, Tailwind CSS, and
+          GSAP, it evolves alongside my growth.
         </p>
-      </div>
-      <div className="flex flex-col justify-between border-b-2 border-ink/20 py-2 sm:flex-row">
-        <div className="flex flex-col space-y-4 text-brown sm:flex-row sm:space-x-8 sm:space-y-0">
-          <div>
-            <p>
-              Boston, United States
-              <br />
-              New York, United States
-            </p>
-          </div>
-          <div>
-            <p>
-              <a href="mailto:anthonyzchen@yahoo.com" className="transition-colors hover:text-vermillion">
-                anthonyzchen@yahoo.com
-              </a>
-              <br />
-              +1 (631) 428-5478
-            </p>
-          </div>
+
+        {/* Social links - larger and more prominent */}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+          {socialsData.map((social, index) => (
+            <a
+              key={index}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit Anthony's ${social.label} profile`}
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-brown/20 text-brown transition-all duration-300 hover:border-vermillion hover:bg-vermillion hover:text-beige"
+            >
+              <i
+                className={`fa-brands ${social.icon} text-lg transition-transform duration-300 group-hover:scale-110`}
+                aria-hidden="true"
+              ></i>
+            </a>
+          ))}
         </div>
-        <div className="mt-4 flex items-center justify-start sm:mt-0 sm:justify-center">
-          <ul className="flex space-x-4">
-            {socialsData.map((social, index) => (
-              <li key={index}>
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Visit Anthony's ${social.label} profile`}
-                  className="text-brown transition-colors duration-300 hover:text-vermillion"
-                >
-                  <i className={`fa-brands ${social.icon} text-xl`} aria-hidden="true"></i>
-                </a>
-              </li>
-            ))}
-          </ul>
+
+        {/* Contact info */}
+        <div className="mt-12 flex flex-col items-center gap-4 text-center text-sm text-brown/70 sm:flex-row sm:gap-8">
+          <a
+            href="mailto:anthonyzchen@yahoo.com"
+            className="transition-colors hover:text-vermillion"
+          >
+            anthonyzchen@yahoo.com
+          </a>
+          <span className="hidden text-brown/30 sm:inline">|</span>
+          <span>Boston & New York</span>
         </div>
       </div>
-      <div className="flex flex-col justify-between py-2 text-brown sm:flex-row">
-        <div id="copyright">
-          <span>&#169;</span>{new Date().getFullYear()} anthonyzchen
+
+      {/* Bottom bar */}
+      <div className="border-t border-ink/10">
+        <div className="px-6 py-4 sm:px-8">
+          <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 text-xs text-brown/60 sm:flex-row">
+            <p>
+              <span className="mr-1">&copy;</span>
+              {new Date().getFullYear()} Anthony Chen
+            </p>
+            <p className="font-medium text-ink/70">
+              Software Engineering & Finance
+            </p>
+          </div>
         </div>
-        <p id="ft_career" className="text-ink font-medium">Software Engineering & Finance</p>
       </div>
     </footer>
   );

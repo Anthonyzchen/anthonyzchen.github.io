@@ -11,22 +11,62 @@ const getThemeStyles = (theme) => {
       return {
         border: "border-jade/30 hover:border-jade/60",
         gradient: "from-jade/10 via-jade/5 to-transparent",
+        accent: "text-jade",
       };
     case "michelin":
       return {
         border: "border-gold/30 hover:border-gold/60",
         gradient: "from-gold/10 via-gold/5 to-transparent",
+        accent: "text-gold",
       };
     default:
       return {
         border: "border-brown/20 hover:border-brown/40",
         gradient: "from-brown/10 to-transparent",
+        accent: "text-brown/30",
       };
   }
 };
 
 /**
+ * BrushCorner - Decorative ink brush stroke corner accent
+ */
+const BrushCorner = ({ position, className = "" }) => {
+  const positionClasses = {
+    "top-left": "top-0 left-0",
+    "top-right": "top-0 right-0 rotate-90",
+    "bottom-left": "bottom-0 left-0 -rotate-90",
+    "bottom-right": "bottom-0 right-0 rotate-180",
+  };
+
+  return (
+    <svg
+      className={`absolute h-8 w-8 opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${positionClasses[position]} ${className}`}
+      viewBox="0 0 32 32"
+      fill="none"
+    >
+      <path
+        d="M2 2 Q8 2 12 6 Q16 10 16 16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M2 6 Q6 6 8 10"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.5"
+      />
+    </svg>
+  );
+};
+
+/**
  * ProjectCard - Displays a project with image, title, description, and tech stack
+ * Features traditional Chinese ink brush corner accents
  */
 const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
   const themeStyles = getThemeStyles(project.theme);
@@ -42,6 +82,12 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
       ref={ref}
       className={`group relative flex flex-col overflow-hidden rounded-xl border-2 bg-dark-beige/95 shadow-md transition-all duration-500 hover:shadow-xl ${themeStyles.border}`}
     >
+      {/* Ink brush corner accents */}
+      <BrushCorner position="top-left" className={themeStyles.accent} />
+      <BrushCorner position="top-right" className={themeStyles.accent} />
+      <BrushCorner position="bottom-left" className={themeStyles.accent} />
+      <BrushCorner position="bottom-right" className={themeStyles.accent} />
+
       {/* Gradient overlay based on theme */}
       <div
         className={`pointer-events-none absolute inset-0 z-0 bg-gradient-to-br opacity-50 ${themeStyles.gradient}`}
