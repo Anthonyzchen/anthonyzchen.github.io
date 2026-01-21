@@ -29,7 +29,7 @@ const Footer = () => {
   return (
     <footer className="flex h-screen w-full flex-col bg-beige px-8">
       <div className="flex flex-grow items-center justify-center">
-        <p className="w-4/5 sm:w-1/2 text-center">
+        <p className="w-4/5 sm:w-1/2 text-center text-brown">
           This personal portfolio, now in its third iteration, strives to best
           showcase my identity. Developed with the Vite framework in Visual
           Studio Code, it reflects my deep connection to my Chinese and
@@ -39,8 +39,8 @@ const Footer = () => {
           features a sleek design with all text set in the modern KoHo typeface.
         </p>
       </div>
-      <div className="flex flex-col justify-between border-b-2 border-brown py-2 sm:flex-row">
-        <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-8 sm:space-y-0">
+      <div className="flex flex-col justify-between border-b-2 border-ink/20 py-2 sm:flex-row">
+        <div className="flex flex-col space-y-4 text-brown sm:flex-row sm:space-x-8 sm:space-y-0">
           <div>
             <p>
               Boston, United States
@@ -50,35 +50,37 @@ const Footer = () => {
           </div>
           <div>
             <p>
-              anthonyzchen@yahoo.com
+              <a href="mailto:anthonyzchen@yahoo.com" className="transition-colors hover:text-vermillion">
+                anthonyzchen@yahoo.com
+              </a>
               <br />
               +1 (631) 428-5478
             </p>
           </div>
         </div>
         <div className="mt-4 flex items-center justify-start sm:mt-0 sm:justify-center">
-          <ul className="space-x-3">
+          <ul className="flex space-x-4">
             {socialsData.map((social, index) => (
-              <a
-                key={index}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Visit Anthony's ${social.label} profile`}
-              >
-                <button aria-label={social.label}>
-                  <i className={`fa-brands ${social.icon}`} aria-hidden="true"></i>
-                </button>
-              </a>
+              <li key={index}>
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Visit Anthony's ${social.label} profile`}
+                  className="text-brown transition-colors duration-300 hover:text-vermillion"
+                >
+                  <i className={`fa-brands ${social.icon} text-xl`} aria-hidden="true"></i>
+                </a>
+              </li>
             ))}
           </ul>
         </div>
       </div>
-      <div className="flex flex-col justify-between py-2 sm:flex-row">
+      <div className="flex flex-col justify-between py-2 text-brown sm:flex-row">
         <div id="copyright">
           <span>&#169;</span>{new Date().getFullYear()} anthonyzchen
         </div>
-        <p id="ft_career">Software Engineering & Finance</p>
+        <p id="ft_career" className="text-ink font-medium">Software Engineering & Finance</p>
       </div>
     </footer>
   );

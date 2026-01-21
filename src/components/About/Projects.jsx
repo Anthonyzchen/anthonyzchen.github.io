@@ -9,10 +9,20 @@ import projectsData from "../../data/projects.json";
 import project1Url from "../../assets/images/Project1_Cover1280.png";
 import project2Url from "../../assets/images/Project2_Cover1280.png";
 
+// Import poster images
+import poster1Url from "../../assets/images/p1.png";
+import poster2Url from "../../assets/images/p2_pic1.png";
+
 // Map project IDs to their imported image URLs
 const projectImages = {
   project1: project1Url,
   project2: project2Url,
+};
+
+// Map project IDs to their poster URLs
+const projectPosters = {
+  project1: poster1Url,
+  project2: poster2Url,
 };
 
 /**
@@ -69,6 +79,7 @@ const Projects = () => {
               key={project.id}
               project={project}
               imageUrl={projectImages[project.id]}
+              posterUrl={projectPosters[project.id]}
               ref={(el) => (projectsRef.current[index] = el)}
             />
           ))}

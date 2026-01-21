@@ -14,8 +14,9 @@
       "Netlify"
     ],
     "image": "Project1_Cover1280.png",
-    "github": "https://github.com/anthonyzchen/covey-town-fishing",
-    "demo": null,
+    "github": null,
+    "demo": "https://spring-23-team-703.netlify.app/",
+    "poster": "p1.png",
     "theme": "fishing"
   },
   {
@@ -32,8 +33,9 @@
       "Seaborn"
     ],
     "image": "Project2_Cover1280.png",
-    "github": "https://github.com/anthonyzchen/michelin-bias-analysis",
+    "github": null,
     "demo": null,
+    "poster": "p2_pic1.png",
     "theme": "michelin"
   }
 ]

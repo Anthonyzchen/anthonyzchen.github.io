@@ -82,6 +82,46 @@ for (let year = minYear; year <= maxYear; year++) {
   }
 }
 
+/**
+ * ExpandableTechStack - Reusable component for expandable technology badges
+ * Shows limited techs with a clickable "+N" button to expand
+ */
+const ExpandableTechStack = ({ technologies, visibleCount = 5, size = "sm" }) => {
+  const [expanded, setExpanded] = useState(false);
+  const hasMore = technologies.length > visibleCount;
+  const displayedTech = expanded ? technologies : technologies.slice(0, visibleCount);
+
+  return (
+    <ul className="flex flex-wrap gap-1.5">
+      {displayedTech.map((tech, index) => (
+        <li key={index}>
+          <TechBadge name={tech} size={size} />
+        </li>
+      ))}
+      {hasMore && !expanded && (
+        <li>
+          <button
+            onClick={() => setExpanded(true)}
+            className="inline-flex items-center rounded-full border border-brown/20 bg-beige px-3 py-1 text-xs font-medium text-brown/60 transition-all duration-300 hover:border-brown/40 hover:text-brown"
+          >
+            +{technologies.length - visibleCount}
+          </button>
+        </li>
+      )}
+      {hasMore && expanded && (
+        <li>
+          <button
+            onClick={() => setExpanded(false)}
+            className="inline-flex items-center rounded-full border border-brown/20 bg-beige px-3 py-1 text-xs font-medium text-brown/60 transition-all duration-300 hover:border-brown/40 hover:text-brown"
+          >
+            Show less
+          </button>
+        </li>
+      )}
+    </ul>
+  );
+};
+
 // Category colors and icons
 const categoryStyles = {
   engineering: {
@@ -351,18 +391,7 @@ const VerticalTimeline = () => {
                   )}
 
                   {/* Tech stack */}
-                  <ul className="flex flex-wrap gap-1">
-                    {experience.technologies.slice(0, 4).map((tech, techIndex) => (
-                      <li key={techIndex}>
-                        <TechBadge name={tech} />
-                      </li>
-                    ))}
-                    {experience.technologies.length > 4 && (
-                      <li className="flex items-center rounded-full bg-brown/10 px-1.5 py-0.5 text-[10px] text-brown/60 sm:px-2 sm:text-xs">
-                        +{experience.technologies.length - 4}
-                      </li>
-                    )}
-                  </ul>
+                  <ExpandableTechStack technologies={experience.technologies} visibleCount={4} />
                 </div>
               </div>
             );
@@ -827,18 +856,7 @@ const HorizontalTimeline = () => {
                   )}
 
                   {/* Tech stack */}
-                  <ul className="flex flex-wrap gap-1.5">
-                    {experience.technologies.slice(0, 5).map((tech, techIndex) => (
-                      <li key={techIndex}>
-                        <TechBadge name={tech} />
-                      </li>
-                    ))}
-                    {experience.technologies.length > 5 && (
-                      <li className="flex items-center rounded-full bg-brown/10 px-2 py-0.5 text-xs text-brown/60">
-                        +{experience.technologies.length - 5}
-                      </li>
-                    )}
-                  </ul>
+                  <ExpandableTechStack technologies={experience.technologies} visibleCount={5} />
                 </div>
 
                 {/* Connector line to timeline - extends through SVG */}

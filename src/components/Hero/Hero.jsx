@@ -24,14 +24,14 @@ const Hero = () => {
   return (
     <section>
       <div className="flex h-screen w-full flex-col items-center justify-center bg-painting bg-cover bg-center px-8">
-        <h1 className="text-4xl uppercase leading-tight" ref={nameRef}>
+        <h1 className="text-4xl uppercase leading-tight text-ink" ref={nameRef}>
           Anthony Chen
         </h1>
-        <h2 className="mt-3 text-lg" ref={titleRef}>
+        <h2 className="mt-3 text-lg text-brown" ref={titleRef}>
           {" "}
           CS & Finance at Northeastern University
         </h2>
-        <p className="mt-4 max-w-xs leading-normal" ref={aboutRef}>
+        <p className="mt-4 max-w-xs leading-normal text-brown" ref={aboutRef}>
           I'm passionate about creating accessible, aesthetic, and adaptable
           solutions through software engineering.
         </p>

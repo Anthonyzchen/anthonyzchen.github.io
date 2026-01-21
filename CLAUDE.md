@@ -60,12 +60,23 @@ src/
 
 ## Color Palette (tailwind.config.js)
 
+### Base Colors
 | Name | Hex | Usage |
 |------|-----|-------|
 | beige | #E2D7BB | Primary background |
-| brown | #564E41 | Text and accents |
-| dark-beige | #DACEAB | Hover states |
+| brown | #564E41 | Body text |
+| dark-beige | #DACEAB | Card backgrounds |
 | transparent-beige | #E2D7BB9A | Overlays |
+| mist | #F5F2EB | Light backgrounds |
+
+### Accent Colors
+| Name | Hex | Usage |
+|------|-----|-------|
+| ink | #2C2825 | Headings, emphasis (darker than brown) |
+| vermillion | #C23B3B | Primary accent, CTAs, links (matches logo) |
+| terracotta | #A65D4C | Hover states for vermillion |
+| jade | #5B7E6B | Fishing project theme (nature/water) |
+| gold | #B8964B | Michelin project theme (prestige/stars) |
 
 ## Animation Timing
 
@@ -87,8 +98,11 @@ The preloader uses a canvas-based water ripple simulation:
 
 ### New Project
 1. Add image to `src/assets/images/`
-2. Add entry to `src/data/projects.json`
+2. Add entry to `src/data/projects.json` with fields:
+   - `id`, `title`, `description`, `techstack`, `technologies[]`
+   - `image`, `github` (optional), `demo` (optional), `poster` (optional), `theme`
 3. Import image in `src/components/About/Projects.jsx` and add to `projectImages` map
+4. If poster exists, import and add to `projectPosters` map
 
 ### New Experience
 1. Add entry to `src/data/experience.json` with required fields:
@@ -108,6 +122,20 @@ The preloader uses a canvas-based water ripple simulation:
 - **Logo** - Fixed top-left, clicking scrolls to top
 - **Scrollbars hidden** - Clean look, Lenis handles smooth scrolling
 - **No horizontal scroll** - `overflow-x: hidden` on html/body
+
+## UI Components
+
+### ProjectCard
+- Displays project with image, title, description, and tech stack
+- **Tech stack**: Shows first 5 technologies, clickable "+N" expands to show all
+- **Action buttons**: View Poster (if poster exists), Live Demo (if demo exists)
+- **Theme-based borders**: jade for fishing theme, gold for Michelin theme
+
+### ExperienceTimeline
+- **Desktop (1024px+)**: Horizontal scrolling timeline with animated SVG path
+- **Mobile (<1024px)**: Vertical timeline with stacked cards
+- **Tech stack**: Expandable with clickable "+N" button (4 visible on mobile, 5 on desktop)
+- Uses `ExpandableTechStack` component for consistent expand/collapse behavior
 
 ## Common Issues
 
