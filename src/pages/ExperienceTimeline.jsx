@@ -442,19 +442,54 @@ const HorizontalTimeline = () => {
     isRewindingRef.current = isRewinding;
   }, [isRewinding]);
 
-  // Store initial screen width for layout calculations (doesn't change on resize)
-  const initialScreenWidth = useRef(
+  // Track screen width for responsive calculations
+  // Using ref to avoid triggering useGSAP re-runs which cause pin-spacer duplication
+  const screenWidthRef = useRef(
     typeof window !== "undefined" ? window.innerWidth : 1200
-  ).current;
+  );
+  const [, forceUpdate] = useState(0);
+
+  // Update screen width on resize and refresh ScrollTrigger
+  useEffect(() => {
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        const newWidth = window.innerWidth;
+        if (newWidth !== screenWidthRef.current) {
+          screenWidthRef.current = newWidth;
+
+          // Force re-render for SVG path recalculation
+          forceUpdate((n) => n + 1);
+
+          // ScrollTrigger.refresh() will trigger onRefresh callback
+          // which handles scroll position restoration
+          ScrollTrigger.refresh();
+        }
+      }, 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Calculate responsive segment width based on screen size
   // lg (1024-1279): 400px, xl (1280-1535): 440px, 2xl (1536+): 480px
   const getSegmentWidth = () => {
-    if (initialScreenWidth >= 1536) return 480;
-    if (initialScreenWidth >= 1280) return 440;
+    const width = screenWidthRef.current;
+    if (width >= 1536) return 480;
+    if (width >= 1280) return 440;
     return 400; // lg breakpoint (1024+)
   };
   const segmentWidth = getSegmentWidth();
+  const screenWidth = screenWidthRef.current;
+
+  // Track scroll progress for preservation across resize
+  const scrollProgressRef = useRef(0);
 
   useGSAP(() => {
     const container = containerRef.current;
@@ -500,8 +535,19 @@ const HorizontalTimeline = () => {
       scrub: 0.5,
       anticipatePin: 1,
       invalidateOnRefresh: true,
+      onRefresh: (self) => {
+        // Restore scroll position after resize using the saved progress from ref
+        const currentProgress = scrollProgressRef.current;
+        if (currentProgress > 0 && currentProgress < 1) {
+          const targetScroll = self.start + (currentProgress * (self.end - self.start));
+          window.scrollTo({ top: targetScroll, behavior: "instant" });
+        }
+      },
       onUpdate: (self) => {
         const prog = self.progress;
+
+        // Save progress for restoration on resize
+        scrollProgressRef.current = prog;
 
         // Update isAtEnd state based on scroll progress
         if (prog >= 0.98 && !isAtEndRef.current) {
@@ -532,10 +578,12 @@ const HorizontalTimeline = () => {
           // Card center is at screen center when: scrollX = cardCenterX - (screenWidth / 2)
           // As a fraction of total scroll: scrollX / scrollWidth
 
-          const screenWidth = window.innerWidth;
-          const cardCenterX = screenWidth + (index + 0.5) * segmentWidth; // intro screen + card position
-          const scrollWhenCentered = cardCenterX - (screenWidth / 2);
-          const totalScrollWidth = horizontal.scrollWidth - screenWidth;
+          // Get current dimensions dynamically for resize support
+          const currentScreenWidth = window.innerWidth;
+          const currentSegmentWidth = currentScreenWidth >= 1536 ? 480 : currentScreenWidth >= 1280 ? 440 : 400;
+          const cardCenterX = currentScreenWidth + (index + 0.5) * currentSegmentWidth; // intro screen + card position
+          const scrollWhenCentered = cardCenterX - (currentScreenWidth / 2);
+          const totalScrollWidth = horizontal.scrollWidth - currentScreenWidth;
           const cardCenterProgress = scrollWhenCentered / totalScrollWidth;
 
           // Animation window: complete exactly when card center hits screen center
@@ -584,7 +632,7 @@ const HorizontalTimeline = () => {
         bounceAnimationRef.current.kill();
       }
     };
-  }, []);
+  }, []); // Empty deps - ScrollTrigger.refresh() handles resize updates
 
   // Handle auto-scroll through the timeline
   const handleAutoScroll = (e) => {
@@ -725,7 +773,7 @@ const HorizontalTimeline = () => {
 
   // Generate SVG path for the timeline
   const generateTimelinePath = () => {
-    const screenW = initialScreenWidth;
+    const screenW = screenWidth;
     const midY = 200; // Center of the 400px SVG
     const waveHeight = 50; // Height of wave from center
 
@@ -773,7 +821,7 @@ const HorizontalTimeline = () => {
   };
 
   // Two full screens (intro + end) plus all experience cards
-  const totalWidth = (2 * initialScreenWidth) + (timelineData.length * segmentWidth);
+  const totalWidth = (2 * screenWidth) + (timelineData.length * segmentWidth);
 
   // Get unique years for the intro section
   const uniqueYears = [...new Set(timelineData.map((item) => item.year))].sort();

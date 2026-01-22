@@ -35,7 +35,7 @@ const Projects = () => {
   const headerRef = useRef(null);
 
   useGSAP(() => {
-    // Pinned animation sequence for projects section
+    // Scroll-scrubbed animations for projects section with snapping
     projectAnimation(projectsRef, sectionRef.current, headerRef.current);
   }, []);
 
