@@ -7,26 +7,32 @@ import experienceData from "../data/experience.json";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Custom hook to detect if we're on mobile (below lg breakpoint)
-const useIsMobile = () => {
-  const isMobile = typeof window !== "undefined" ? window.innerWidth < 1024 : false;
-  return isMobile;
+// Get size category based on window width
+// Returns "mobile" | "lg" | "xl" | "2xl"
+const getSizeCategory = (width) => {
+  if (width < 1024) return "mobile";
+  if (width < 1280) return "lg";
+  if (width < 1536) return "xl";
+  return "2xl";
 };
 
-// Hook to refresh page on resize (debounced)
-const useRefreshOnResize = () => {
+// Custom hook to detect size category with debounced updates
+// Returns both isMobile boolean and sizeCategory string
+// When sizeCategory changes, components using it as a key will remount
+const useSizeCategory = () => {
+  const [sizeCategory, setSizeCategory] = useState(() =>
+    typeof window !== "undefined" ? getSizeCategory(window.innerWidth) : "lg"
+  );
+
   useEffect(() => {
-    const initialWidth = window.innerWidth;
     let timeoutId;
 
     const handleResize = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        // Refresh if width changed significantly (more than 50px to avoid minor fluctuations)
-        if (Math.abs(window.innerWidth - initialWidth) > 50) {
-          window.location.reload();
-        }
-      }, 300);
+        const newCategory = getSizeCategory(window.innerWidth);
+        setSizeCategory(newCategory);
+      }, 150); // Debounce to avoid rapid re-renders
     };
 
     window.addEventListener("resize", handleResize);
@@ -35,6 +41,11 @@ const useRefreshOnResize = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  return {
+    isMobile: sizeCategory === "mobile",
+    sizeCategory,
+  };
 };
 
 // Sort by start date (oldest first for left to right chronological)
@@ -223,7 +234,7 @@ const VerticalTimeline = () => {
       {/* Vertical Timeline */}
       <div className="relative mx-auto max-w-2xl">
         {/* Timeline line */}
-        <div className="absolute left-3 top-0 h-full w-0.5 bg-brown/20 sm:left-6" />
+        <div className="absolute left-3 top-0 h-full w-0.5 bg-brown/20 sm:left-6 md:left-7" />
 
         {/* Experience cards */}
         <div className="space-y-4 sm:space-y-6">
@@ -232,20 +243,18 @@ const VerticalTimeline = () => {
             const ongoing = isOngoing(experience.timeframe);
 
             return (
-              <div key={experience.id} className="relative pl-8 sm:pl-14">
+              <div key={experience.id} className="relative pl-8 sm:pl-14 md:pl-16">
                 {/* Timeline dot */}
                 <div
-                  className={`absolute top-5 h-2.5 w-2.5 rounded-full border-2 border-beige sm:top-6 sm:h-3 sm:w-3 ${
+                  className={`absolute left-[6px] top-5 h-2.5 w-2.5 rounded-full border-2 border-beige sm:left-[12px] sm:top-6 sm:h-3 sm:w-3 md:left-[14px] ${
                     ongoing ? "bg-green-600" : "bg-brown"
                   }`}
-                  style={{ left: "6px" }}
                 />
 
                 {/* Year badge - show on first item of each year */}
                 {(index === 0 || sortedExperiencesDescending[index - 1].year !== experience.year) && (
                   <div
-                    className="absolute top-3 rounded-full bg-brown px-1.5 py-0.5 text-[10px] font-medium text-beige sm:top-4 sm:px-2 sm:text-xs"
-                    style={{ left: "12px", transform: "translateX(-50%)" }}
+                    className="absolute left-3 top-3 -translate-x-1/2 rounded-full bg-brown px-1.5 py-0.5 text-[10px] font-medium text-beige sm:left-6 sm:top-4 sm:px-2 sm:text-xs md:left-7"
                   >
                     {experience.year}
                   </div>
@@ -408,6 +417,15 @@ const HorizontalTimeline = () => {
     typeof window !== "undefined" ? window.innerWidth : 1200
   ).current;
 
+  // Calculate responsive segment width based on screen size
+  // lg (1024-1279): 400px, xl (1280-1535): 440px, 2xl (1536+): 480px
+  const getSegmentWidth = () => {
+    if (initialScreenWidth >= 1536) return 480;
+    if (initialScreenWidth >= 1280) return 440;
+    return 400; // lg breakpoint (1024+)
+  };
+  const segmentWidth = getSegmentWidth();
+
   useGSAP(() => {
     const container = containerRef.current;
     const horizontal = horizontalRef.current;
@@ -485,7 +503,7 @@ const HorizontalTimeline = () => {
           // As a fraction of total scroll: scrollX / scrollWidth
 
           const screenWidth = window.innerWidth;
-          const cardCenterX = screenWidth + (index + 0.5) * 480; // 480 = segmentWidth, intro screen + card position
+          const cardCenterX = screenWidth + (index + 0.5) * segmentWidth; // intro screen + card position
           const scrollWhenCentered = cardCenterX - (screenWidth / 2);
           const totalScrollWidth = horizontal.scrollWidth - screenWidth;
           const cardCenterProgress = scrollWhenCentered / totalScrollWidth;
@@ -677,7 +695,6 @@ const HorizontalTimeline = () => {
 
   // Generate SVG path for the timeline
   const generateTimelinePath = () => {
-    const segmentWidth = 480;
     const screenW = initialScreenWidth;
     const midY = 200; // Center of the 400px SVG
     const waveHeight = 50; // Height of wave from center
@@ -725,7 +742,6 @@ const HorizontalTimeline = () => {
     return path;
   };
 
-  const segmentWidth = 480;
   // Two full screens (intro + end) plus all experience cards
   const totalWidth = (2 * initialScreenWidth) + (timelineData.length * segmentWidth);
 
@@ -796,17 +812,16 @@ const HorizontalTimeline = () => {
         style={{ width: `${totalWidth}px` }}
       >
         {/* Intro section - full screen width */}
-        <div className="relative flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-8">
-          <h1 className="mb-6 text-center text-5xl font-medium text-brown md:text-7xl">
+        <div className="relative flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8">
+          <h1 className="mb-4 text-center text-4xl font-medium text-brown lg:mb-6 lg:text-5xl xl:text-6xl 2xl:text-7xl">
             My Professional Journey
           </h1>
-          <p className="mb-4 text-center text-2xl text-brown/70">
+          <p className="mb-3 text-center text-xl text-brown/70 lg:mb-4 lg:text-2xl">
             {uniqueYears[0]} - Present
           </p>
-          <p className="max-w-[400px] text-center text-lg text-brown/60">
+          <p className="max-w-[320px] text-center text-base text-brown/60 lg:max-w-[400px] lg:text-lg">
             A timeline of growth through education, leadership, and engineering.
           </p>
-
         </div>
 
         {/* Timeline SVG */}
@@ -898,29 +913,29 @@ const HorizontalTimeline = () => {
               {/* Card positioned above or below timeline based on index */}
               <div
                 className={`absolute w-full ${
-                  index % 2 === 0 ? "bottom-[310px]" : "top-[260px]"
+                  index % 2 === 0 ? "bottom-[290px]" : "top-[290px]"
                 }`}
               >
                 <div
-                  className={`rounded-xl border-2 ${style.border} bg-dark-beige/95 p-5 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl`}
+                  className={`rounded-xl border-2 ${style.border} bg-dark-beige/95 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl`}
                 >
                   {/* Header with category icon and employment type */}
-                  <div className="mb-3 flex items-start justify-between">
-                    <div className={`flex items-center gap-2 ${style.accent}`}>
-                      {style.icon}
-                      <span className="text-sm font-medium uppercase tracking-wider">
+                  <div className="mb-2 flex items-start justify-between">
+                    <div className={`flex items-center gap-1.5 ${style.accent}`}>
+                      <span className="[&>svg]:h-4 [&>svg]:w-4">{style.icon}</span>
+                      <span className="text-xs font-medium uppercase tracking-wider">
                         {experience.category}
                       </span>
                     </div>
                     <span
-                      className={`rounded-full border px-3 py-1 text-sm font-medium ${style.badge}`}
+                      className={`rounded-full border px-2 py-0.5 text-xs font-medium ${style.badge}`}
                     >
                       {experience.employment}
                     </span>
                   </div>
 
                   {/* Title and company */}
-                  <h3 className="mb-2 text-xl font-medium leading-tight text-brown">
+                  <h3 className="mb-1 text-base font-medium leading-tight text-brown">
                     {experience.title}
                   </h3>
                   {experience.link ? (
@@ -928,11 +943,11 @@ const HorizontalTimeline = () => {
                       href={experience.link}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="mb-2 inline-flex items-center text-base text-red-700 transition-colors hover:text-red-800"
+                      className="mb-1.5 inline-flex items-center text-sm text-red-700 transition-colors hover:text-red-800"
                     >
                       {experience.company}
                       <svg
-                        className="ml-1 h-4 w-4"
+                        className="ml-1 h-3.5 w-3.5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -946,18 +961,18 @@ const HorizontalTimeline = () => {
                       </svg>
                     </a>
                   ) : (
-                    <p className="mb-2 text-base text-brown/80">
+                    <p className="mb-1.5 text-sm text-brown/80">
                       {experience.company}
                     </p>
                   )}
 
                   {/* Timeframe and location */}
-                  <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-brown/60">
+                  <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-brown/60">
                     <span>{experience.timeframe}</span>
                     <span>|</span>
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center gap-0.5">
                       <svg
-                        className="h-4 w-4"
+                        className="h-3.5 w-3.5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -980,19 +995,19 @@ const HorizontalTimeline = () => {
                   </div>
 
                   {/* Short description */}
-                  <p className="mb-3 text-sm leading-relaxed text-brown/80">
+                  <p className="mb-2 text-xs leading-relaxed text-brown/80">
                     {experience.shortDescription}
                   </p>
 
-                  {/* Highlights */}
+                  {/* Highlights - only show 2 */}
                   {experience.highlights && experience.highlights.length > 0 && (
-                    <ul className="mb-3 space-y-1">
-                      {experience.highlights.slice(0, 3).map((highlight, hIndex) => (
+                    <ul className="mb-2 space-y-0.5">
+                      {experience.highlights.slice(0, 2).map((highlight, hIndex) => (
                         <li
                           key={hIndex}
-                          className="flex items-start gap-2 text-sm text-brown/70"
+                          className="flex items-start gap-1.5 text-xs text-brown/70"
                         >
-                          <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-brown/40" />
+                          <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-brown/40" />
                           {highlight}
                         </li>
                       ))}
@@ -1000,7 +1015,7 @@ const HorizontalTimeline = () => {
                   )}
 
                   {/* Tech stack */}
-                  <ExpandableTechStack technologies={experience.technologies} visibleCount={5} />
+                  <ExpandableTechStack technologies={experience.technologies} visibleCount={4} />
                 </div>
 
                 {/* Connector line to timeline - extends through SVG */}
@@ -1026,10 +1041,10 @@ const HorizontalTimeline = () => {
         })}
 
         {/* End section - full screen width */}
-        <div className="flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-8">
-          <div className="mb-6 rounded-full bg-green-700/20 p-5">
+        <div className="flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8">
+          <div className="mb-4 rounded-full bg-green-700/20 p-4 lg:mb-6 lg:p-5">
             <svg
-              className="h-10 w-10 text-green-700"
+              className="h-8 w-8 text-green-700 lg:h-10 lg:w-10"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -1042,16 +1057,16 @@ const HorizontalTimeline = () => {
               />
             </svg>
           </div>
-          <h2 className="mb-4 text-center text-5xl font-medium text-brown md:text-6xl">
+          <h2 className="mb-3 text-center text-4xl font-medium text-brown lg:mb-4 lg:text-5xl xl:text-6xl">
             Present Day
           </h2>
-          <p className="mb-3 text-center text-2xl text-brown/70">
+          <p className="mb-2 text-center text-xl text-brown/70 lg:mb-3 lg:text-2xl">
             Software Engineer at UKG
           </p>
-          <p className="max-w-[400px] text-center text-lg text-brown/60">
+          <p className="max-w-[320px] text-center text-base text-brown/60 lg:max-w-[400px] lg:text-lg">
             Building enterprise solutions and continuing to grow as a developer.
           </p>
-          <div className="mt-8 flex gap-4">
+          <div className="mt-6 flex gap-3 lg:mt-8 lg:gap-4">
             <a
               href="https://www.linkedin.com/in/anthonyzchen/"
               target="_blank"
@@ -1085,15 +1100,20 @@ const HorizontalTimeline = () => {
 /**
  * ExperienceTimeline - Main component that renders either
  * vertical (mobile) or horizontal (desktop) timeline based on screen size
+ *
+ * Uses sizeCategory as a key to force remount when crossing breakpoints.
+ * This ensures the SVG path and ScrollTrigger are recalculated with correct dimensions.
  */
 const ExperienceTimeline = () => {
-  const isMobile = useIsMobile();
-
-  // Refresh page on resize to ensure clean GSAP state
-  useRefreshOnResize();
+  const { isMobile, sizeCategory } = useSizeCategory();
 
   // Render vertical timeline on mobile, horizontal on desktop
-  return isMobile ? <VerticalTimeline /> : <HorizontalTimeline />;
+  // Key prop forces remount when size category changes, ensuring fresh calculations
+  return isMobile ? (
+    <VerticalTimeline key={sizeCategory} />
+  ) : (
+    <HorizontalTimeline key={sizeCategory} />
+  );
 };
 
 export default ExperienceTimeline;

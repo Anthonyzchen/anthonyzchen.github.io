@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { enterStaggerTextAnimation } from "../utils";
 
 const Hero = () => {
   // Create refs for text elements and scroll indicator
@@ -17,16 +16,40 @@ const Hero = () => {
 
   useGSAP(() => {
     // The animation is delayed to play after the Preloader has finished
+    // Simple fade and slide up for each text element
     heroTL.current = gsap
       .timeline()
-      .add(enterStaggerTextAnimation(nameRef))
-      .add(enterStaggerTextAnimation(titleRef), "-=0.3")
-      .add(enterStaggerTextAnimation(aboutRef), "-=0.3")
+      .from(nameRef.current, {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: "power2.out",
+      })
+      .from(
+        titleRef.current,
+        {
+          opacity: 0,
+          y: 20,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "-=0.4"
+      )
+      .from(
+        aboutRef.current,
+        {
+          opacity: 0,
+          y: 20,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "-=0.3"
+      )
       .fromTo(
         decorLineRef.current,
         { scaleX: 0 },
         { scaleX: 1, duration: 0.8, ease: "power2.out" },
-        "-=0.2"
+        "-=0.4"
       )
       .delay(3);
 
@@ -78,20 +101,20 @@ const Hero = () => {
       <div className="relative flex h-screen w-full flex-col items-center justify-center bg-painting bg-cover bg-center px-6 sm:px-8">
         {/* Edge fades - ink wash style vignette */}
         {/* Left fade */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-beige/70 to-transparent sm:w-32 md:w-48" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-beige/70 to-transparent sm:w-24 md:w-32 lg:w-40 xl:w-48" />
         {/* Right fade */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-beige/70 to-transparent sm:w-32 md:w-48" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-beige/70 to-transparent sm:w-24 md:w-32 lg:w-40 xl:w-48" />
         {/* Bottom fade - stronger for transition to next section */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-beige via-beige/80 to-transparent sm:h-56 md:h-64" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-beige via-beige/80 to-transparent sm:h-48 md:h-56 lg:h-64" />
         {/* Top subtle fade */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-beige/40 to-transparent sm:h-32" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-beige/40 to-transparent sm:h-24 md:h-32" />
 
         {/* Main content container */}
         <div className="relative flex flex-col items-center text-center">
           {/* Name - larger and more prominent */}
           <h1
-            className="text-5xl font-light uppercase tracking-widest text-ink sm:text-6xl md:text-7xl"
             ref={nameRef}
+            className="text-4xl font-light uppercase tracking-widest text-ink sm:text-5xl md:text-6xl lg:text-7xl"
           >
             Anthony Chen
           </h1>
@@ -115,16 +138,16 @@ const Hero = () => {
 
           {/* Title */}
           <h2
-            className="text-base font-medium tracking-wide text-brown/90 sm:text-lg md:text-xl"
             ref={titleRef}
+            className="text-base font-medium tracking-wide text-brown/90 sm:text-lg md:text-xl"
           >
             Software Engineer
           </h2>
 
           {/* About text */}
           <p
-            className="mt-4 max-w-sm text-sm leading-relaxed text-brown/80 sm:mt-6 sm:max-w-md sm:text-base md:max-w-lg"
             ref={aboutRef}
+            className="mt-4 max-w-sm text-sm leading-relaxed text-brown/80 sm:mt-6 sm:max-w-md sm:text-base md:max-w-lg"
           >
             Building accessible, aesthetic, and adaptable solutions through
             thoughtful software engineering.

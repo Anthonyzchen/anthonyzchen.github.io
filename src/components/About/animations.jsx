@@ -44,6 +44,7 @@ export const projectAnimation = (projectsRef, sectionRef, headerRef) => {
     trigger: sectionRef,
     start: "top 90%",
     end: "bottom 10%",
+    invalidateOnRefresh: true,
     onUpdate: () => {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(checkSnap, 150); // Check 150ms after scroll stops
@@ -55,6 +56,7 @@ export const projectAnimation = (projectsRef, sectionRef, headerRef) => {
   ScrollTrigger.create({
     trigger: sectionRef,
     start: "top 60%",
+    invalidateOnRefresh: true,
     onEnter: () => {
       if (hasAnimated) return;
       hasAnimated = true;
@@ -102,6 +104,7 @@ export const techBadgeAnimation = (containerRef) => {
         trigger: containerRef,
         start: "top 85%",
         toggleActions: "play none none reverse",
+        invalidateOnRefresh: true,
       },
     }
   );

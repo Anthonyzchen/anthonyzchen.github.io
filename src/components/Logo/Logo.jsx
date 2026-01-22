@@ -25,9 +25,9 @@ const Logo = () => {
   };
 
   return (
-    <div ref={logoRef} className="fixed left-8 top-4 z-30">
+    <div ref={logoRef} className="fixed left-4 top-3 z-30 sm:left-6 sm:top-4 md:left-8">
       <button className="logo cursor-pointer" onClick={scrollToTop}>
-        <img className="h-16" src={logoUrl} alt="logo - click to scroll to top" />
+        <img className="h-10 sm:h-12 md:h-14 lg:h-16" src={logoUrl} alt="logo - click to scroll to top" />
       </button>
     </div>
   );

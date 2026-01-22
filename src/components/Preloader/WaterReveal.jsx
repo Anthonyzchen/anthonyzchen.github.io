@@ -241,8 +241,8 @@ const WaterReveal = ({ onComplete, duration = 5000 }) => {
         position: "fixed",
         top: 0,
         left: 0,
-        width: "100vw",
-        height: "100vh",
+        width: "100%",
+        height: "100%",
         zIndex: 9999,
         pointerEvents: "none",
       }}
