@@ -14,7 +14,11 @@
       "Bash(git checkout:*)",
       "Bash(git merge:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(dir:*)",
+      "Skill(confluence-expert)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []
