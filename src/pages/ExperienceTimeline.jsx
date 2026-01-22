@@ -220,44 +220,6 @@ const VerticalTimeline = () => {
         </h1>
       </div>
 
-      {/* Category Legend */}
-      <div className="mx-auto mb-6 max-w-2xl sm:mb-8">
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-          <div className="flex items-center gap-1 rounded-full bg-dark-beige/80 px-2 py-1 sm:gap-1.5 sm:px-3 sm:py-1.5">
-            <span className="text-blue-700">
-              <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-              </svg>
-            </span>
-            <span className="text-[10px] text-brown sm:text-xs">Engineering</span>
-          </div>
-          <div className="flex items-center gap-1 rounded-full bg-dark-beige/80 px-2 py-1 sm:gap-1.5 sm:px-3 sm:py-1.5">
-            <span className="text-purple-700">
-              <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </span>
-            <span className="text-[10px] text-brown sm:text-xs">Leadership</span>
-          </div>
-          <div className="flex items-center gap-1 rounded-full bg-dark-beige/80 px-2 py-1 sm:gap-1.5 sm:px-3 sm:py-1.5">
-            <span className="text-amber-700">
-              <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </span>
-            <span className="text-[10px] text-brown sm:text-xs">Service</span>
-          </div>
-          <div className="flex items-center gap-1 rounded-full bg-dark-beige/80 px-2 py-1 sm:gap-1.5 sm:px-3 sm:py-1.5">
-            <span className="text-emerald-700">
-              <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-              </svg>
-            </span>
-            <span className="text-[10px] text-brown sm:text-xs">Education</span>
-          </div>
-        </div>
-      </div>
-
       {/* Vertical Timeline */}
       <div className="relative mx-auto max-w-2xl">
         {/* Timeline line */}
@@ -413,6 +375,33 @@ const HorizontalTimeline = () => {
   const horizontalRef = useRef(null);
   const pathRef = useRef(null);
   const cardsRef = useRef([]);
+  const autoScrollButtonRef = useRef(null);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const [isAtEnd, setIsAtEnd] = useState(false);
+  const [isRewinding, setIsRewinding] = useState(false);
+  const autoScrollTweenRef = useRef(null);
+  const scrollTriggerRef = useRef(null);
+  const bounceAnimationRef = useRef(null);
+
+  // Refs to track state inside ScrollTrigger callback
+  const isAtEndRef = useRef(false);
+  const isRewindingRef = useRef(false);
+
+  // Ref for scroll blocking function
+  const blockScrollRef = useRef((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  });
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    isAtEndRef.current = isAtEnd;
+  }, [isAtEnd]);
+
+  useEffect(() => {
+    isRewindingRef.current = isRewinding;
+  }, [isRewinding]);
 
   // Store initial screen width for layout calculations (doesn't change on resize)
   const initialScreenWidth = useRef(
@@ -455,7 +444,7 @@ const HorizontalTimeline = () => {
     }
 
     // Main horizontal scroll animation with optimized onUpdate
-    const mainTrigger = ScrollTrigger.create({
+    scrollTriggerRef.current = ScrollTrigger.create({
       trigger: container,
       start: "top top",
       end: () => `+=${scrollWidth}`,
@@ -465,6 +454,13 @@ const HorizontalTimeline = () => {
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         const prog = self.progress;
+
+        // Update isAtEnd state based on scroll progress
+        if (prog >= 0.98 && !isAtEndRef.current) {
+          setIsAtEnd(true);
+        } else if (prog < 0.95 && isAtEndRef.current && !isRewindingRef.current) {
+          setIsAtEnd(false);
+        }
 
         // Update horizontal position directly on style for performance
         horizontal.style.transform = `translate3d(${-scrollWidth * prog}px, 0, 0)`;
@@ -517,11 +513,167 @@ const HorizontalTimeline = () => {
       },
     });
 
+    // Bounce animation for auto-scroll button (vertical bounce like Hero)
+    if (autoScrollButtonRef.current) {
+      bounceAnimationRef.current = gsap.to(autoScrollButtonRef.current, {
+        y: 8,
+        duration: 1.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+      });
+    }
+
     return () => {
-      mainTrigger.kill();
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
       ScrollTrigger.getAll().forEach((t) => t.kill());
+      if (autoScrollTweenRef.current) {
+        autoScrollTweenRef.current.kill();
+      }
+      if (bounceAnimationRef.current) {
+        bounceAnimationRef.current.kill();
+      }
     };
   }, []);
+
+  // Handle auto-scroll through the timeline
+  const handleAutoScroll = (e) => {
+    // Prevent event bubbling issues
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Stop Lenis scroll momentum immediately
+    if (window.lenis) {
+      window.lenis.stop();
+      // Resume after a brief moment
+      setTimeout(() => {
+        if (window.lenis) window.lenis.start();
+      }, 50);
+    }
+
+    // Don't allow stopping during rewind
+    if (isRewinding) {
+      return;
+    }
+
+    if (isAutoScrolling) {
+      // Stop auto-scroll (only for forward journey, not rewind)
+      if (autoScrollTweenRef.current) {
+        autoScrollTweenRef.current.kill();
+      }
+      // Resume bounce animation
+      if (bounceAnimationRef.current) {
+        bounceAnimationRef.current.play();
+      }
+      setIsAutoScrolling(false);
+      return;
+    }
+
+    // Pause bounce animation during auto-scroll for stability
+    if (bounceAnimationRef.current) {
+      bounceAnimationRef.current.pause();
+      gsap.set(autoScrollButtonRef.current, { y: 0 });
+    }
+
+    // Use the ScrollTrigger's end position directly
+    const trigger = scrollTriggerRef.current;
+    if (!trigger) return;
+
+    const currentScroll = window.scrollY;
+    const triggerStart = trigger.start;
+    const triggerEnd = trigger.end;
+    const totalScrollDistance = triggerEnd - triggerStart;
+
+    // Total journey takes a fixed time (e.g., 30 seconds for the full timeline)
+    const totalDuration = 30;
+    const pixelsPerSecond = totalScrollDistance / totalDuration;
+
+    // If at the end, scroll back to the beginning quickly
+    if (isAtEnd) {
+      const rewindDistance = Math.max(0, currentScroll - triggerStart);
+
+      if (rewindDistance <= 10) {
+        setIsAtEnd(false);
+        setIsRewinding(false);
+        return;
+      }
+
+      // Rewind at 3x speed - no stopping allowed
+      const duration = Math.max(2, rewindDistance / (pixelsPerSecond * 3));
+
+      setIsRewinding(true);
+      setIsAutoScrolling(false); // Not showing as "auto scrolling" during rewind
+
+      // Block scrolling during rewind (like preloader does)
+      if (window.lenis) {
+        window.lenis.stop();
+      }
+      document.body.style.overflow = "hidden";
+
+      // Block wheel and touch scroll events
+      const blockScroll = blockScrollRef.current;
+      document.addEventListener("wheel", blockScroll, { passive: false, capture: true });
+      document.addEventListener("touchmove", blockScroll, { passive: false, capture: true });
+
+      autoScrollTweenRef.current = gsap.to(window, {
+        scrollTo: { y: triggerStart, autoKill: false },
+        duration: duration,
+        ease: "power2.inOut",
+        onComplete: () => {
+          // Remove scroll blockers
+          document.removeEventListener("wheel", blockScroll, { capture: true });
+          document.removeEventListener("touchmove", blockScroll, { capture: true });
+
+          // Re-enable scrolling
+          document.body.style.overflow = "";
+          if (window.lenis) {
+            window.lenis.start();
+          }
+
+          setIsRewinding(false);
+          setIsAtEnd(false);
+          if (bounceAnimationRef.current) {
+            bounceAnimationRef.current.play();
+          }
+        },
+      });
+      return;
+    }
+
+    // Forward scroll to the end
+    const remainingDistance = Math.max(0, triggerEnd - currentScroll);
+
+    // If already at or past the end, don't scroll
+    if (remainingDistance <= 0) {
+      setIsAtEnd(true);
+      return;
+    }
+
+    const duration = remainingDistance / pixelsPerSecond;
+
+    setIsAutoScrolling(true);
+
+    autoScrollTweenRef.current = gsap.to(window, {
+      scrollTo: { y: triggerEnd, autoKill: true },
+      duration: duration,
+      ease: "none",
+      onComplete: () => {
+        setIsAutoScrolling(false);
+        setIsAtEnd(true);
+        if (bounceAnimationRef.current) {
+          bounceAnimationRef.current.play();
+        }
+      },
+      onInterrupt: () => {
+        setIsAutoScrolling(false);
+        if (bounceAnimationRef.current) {
+          bounceAnimationRef.current.play();
+        }
+      },
+    });
+  };
 
   // Generate SVG path for the timeline
   const generateTimelinePath = () => {
@@ -577,7 +729,7 @@ const HorizontalTimeline = () => {
   // Two full screens (intro + end) plus all experience cards
   const totalWidth = (2 * initialScreenWidth) + (timelineData.length * segmentWidth);
 
-  // Get unique years for the legend
+  // Get unique years for the intro section
   const uniqueYears = [...new Set(timelineData.map((item) => item.year))].sort();
 
   return (
@@ -585,66 +737,57 @@ const HorizontalTimeline = () => {
       ref={containerRef}
       className="relative min-h-screen overflow-hidden bg-beige"
     >
-      {/* Bottom floating bubbles */}
-      <div className="fixed bottom-6 left-0 right-0 z-30 hidden justify-center gap-4 px-8 lg:flex">
-        {/* Timeline years bubble */}
-        <div className="rounded-full bg-dark-beige/90 px-4 py-2 shadow-lg backdrop-blur-sm">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-medium uppercase tracking-wider text-brown/60">
-              Timeline
-            </span>
-            {uniqueYears.map((year) => (
-              <div key={year} className="flex items-center gap-1">
-                <div className="h-1.5 w-1.5 rounded-full bg-brown/40" />
-                <span className="text-xs text-brown">{year}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Categories bubble */}
-        <div className="rounded-full bg-dark-beige/90 px-4 py-2 shadow-lg backdrop-blur-sm">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-medium uppercase tracking-wider text-brown/60">
-              Categories
-            </span>
-            <div className="flex items-center gap-1 text-blue-700">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-              </svg>
-              <span className="text-xs text-brown">Engineering</span>
-            </div>
-            <div className="flex items-center gap-1 text-purple-700">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              <span className="text-xs text-brown">Leadership</span>
-            </div>
-            <div className="flex items-center gap-1 text-amber-700">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <span className="text-xs text-brown">Service</span>
-            </div>
-            <div className="flex items-center gap-1 text-emerald-700">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-              </svg>
-              <span className="text-xs text-brown">Education</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Experience count bubble */}
-        <div className="rounded-full bg-dark-beige/90 px-4 py-2 shadow-lg backdrop-blur-sm">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-medium text-brown">
-              {timelineData.length}
-            </span>
-            <span className="text-xs text-brown/60">Experiences</span>
-          </div>
-        </div>
-      </div>
+      {/* Auto-scroll button - fixed to viewport bottom center */}
+      <button
+        ref={autoScrollButtonRef}
+        onMouseDown={handleAutoScroll}
+        onTouchEnd={handleAutoScroll}
+        className={`absolute bottom-6 left-1/2 z-50 flex -translate-x-1/2 flex-col items-center gap-2 p-4 transition-colors sm:bottom-8 ${
+          isRewinding ? "cursor-not-allowed text-brown/40" : "cursor-pointer text-brown/60 hover:text-vermillion"
+        }`}
+        style={{ pointerEvents: "auto", touchAction: "manipulation" }}
+        aria-label={isAutoScrolling ? "Stop auto-scroll" : isRewinding ? "Rewinding" : "Auto-scroll through timeline"}
+      >
+        <span className="min-w-[80px] text-center text-xs uppercase tracking-widest">
+          {isRewinding ? "Rewinding" : isAutoScrolling ? "Stop" : isAtEnd ? "Rewind" : "Journey"}
+        </span>
+        <svg
+          className={`h-5 w-5 ${isRewinding ? "animate-pulse" : ""}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          {isRewinding ? (
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          ) : isAutoScrolling ? (
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          ) : isAtEnd ? (
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          ) : (
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M14 5l7 7m0 0l-7 7m7-7H3"
+            />
+          )}
+        </svg>
+      </button>
 
       {/* Horizontal scrolling container */}
       <div
@@ -653,7 +796,7 @@ const HorizontalTimeline = () => {
         style={{ width: `${totalWidth}px` }}
       >
         {/* Intro section - full screen width */}
-        <div className="flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-8">
+        <div className="relative flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-8">
           <h1 className="mb-6 text-center text-5xl font-medium text-brown md:text-7xl">
             My Professional Journey
           </h1>
@@ -663,6 +806,7 @@ const HorizontalTimeline = () => {
           <p className="max-w-[400px] text-center text-lg text-brown/60">
             A timeline of growth through education, leadership, and engineering.
           </p>
+
         </div>
 
         {/* Timeline SVG */}
@@ -754,7 +898,7 @@ const HorizontalTimeline = () => {
               {/* Card positioned above or below timeline based on index */}
               <div
                 className={`absolute w-full ${
-                  index % 2 === 0 ? "bottom-[290px]" : "top-[290px]"
+                  index % 2 === 0 ? "bottom-[310px]" : "top-[260px]"
                 }`}
               >
                 <div

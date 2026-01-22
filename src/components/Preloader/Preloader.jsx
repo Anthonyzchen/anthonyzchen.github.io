@@ -10,8 +10,25 @@ const Preloader = () => {
   const lenisRef = useRef(null);
 
   useLayoutEffect(() => {
-    // Initialize Lenis
-    lenisRef.current = new Lenis();
+    // Disable browser's automatic scroll restoration
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    // Force scroll to top on page load/refresh
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Initialize Lenis for smooth scrolling
+    lenisRef.current = new Lenis({
+      lerp: 0.1, // Default smooth scrolling
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    // Expose Lenis instance globally for other components to access
+    window.lenis = lenisRef.current;
 
     // Stop scrolling during preloader
     lenisRef.current.stop();

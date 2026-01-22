@@ -121,8 +121,21 @@ const WaterReveal = ({ onComplete, duration = 5000 }) => {
         lastDropTime = now;
 
         for (let i = 0; i < numDrops; i++) {
-          const x = Math.random() * width;
-          const y = Math.random() * height;
+          // Bias drops toward center, especially early on
+          // As progress increases, drops become more random across the screen
+          const centerBias = Math.max(0, 1 - progress * 1.5); // Strong center bias early, fades out
+
+          // Gaussian-like distribution centered on screen middle
+          const gaussianX = (Math.random() + Math.random() + Math.random()) / 3; // 0-1, clustered around 0.5
+          const gaussianY = (Math.random() + Math.random() + Math.random()) / 3;
+
+          // Blend between center-biased and fully random based on progress
+          const randomX = Math.random();
+          const randomY = Math.random();
+
+          const x = (gaussianX * centerBias + randomX * (1 - centerBias)) * width;
+          const y = (gaussianY * centerBias + randomY * (1 - centerBias)) * height;
+
           ripples.push(new Ripple(x, y));
 
           // Add to revealed areas with larger radius

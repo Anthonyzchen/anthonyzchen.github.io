@@ -1,3 +1,8 @@
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 /**
  * BrushStroke - Decorative ink brush stroke SVG
  */
@@ -19,6 +24,56 @@ const BrushStroke = ({ className = "" }) => (
 );
 
 const Footer = () => {
+  const footerRef = useRef(null);
+
+  useGSAP(() => {
+    let isSnapping = false;
+    let scrollTimeout;
+
+    const checkSnap = () => {
+      if (isSnapping) return;
+
+      const footer = footerRef.current;
+      if (!footer) return;
+
+      const rect = footer.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Snap zone: footer top is between 15% and 85% of viewport
+      if (rect.top > viewportHeight * 0.15 && rect.top < viewportHeight * 0.85) {
+        isSnapping = true;
+
+        // Determine snap direction based on position
+        const snapToFooter = rect.top < viewportHeight * 0.5;
+        const targetY = snapToFooter
+          ? window.scrollY + rect.top
+          : window.scrollY + rect.top - viewportHeight;
+
+        gsap.to(window, {
+          scrollTo: { y: snapToFooter ? footer : targetY, autoKill: true },
+          duration: 0.8,
+          ease: "power2.inOut",
+          onComplete: () => {
+            isSnapping = false;
+          },
+          onInterrupt: () => {
+            isSnapping = false;
+          },
+        });
+      }
+    };
+
+    // Detect when scrolling stops
+    ScrollTrigger.create({
+      trigger: footerRef.current,
+      start: "top bottom",
+      end: "bottom bottom",
+      onUpdate: () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(checkSnap, 150);
+      },
+    });
+  });
   const socialsData = [
     {
       href: "https://github.com/Anzchen",
@@ -48,25 +103,22 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative w-full overflow-hidden bg-beige">
+    <footer ref={footerRef} className="relative flex h-screen w-full flex-col overflow-hidden bg-beige">
       {/* Faded painting background overlay */}
       <div
         className="pointer-events-none absolute inset-0 bg-painting bg-cover bg-center opacity-[0.04]"
         style={{ backgroundPosition: "center 30%" }}
       />
 
-      {/* Main content section */}
-      <div className="relative flex min-h-[70vh] flex-col items-center justify-center px-6 py-16 sm:px-8">
-        {/* Decorative brush stroke */}
-        <BrushStroke className="mb-6 text-vermillion/40" />
-
+      {/* Main content section - grows to fill available space */}
+      <div className="relative flex flex-1 flex-col items-center justify-center px-6 sm:px-8">
         {/* Heading */}
         <h2 className="mb-4 text-center text-3xl font-light uppercase tracking-widest text-ink sm:text-4xl">
           Let's Connect
         </h2>
 
-        {/* Decorative line */}
-        <div className="mb-8 h-px w-16 bg-vermillion/50" />
+        {/* Decorative brush stroke */}
+        <BrushStroke className="mb-6 text-vermillion/40" />
 
         {/* About text */}
         <p className="max-w-xl text-center text-sm leading-relaxed text-brown/80 sm:text-base">
@@ -107,8 +159,8 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-ink/10">
+      {/* Bottom bar - fixed height at bottom */}
+      <div className="relative border-t border-ink/10">
         <div className="px-6 py-4 sm:px-8">
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 text-xs text-brown/60 sm:flex-row">
             <p>

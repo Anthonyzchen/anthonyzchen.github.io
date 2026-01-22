@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { enterStaggerTextAnimation } from "../utils";
 
 const Hero = () => {
@@ -8,8 +9,8 @@ const Hero = () => {
   const nameRef = useRef();
   const titleRef = useRef();
   const aboutRef = useRef();
-  const scrollIndicatorRef = useRef();
   const decorLineRef = useRef();
+  const sectionRef = useRef();
 
   // Ref to store GSAP timeline for hero animations
   const heroTL = useRef();
@@ -27,34 +28,53 @@ const Hero = () => {
         { scaleX: 1, duration: 0.8, ease: "power2.out" },
         "-=0.2"
       )
-      .fromTo(
-        scrollIndicatorRef.current,
-        { opacity: 0, y: -20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-        "-=0.3"
-      )
       .delay(3);
 
-    // Continuous bounce animation for scroll indicator
-    gsap.to(scrollIndicatorRef.current, {
-      y: 8,
-      duration: 1.2,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-      delay: 5,
+    // Snapping logic between Hero and next section
+    let isSnapping = false;
+    let scrollTimeout;
+
+    const checkSnap = () => {
+      if (isSnapping) return;
+
+      const scrollY = window.scrollY;
+      const heroHeight = window.innerHeight;
+
+      // Snap zone: if scrolled between 15% and 85% of hero height
+      if (scrollY > heroHeight * 0.15 && scrollY < heroHeight * 0.85) {
+        isSnapping = true;
+
+        // Determine snap direction based on position
+        const targetY = scrollY < heroHeight * 0.5 ? 0 : heroHeight;
+
+        gsap.to(window, {
+          scrollTo: { y: targetY, autoKill: true },
+          duration: 0.8,
+          ease: "power2.inOut",
+          onComplete: () => {
+            isSnapping = false;
+          },
+          onInterrupt: () => {
+            isSnapping = false;
+          },
+        });
+      }
+    };
+
+    // Detect when scrolling stops
+    ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top top",
+      end: "bottom top",
+      onUpdate: () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(checkSnap, 150);
+      },
     });
   });
 
-  const scrollToContent = () => {
-    window.scrollTo({
-      top: window.innerHeight,
-      behavior: "smooth",
-    });
-  };
-
   return (
-    <section className="relative">
+    <section ref={sectionRef} className="relative">
       <div className="relative flex h-screen w-full flex-col items-center justify-center bg-painting bg-cover bg-center px-6 sm:px-8">
         {/* Edge fades - ink wash style vignette */}
         {/* Left fade */}
@@ -76,11 +96,22 @@ const Hero = () => {
             Anthony Chen
           </h1>
 
-          {/* Decorative line */}
-          <div
+          {/* Decorative wavy brush stroke */}
+          <svg
             ref={decorLineRef}
-            className="my-6 h-px w-24 origin-center bg-vermillion/60 sm:my-8 sm:w-32"
-          />
+            width="60"
+            height="8"
+            viewBox="0 0 60 8"
+            className="my-6 origin-center text-vermillion/60 sm:my-8"
+          >
+            <path
+              d="M0 4 Q10 0 20 4 Q30 8 40 4 Q50 0 60 4"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+              strokeLinecap="round"
+            />
+          </svg>
 
           {/* Title */}
           <h2
@@ -99,29 +130,6 @@ const Hero = () => {
             thoughtful software engineering.
           </p>
         </div>
-
-        {/* Scroll indicator */}
-        <button
-          ref={scrollIndicatorRef}
-          onClick={scrollToContent}
-          className="absolute bottom-12 z-10 flex flex-col items-center gap-2 text-brown/60 transition-colors hover:text-vermillion sm:bottom-16"
-          aria-label="Scroll to content"
-        >
-          <span className="text-xs uppercase tracking-widest">Explore</span>
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </button>
       </div>
     </section>
   );

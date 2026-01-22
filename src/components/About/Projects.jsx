@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { projectAnimation } from "./animations";
 import { ProjectCard } from "../ui";
 import projectsData from "../../data/projects.json";
@@ -36,44 +35,29 @@ const Projects = () => {
   const headerRef = useRef(null);
 
   useGSAP(() => {
-    // Animate section header
-    gsap.fromTo(
-      headerRef.current,
-      {
-        opacity: 0,
-        y: 40,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: headerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
-
-    projectAnimation(projectsRef);
+    // Pinned animation sequence for projects section
+    projectAnimation(projectsRef, sectionRef.current, headerRef.current);
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden bg-beige">
+    <section
+      ref={sectionRef}
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-beige"
+    >
       {/* Faded painting background overlay */}
       <div
         className="pointer-events-none absolute inset-0 bg-painting bg-cover bg-center opacity-[0.03]"
         style={{ backgroundPosition: "center 70%" }}
       />
 
-      {/* Ink wash gradient fade at top */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-beige via-beige/80 to-transparent" />
-
-      <div className="relative px-4 py-16 sm:px-8 md:py-24">
-        <div className="mx-auto max-w-6xl">
+      <div className="relative w-full px-4 py-12 sm:px-8 md:py-16">
+        <div className="mx-auto max-w-5xl">
           {/* Section Header with ink brush styling */}
-          <div ref={headerRef} className="mb-12 text-center md:mb-16">
+          <div ref={headerRef} className="mb-8 text-center md:mb-10">
+            <h2 className="mb-4 text-3xl font-light uppercase tracking-wider text-ink sm:text-4xl md:text-5xl">
+              Featured Projects
+            </h2>
+
             {/* Decorative brush stroke accent */}
             <div className="mb-6 flex justify-center">
               <svg
@@ -92,13 +76,6 @@ const Projects = () => {
               </svg>
             </div>
 
-            <h2 className="mb-4 text-3xl font-light uppercase tracking-wider text-ink sm:text-4xl md:text-5xl">
-              Featured Projects
-            </h2>
-
-            {/* Decorative vermillion line */}
-            <div className="mx-auto my-4 h-px w-16 bg-vermillion/50" />
-
             <p className="mx-auto max-w-2xl text-base text-brown/70 sm:text-lg">
               A selection of projects showcasing my work in web development,
               data analysis, and interactive applications.
@@ -106,7 +83,7 @@ const Projects = () => {
           </div>
 
           {/* Project Grid */}
-          <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
+          <div className="mx-auto grid max-w-4xl gap-6 sm:gap-8 md:grid-cols-2">
             {projectsData.map((project, index) => (
               <ProjectCard
                 key={project.id}
@@ -119,9 +96,6 @@ const Projects = () => {
           </div>
         </div>
       </div>
-
-      {/* Ink wash gradient fade at bottom */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-beige via-beige/80 to-transparent" />
     </section>
   );
 };
