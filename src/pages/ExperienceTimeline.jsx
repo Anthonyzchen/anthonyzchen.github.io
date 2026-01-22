@@ -19,10 +19,13 @@ const getSizeCategory = (width) => {
 // Custom hook to detect size category with debounced updates
 // Returns both isMobile boolean and sizeCategory string
 // When sizeCategory changes, components using it as a key will remount
+// Also preserves scroll percentage across size category changes
 const useSizeCategory = () => {
   const [sizeCategory, setSizeCategory] = useState(() =>
     typeof window !== "undefined" ? getSizeCategory(window.innerWidth) : "lg"
   );
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const savedScrollPercentRef = useRef(null);
 
   useEffect(() => {
     let timeoutId;
@@ -31,6 +34,14 @@ const useSizeCategory = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         const newCategory = getSizeCategory(window.innerWidth);
+        if (newCategory !== sizeCategory) {
+          // Save current scroll percentage before category change
+          const scrollY = window.scrollY;
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          savedScrollPercentRef.current = maxScroll > 0 ? scrollY / maxScroll : 0;
+          // Hide content during transition to prevent flash
+          setIsTransitioning(true);
+        }
         setSizeCategory(newCategory);
       }, 150); // Debounce to avoid rapid re-renders
     };
@@ -40,11 +51,30 @@ const useSizeCategory = () => {
       clearTimeout(timeoutId);
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [sizeCategory]);
+
+  // Restore scroll position after remount
+  useEffect(() => {
+    if (savedScrollPercentRef.current !== null) {
+      const savedPercent = savedScrollPercentRef.current;
+      savedScrollPercentRef.current = null;
+
+      // Wait for layout to stabilize, then restore scroll instantly
+      // Using setTimeout(0) to defer until after React's commit phase
+      setTimeout(() => {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const targetScroll = savedPercent * maxScroll;
+        window.scrollTo({ top: targetScroll, behavior: 'instant' });
+        // Show content after scroll is restored
+        setIsTransitioning(false);
+      }, 0);
+    }
+  }, [sizeCategory]);
 
   return {
     isMobile: sizeCategory === "mobile",
     sizeCategory,
+    isTransitioning,
   };
 };
 
@@ -1105,14 +1135,19 @@ const HorizontalTimeline = () => {
  * This ensures the SVG path and ScrollTrigger are recalculated with correct dimensions.
  */
 const ExperienceTimeline = () => {
-  const { isMobile, sizeCategory } = useSizeCategory();
+  const { isMobile, sizeCategory, isTransitioning } = useSizeCategory();
 
   // Render vertical timeline on mobile, horizontal on desktop
   // Key prop forces remount when size category changes, ensuring fresh calculations
-  return isMobile ? (
-    <VerticalTimeline key={sizeCategory} />
-  ) : (
-    <HorizontalTimeline key={sizeCategory} />
+  // Opacity 0 during transition prevents flash to wrong scroll position
+  return (
+    <div style={{ opacity: isTransitioning ? 0 : 1 }}>
+      {isMobile ? (
+        <VerticalTimeline key={sizeCategory} />
+      ) : (
+        <HorizontalTimeline key={sizeCategory} />
+      )}
+    </div>
   );
 };
 
