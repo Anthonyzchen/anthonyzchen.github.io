@@ -453,6 +453,28 @@ const HorizontalTimeline = () => {
   useEffect(() => {
     let timeoutId;
     const handleResize = () => {
+      // If rewind or auto-scroll is happening, stop it and restore normal state
+      if (autoScrollTweenRef.current) {
+        autoScrollTweenRef.current.kill();
+        autoScrollTweenRef.current = null;
+      }
+      if (isRewindingRef.current) {
+        // Remove scroll blockers
+        const blockScroll = blockScrollRef.current;
+        document.removeEventListener("wheel", blockScroll, { capture: true });
+        document.removeEventListener("touchmove", blockScroll, { capture: true });
+        document.body.style.overflow = "";
+        if (window.lenis) {
+          window.lenis.start();
+        }
+        setIsRewinding(false);
+      }
+      setIsAutoScrolling(false);
+      setIsAtEnd(false);
+      if (bounceAnimationRef.current) {
+        bounceAnimationRef.current.play();
+      }
+
       const newWidth = window.innerWidth;
 
       // Update ref immediately so renders use the correct value
