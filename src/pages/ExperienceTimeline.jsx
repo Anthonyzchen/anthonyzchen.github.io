@@ -453,21 +453,31 @@ const HorizontalTimeline = () => {
   useEffect(() => {
     let timeoutId;
     const handleResize = () => {
+      const newWidth = window.innerWidth;
+
+      // Update ref immediately so renders use the correct value
+      screenWidthRef.current = newWidth;
+
+      // Immediately update horizontal position on every resize frame
+      if (horizontalRef.current && scrollProgressRef.current !== undefined) {
+        // Calculate segment width for the new screen size
+        const newSegmentWidth = newWidth >= 1536 ? 480 : newWidth >= 1280 ? 440 : 400;
+        // Calculate total width: 2 full screens (intro + end) + all cards
+        const newTotalWidth = (2 * newWidth) + (timelineData.length * newSegmentWidth);
+        const currentScrollWidth = newTotalWidth - newWidth;
+        horizontalRef.current.style.transform = `translate3d(${-currentScrollWidth * scrollProgressRef.current}px, 0, 0)`;
+      }
+
+      // Force immediate re-render so DOM elements get updated widths
+      forceUpdate((n) => n + 1);
+
+      // Debounce ScrollTrigger refresh (heavier operation)
       clearTimeout(timeoutId);
-
       timeoutId = setTimeout(() => {
-        const newWidth = window.innerWidth;
-        if (newWidth !== screenWidthRef.current) {
-          screenWidthRef.current = newWidth;
-
-          // Force re-render for SVG path recalculation
-          forceUpdate((n) => n + 1);
-
-          // ScrollTrigger.refresh() recalculates all trigger positions
-          // The onRefresh callback handles scroll position restoration
-          ScrollTrigger.refresh();
-        }
-      }, 250);
+        // ScrollTrigger.refresh() recalculates all trigger positions
+        // The onRefresh callback handles scroll position restoration
+        ScrollTrigger.refresh();
+      }, 150);
     };
 
     window.addEventListener("resize", handleResize);
@@ -556,18 +566,28 @@ const HorizontalTimeline = () => {
           setIsAtEnd(false);
         }
 
+        // Calculate scroll width dynamically for resize support
+        const currentScrollWidth = horizontal.scrollWidth - window.innerWidth;
+
         // Update horizontal position directly on style for performance
-        horizontal.style.transform = `translate3d(${-scrollWidth * prog}px, 0, 0)`;
+        horizontal.style.transform = `translate3d(${-currentScrollWidth * prog}px, 0, 0)`;
+
+        // Calculate path parameters dynamically for resize support
+        const currentTotalWidth = horizontal.scrollWidth;
+        const currentPathStartPercent = (window.innerWidth * 0.7) / currentTotalWidth;
+        const currentPathEndPercent = 1 - (window.innerWidth * 0.7) / currentTotalWidth;
+        const currentPathRange = currentPathEndPercent - currentPathStartPercent;
 
         // Update path drawing - synced with where the path actually starts/ends
         if (path && pathLength > 0) {
-          const pathProgress = Math.min(1, Math.max(0, (prog - pathStartPercent) / pathRange));
+          const pathProgress = Math.min(1, Math.max(0, (prog - currentPathStartPercent) / currentPathRange));
           path.style.strokeDashoffset = pathLength * (1 - pathProgress);
         }
 
         // Animate cards - each card should be fully visible by the time it reaches center of screen
-        const cardSectionStart = introEndPercent;
-        const cardSectionRange = timelineRange;
+        const currentIntroEndPercent = window.innerWidth / currentTotalWidth;
+        const currentOutroStartPercent = 1 - (window.innerWidth / currentTotalWidth);
+        const currentTimelineRange = currentOutroStartPercent - currentIntroEndPercent;
 
         cardsRef.current.forEach((card, index) => {
           if (!card) return;
@@ -892,7 +912,10 @@ const HorizontalTimeline = () => {
         style={{ width: `${totalWidth}px` }}
       >
         {/* Intro section - full screen width */}
-        <div className="relative flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8">
+        <div
+          className="relative flex h-full flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8"
+          style={{ width: `${screenWidth}px` }}
+        >
           <h1 className="mb-4 text-center text-4xl font-medium text-brown lg:mb-6 lg:text-5xl xl:text-6xl 2xl:text-7xl">
             My Professional Journey
           </h1>
@@ -1121,7 +1144,10 @@ const HorizontalTimeline = () => {
         })}
 
         {/* End section - full screen width */}
-        <div className="flex h-full w-screen flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8">
+        <div
+          className="flex h-full flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8"
+          style={{ width: `${screenWidth}px` }}
+        >
           <div className="mb-4 rounded-full bg-green-700/20 p-4 lg:mb-6 lg:p-5">
             <svg
               className="h-8 w-8 text-green-700 lg:h-10 lg:w-10"
