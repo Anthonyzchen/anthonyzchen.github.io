@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
+import { useRef, useEffect, useCallback } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projectAnimation } from "./animations";
 import { ProjectCard } from "../ui";
 import projectsData from "../../data/projects.json";
@@ -33,11 +33,68 @@ const Projects = () => {
   const projectsRef = useRef([]);
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
+  const cleanupRef = useRef(null);
 
-  useGSAP(() => {
-    // Scroll-scrubbed animations for projects section with snapping
-    projectAnimation(projectsRef, sectionRef.current, headerRef.current);
+  // Function to create animations
+  const createAnimations = useCallback(() => {
+    // Clean up existing animations first
+    if (cleanupRef.current) {
+      console.log("[DEBUG] Cleaning up existing project animations...");
+      cleanupRef.current();
+    }
+
+    console.log("[DEBUG] Creating project animations...");
+    cleanupRef.current = projectAnimation(projectsRef, sectionRef.current, headerRef.current);
+    console.log("[DEBUG] Project ScrollTriggers created:", ScrollTrigger.getAll().length);
   }, []);
+
+  // Initial animation setup
+  useEffect(() => {
+    // Small delay to ensure DOM is ready
+    const timeoutId = setTimeout(() => {
+      createAnimations();
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (cleanupRef.current) {
+        cleanupRef.current();
+      }
+    };
+  }, [createAnimations]);
+
+  // Handle resize events - kill and recreate animations
+  useEffect(() => {
+    let resizeTimeout;
+    let lastWidth = window.innerWidth;
+
+    const handleResize = () => {
+      const currentWidth = window.innerWidth;
+
+      // Only recreate if width changed (not just height from mobile address bar)
+      if (currentWidth !== lastWidth) {
+        lastWidth = currentWidth;
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          console.log("[DEBUG] Width changed, recreating project animations...");
+
+          // Kill old animations and create new ones
+          createAnimations();
+
+          // Refresh all ScrollTriggers to recalculate positions
+          ScrollTrigger.refresh();
+        }, 250);
+      }
+    };
+
+    console.log("[DEBUG] Projects resize listener attached");
+    window.addEventListener("resize", handleResize);
+    return () => {
+      console.log("[DEBUG] Projects resize listener removed");
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimeout);
+    };
+  }, [createAnimations]);
 
   return (
     <section

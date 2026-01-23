@@ -463,11 +463,11 @@ const HorizontalTimeline = () => {
           // Force re-render for SVG path recalculation
           forceUpdate((n) => n + 1);
 
-          // ScrollTrigger.refresh() will trigger onRefresh callback
-          // which handles scroll position restoration
+          // ScrollTrigger.refresh() recalculates all trigger positions
+          // The onRefresh callback handles scroll position restoration
           ScrollTrigger.refresh();
         }
-      }, 100);
+      }, 250);
     };
 
     window.addEventListener("resize", handleResize);
@@ -620,17 +620,19 @@ const HorizontalTimeline = () => {
       });
     }
 
+    // Note: useGSAP automatically handles cleanup of GSAP animations created within it.
+    // We only need to manually clean up refs that might persist.
     return () => {
-      if (scrollTriggerRef.current) {
-        scrollTriggerRef.current.kill();
-      }
-      ScrollTrigger.getAll().forEach((t) => t.kill());
       if (autoScrollTweenRef.current) {
         autoScrollTweenRef.current.kill();
+        autoScrollTweenRef.current = null;
       }
       if (bounceAnimationRef.current) {
         bounceAnimationRef.current.kill();
+        bounceAnimationRef.current = null;
       }
+      // Note: Do NOT call ScrollTrigger.getAll().forEach((t) => t.kill()) here
+      // as it would kill ScrollTriggers from other components (like Projects)
     };
   }, []); // Empty deps - ScrollTrigger.refresh() handles resize updates
 
