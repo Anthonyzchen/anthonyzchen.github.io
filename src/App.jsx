@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,6 +12,15 @@ import Home from "./pages/Home";
 import PageLayout from "./pages/PageLayout";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+// Configure ScrollTrigger to ignore mobile resize events (address bar show/hide)
+ScrollTrigger.config({ ignoreMobileResize: true });
+
+// Force scroll to top on page load/refresh
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+window.scrollTo(0, 0);
 
 export default function App() {
   return (
