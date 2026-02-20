@@ -20,6 +20,17 @@ const Preloader = () => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
 
+    // Belt-and-suspenders: catch any browser scroll restoration after layout
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+    });
+
+    // On beforeunload, set scroll to 0 so the browser saves position as 0
+    const handleBeforeUnload = () => {
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     // Initialize Lenis for smooth scrolling
     lenisRef.current = new Lenis({
       lerp: 0.1, // Default smooth scrolling
@@ -37,6 +48,7 @@ const Preloader = () => {
     document.body.style.overflow = "hidden";
 
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       if (lenisRef.current) {
         lenisRef.current.destroy();
       }
