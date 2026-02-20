@@ -20,3 +20,26 @@ html {
 html::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
 }
+
+/* Utility to hide scrollbar on any element */
+.scrollbar-hide {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Carousel edge fade — slivers of adjacent cards dissolve into the background */
+.carousel-fade {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+}
+
+/* Wider fade on larger screens where more cards are visible */
+@media (min-width: 640px) {
+    .carousel-fade {
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 18%, black 82%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 18%, black 82%, transparent 100%);
+    }
+}

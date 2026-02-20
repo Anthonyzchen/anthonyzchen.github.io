@@ -3,6 +3,7 @@
     "id": "project1",
     "title": "Fishing Game Addition in Covey.Town",
     "description": "This project involved integrating an interactive Fishing Game Area into the pre-existing codebase, enhancing virtual exploration with engaging gameplay. In this feature, users are able to fish for rare catches, customize avatars, and compete for the highest score on a global leaderboard.",
+    "shortDescription": "Integrated an interactive Fishing Game into Covey.Town — fish for rare catches, customize avatars, and compete on a global leaderboard.",
     "techstack": "Built using TypeScript, React, and Chakra UI, with real-time leaderboard updates via MongoDB. Sprites crafted with Photoshop, optimized using TexturePacker, and deployed via Netlify with automated testing.",
     "technologies": [
       "TypeScript",
@@ -17,12 +18,13 @@
     "github": null,
     "demo": "https://spring-23-team-703.netlify.app/",
     "poster": "p1.png",
-    "theme": "fishing"
+    "theme": "fishing",
+    "hideTitle": true
   },
   {
     "id": "project2",
     "title": "Determining Bias in the Michelin Guide",
-    "description": "This project analyzed Michelin Guide biases in geographic and cuisine trends using machine learning. Results suggested a preference for established cuisines and high-end restaurants, potentially overlooking more diverse options for one star ratings. Insufficient data limited our conclusions for two- and three-star ratings.",
+    "description": "Analyzed Michelin Guide biases in geographic and cuisine trends using machine learning. Results suggested a preference for established cuisines and high-end restaurants, potentially overlooking more diverse options for one-star ratings.",
     "techstack": "Built with Python using pandas, numpy, and scikit-learn. Visualizations were created with matplotlib and seaborn, and predictions were generated with K-NN, Random Forest, and SVM algorithms. Data was sourced from Kaggle.",
     "technologies": [
       "Python",
@@ -36,6 +38,26 @@
     "github": null,
     "demo": null,
     "poster": "p2_pic1.png",
-    "theme": "michelin"
+    "theme": "michelin",
+    "hideTitle": true
+  },
+  {
+    "id": "project5",
+    "title": "Weekly Routine",
+    "description": "A progressive web app for organizing weekly routines, tracking diet and macros, and logging workouts. Designed for mobile-first use with offline support and cloud sync.",
+    "techstack": "Built with TypeScript and React using Vite, styled with Tailwind CSS, backed by Supabase for auth and data sync, and Zustand for client-side state management.",
+    "technologies": [
+      "TypeScript",
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Zustand"
+    ],
+    "image": "Project5_Cover1280.png",
+    "github": null,
+    "demo": "https://weeklyroutine.vercel.app",
+    "demoLabel": "Check it out",
+    "poster": null,
+    "theme": "default"
   }
 ]

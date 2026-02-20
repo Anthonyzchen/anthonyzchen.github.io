@@ -80,7 +80,7 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
   return (
     <article
       ref={ref}
-      className={`group relative flex flex-col overflow-hidden rounded-xl border-2 bg-dark-beige/95 shadow-md transition-all duration-500 hover:shadow-xl ${themeStyles.border}`}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-xl border-2 bg-dark-beige/95 shadow-md transition-all duration-500 hover:shadow-xl ${themeStyles.border}`}
     >
       {/* Ink brush corner accents */}
       <BrushCorner position="top-left" className={themeStyles.accent} />
@@ -94,9 +94,9 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
       />
 
       {/* Image */}
-      <div className="relative z-[1] overflow-hidden">
+      <div className="relative z-[1] aspect-[3/1] w-full overflow-hidden bg-dark-beige">
         <img
-          className="w-full object-contain transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           src={imageUrl}
           alt={`${project.title} project preview`}
         />
@@ -105,50 +105,56 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-[1] flex flex-1 flex-col p-5 sm:p-6">
-        {/* Title */}
-        <h3 className="mb-3 text-xl font-semibold leading-tight text-ink sm:text-2xl">
-          {project.title}
-        </h3>
+      <div className="relative z-[1] flex min-h-0 flex-1 flex-col p-5 sm:p-6">
+        {/* Title — hidden when the cover image already contains it */}
+        {!project.hideTitle && (
+          <h3 className="mb-2 text-xl font-semibold leading-tight text-ink sm:text-2xl">
+            {project.title}
+          </h3>
+        )}
 
-        {/* Description */}
-        <p className="mb-4 flex-1 text-sm leading-relaxed text-brown sm:text-base">
-          {project.description}
-        </p>
-
-        {/* Tech stack */}
-        <div className="mb-4">
-          <ul className="flex flex-wrap gap-1.5">
-            {displayedTech.map((tech, index) => (
-              <li key={index}>
-                <TechBadge name={tech} />
-              </li>
-            ))}
-            {hasMoreTech && !techExpanded && (
-              <li>
-                <button
-                  onClick={() => setTechExpanded(true)}
-                  className="inline-flex items-center rounded-full border border-brown/20 bg-beige px-3 py-1 text-xs font-medium text-brown/60 transition-all duration-300 hover:border-brown/40 hover:text-brown"
-                >
-                  +{project.technologies.length - visibleTechCount}
-                </button>
-              </li>
-            )}
-            {hasMoreTech && techExpanded && (
-              <li>
-                <button
-                  onClick={() => setTechExpanded(false)}
-                  className="inline-flex items-center rounded-full border border-brown/20 bg-beige px-3 py-1 text-xs font-medium text-brown/60 transition-all duration-300 hover:border-brown/40 hover:text-brown"
-                >
-                  Show less
-                </button>
-              </li>
-            )}
-          </ul>
+        {/* Description — fills available space, overflows hidden */}
+        <div className="mb-3 min-h-0 flex-1 overflow-hidden">
+          <p className="text-sm leading-relaxed text-brown sm:text-base">
+            {project.shortDescription ?? project.description}
+          </p>
         </div>
 
-        {/* Action links */}
-        <div className="flex flex-wrap gap-2 border-t border-brown/10 pt-4">
+        {/* Bottom section — pinned to bottom */}
+        <div className="mt-auto shrink-0">
+          {/* Tech stack */}
+          <div className="mb-3">
+            <ul className="flex flex-wrap gap-1.5">
+              {displayedTech.map((tech, index) => (
+                <li key={index}>
+                  <TechBadge name={tech} />
+                </li>
+              ))}
+              {hasMoreTech && !techExpanded && (
+                <li>
+                  <button
+                    onClick={() => setTechExpanded(true)}
+                    className="inline-flex items-center rounded-full border border-brown/20 bg-beige px-3 py-1 text-xs font-medium text-brown/60 transition-all duration-300 hover:border-brown/40 hover:text-brown"
+                  >
+                    +{project.technologies.length - visibleTechCount}
+                  </button>
+                </li>
+              )}
+              {hasMoreTech && techExpanded && (
+                <li>
+                  <button
+                    onClick={() => setTechExpanded(false)}
+                    className="inline-flex items-center rounded-full border border-brown/20 bg-beige px-3 py-1 text-xs font-medium text-brown/60 transition-all duration-300 hover:border-brown/40 hover:text-brown"
+                  >
+                    Show less
+                  </button>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          {/* Action links */}
+          <div className="flex flex-wrap gap-2 border-t border-brown/10 pt-3">
           {project.github && (
             <a
               href={project.github}
@@ -205,9 +211,10 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
                   d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                 />
               </svg>
-              Live Demo
+              {project.demoLabel ?? "Live Demo"}
             </a>
           )}
+        </div>
         </div>
       </div>
     </article>
