@@ -89,7 +89,7 @@ export const techBadgeAnimation = (containerRef) => {
       y: 0,
       duration: 0.4,
       stagger: 0.05,
-      ease: "power2.out",
+      ease: "power3.out",
       scrollTrigger: {
         trigger: containerRef,
         start: "top 85%",

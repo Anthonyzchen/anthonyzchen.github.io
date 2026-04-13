@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -23,8 +23,53 @@ const BrushStroke = ({ className = "" }) => (
   </svg>
 );
 
+const CopyEmail = ({ email, className = "" }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className={`cursor-pointer transition-colors hover:text-vermillion ${className}`}
+    >
+      {copied ? "Copied!" : email}
+    </button>
+  );
+};
+
 const Footer = () => {
   const footerRef = useRef(null);
+  const contentRef = useRef(null);
+
+  // Staggered entrance for footer content
+  useGSAP(() => {
+    if (!contentRef.current) return;
+    const elements = contentRef.current.children;
+
+    gsap.fromTo(
+      elements,
+      { opacity: 0, y: 20, filter: "blur(3px)" },
+      {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+  });
 
   useGSAP(() => {
     let isSnapping = false;
@@ -111,7 +156,7 @@ const Footer = () => {
       />
 
       {/* Main content section - grows to fill available space */}
-      <div className="relative flex flex-1 flex-col items-center justify-center px-6 sm:px-8">
+      <div ref={contentRef} className="relative flex flex-1 flex-col items-center justify-center px-6 sm:px-8">
         {/* Heading */}
         <h2 className="mb-4 text-center text-3xl font-light uppercase tracking-widest text-ink sm:text-4xl">
           Let's Connect
@@ -136,10 +181,10 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Visit Anthony's ${social.label} profile`}
-              className="group flex h-12 w-12 items-center justify-center rounded-full border border-brown/20 text-brown transition-all duration-300 hover:border-vermillion hover:bg-vermillion hover:text-beige"
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-brown/20 text-brown transition-all duration-300 hover:-translate-y-1 hover:border-vermillion hover:bg-vermillion hover:text-beige hover:shadow-md"
             >
               <i
-                className={`fa-brands ${social.icon} text-lg transition-transform duration-300 group-hover:scale-110`}
+                className={`fa-brands ${social.icon} text-lg transition-transform duration-300 group-hover:scale-115`}
                 aria-hidden="true"
               ></i>
             </a>
@@ -148,12 +193,7 @@ const Footer = () => {
 
         {/* Contact info */}
         <div className="mt-12 flex flex-col items-center gap-4 text-center text-sm text-brown/70 sm:flex-row sm:gap-8">
-          <a
-            href="mailto:anthonyzchen@yahoo.com"
-            className="transition-colors hover:text-vermillion"
-          >
-            anthonyzchen@yahoo.com
-          </a>
+          <CopyEmail email="support@anthonyzchen.com" />
           <span className="hidden text-brown/30 sm:inline">|</span>
           <span>Boston & New York</span>
         </div>
@@ -165,10 +205,10 @@ const Footer = () => {
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 text-xs text-brown/60 sm:flex-row">
             <p>
               <span className="mr-1">&copy;</span>
-              {new Date().getFullYear()} Anthony Chen
+              {new Date().getFullYear()} Anthonyzchen LLC
             </p>
             <p className="font-medium text-ink/70">
-              Software Engineering & Finance
+              Software Engineering & App Development
             </p>
           </div>
         </div>

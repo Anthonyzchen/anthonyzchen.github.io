@@ -1,5 +1,40 @@
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import SplitTextJS from "split-text-js";
+
+/**
+ * Hook for staggered entrance animation on page mount.
+ * Animates direct children of the container with fade-up + blur clear.
+ * Returns a ref to attach to the container element.
+ */
+export const usePageEntrance = () => {
+  const containerRef = useRef(null);
+
+  useGSAP(
+    () => {
+      if (!containerRef.current) return;
+      const sections = containerRef.current.children;
+      if (!sections.length) return;
+
+      gsap.fromTo(
+        sections,
+        { opacity: 0, y: 24, filter: "blur(4px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "power3.out",
+        }
+      );
+    },
+    { scope: containerRef }
+  );
+
+  return containerRef;
+};
 
 // Function to create an animation for entering text with staggered effects
 // Animates character by character, but words stay together (no mid-word line breaks)

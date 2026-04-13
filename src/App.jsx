@@ -10,6 +10,10 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
 import Home from "./pages/Home";
 import PageLayout from "./pages/PageLayout";
+import AppLayout from "./pages/AppLayout";
+import AppLanding from "./pages/AppLanding";
+import AppPrivacy from "./pages/AppPrivacy";
+import AppSupport from "./pages/AppSupport";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -29,8 +33,13 @@ export default function App() {
         <Routes>
           <Route element={<PageLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="*" element={<Navigate to="/" />} />
           </Route>
+          <Route element={<AppLayout />}>
+            <Route path="/apps/:slug" element={<AppLanding />} />
+            <Route path="/apps/:slug/privacy" element={<AppPrivacy />} />
+            <Route path="/apps/:slug/support" element={<AppSupport />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
     </main>

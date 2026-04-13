@@ -277,7 +277,7 @@ const VerticalTimeline = () => {
                 {/* Timeline dot */}
                 <div
                   className={`absolute left-[6px] top-5 h-2.5 w-2.5 rounded-full border-2 border-beige sm:left-[12px] sm:top-6 sm:h-3 sm:w-3 md:left-[14px] ${
-                    ongoing ? "bg-green-600" : "bg-brown"
+                    ongoing ? "bg-vermillion" : "bg-brown"
                   }`}
                 />
 
@@ -1170,21 +1170,6 @@ const HorizontalTimeline = () => {
           className="flex h-full flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8"
           style={{ width: `${screenWidth}px` }}
         >
-          <div className="mb-4 rounded-full bg-green-700/20 p-4 lg:mb-6 lg:p-5">
-            <svg
-              className="h-8 w-8 text-green-700 lg:h-10 lg:w-10"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
           <h2 className="mb-3 text-center text-4xl font-medium text-brown lg:mb-4 lg:text-5xl xl:text-6xl">
             Present Day
           </h2>

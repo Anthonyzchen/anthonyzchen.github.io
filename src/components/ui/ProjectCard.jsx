@@ -1,4 +1,5 @@
 import { forwardRef, useState } from "react";
+import { Link } from "react-router-dom";
 import TechBadge from "./TechBadge";
 
 /**
@@ -80,7 +81,7 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
   return (
     <article
       ref={ref}
-      className={`group relative flex h-full flex-col overflow-hidden rounded-xl border-2 bg-dark-beige/95 shadow-md transition-all duration-500 hover:shadow-xl ${themeStyles.border}`}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-xl border-2 bg-dark-beige/95 shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${themeStyles.border}`}
     >
       {/* Ink brush corner accents */}
       <BrushCorner position="top-left" className={themeStyles.accent} />
@@ -96,7 +97,7 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
       {/* Image */}
       <div className="relative z-[1] aspect-[3/1] w-full overflow-hidden bg-dark-beige">
         <img
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-900 ease-out group-hover:scale-105"
           src={imageUrl}
           alt={`${project.title} project preview`}
         />
@@ -190,6 +191,27 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
               </svg>
               View Poster
             </a>
+          )}
+          {project.appPage && (
+            <Link
+              to={project.appPage}
+              className="inline-flex items-center gap-1.5 rounded-lg border-2 border-ink bg-transparent px-3 py-1.5 text-sm font-medium text-ink transition-all duration-300 hover:bg-ink hover:text-beige"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              About
+            </Link>
           )}
           {project.demo && (
             <a

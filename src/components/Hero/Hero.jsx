@@ -23,7 +23,7 @@ const Hero = () => {
         opacity: 0,
         y: 30,
         duration: 0.8,
-        ease: "power2.out",
+        ease: "power3.out",
       })
       .from(
         titleRef.current,
@@ -31,7 +31,7 @@ const Hero = () => {
           opacity: 0,
           y: 20,
           duration: 0.6,
-          ease: "power2.out",
+          ease: "power3.out",
         },
         "-=0.4"
       )
@@ -41,7 +41,7 @@ const Hero = () => {
           opacity: 0,
           y: 20,
           duration: 0.6,
-          ease: "power2.out",
+          ease: "power3.out",
         },
         "-=0.3"
       )
@@ -141,7 +141,7 @@ const Hero = () => {
             ref={titleRef}
             className="text-base font-medium tracking-wide text-brown/90 sm:text-lg md:text-xl"
           >
-            Software Engineer
+            Software Engineer & App Developer
           </h2>
 
           {/* About text */}
