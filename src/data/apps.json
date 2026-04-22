@@ -1,5 +1,16 @@
 [
   {
+    "slug": "recallguard",
+    "name": "RecallGuard",
+    "tagline": "Personalized FDA food recall alerts.",
+    "description": "RecallGuard filters FDA food recalls against the brands, categories, and state you care about, and sends push notifications so you only hear about recalls that matter to you. Premium adds pantry matching via receipt import to check whether a recall affects products you've actually bought.",
+    "icon": null,
+    "screenshots": [],
+    "appStoreUrl": null,
+    "demoUrl": null,
+    "supportEmail": "support@anthonyzchen.com"
+  },
+  {
     "slug": "weekly-routine",
     "name": "Weekly Routine",
     "tagline": "Plan your week, track your meals, build your routine.",

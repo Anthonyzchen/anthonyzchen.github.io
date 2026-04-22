@@ -14,6 +14,8 @@ import AppLayout from "./pages/AppLayout";
 import AppLanding from "./pages/AppLanding";
 import AppPrivacy from "./pages/AppPrivacy";
 import AppSupport from "./pages/AppSupport";
+import RecallGuardPrivacy from "./pages/RecallGuardPrivacy";
+import RecallGuardTerms from "./pages/RecallGuardTerms";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -35,6 +37,15 @@ export default function App() {
             <Route path="/" element={<Home />} />
           </Route>
           <Route element={<AppLayout />}>
+            {/* Hand-written RecallGuard legal pages must match before the generic slug routes */}
+            <Route
+              path="/apps/recallguard/privacy"
+              element={<RecallGuardPrivacy />}
+            />
+            <Route
+              path="/apps/recallguard/terms"
+              element={<RecallGuardTerms />}
+            />
             <Route path="/apps/:slug" element={<AppLanding />} />
             <Route path="/apps/:slug/privacy" element={<AppPrivacy />} />
             <Route path="/apps/:slug/support" element={<AppSupport />} />
