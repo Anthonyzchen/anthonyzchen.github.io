@@ -148,18 +148,17 @@ const RecallGuardPrivacy = () => {
             discard the precise coordinates. We do not track your location in
             the background.
           </li>
-          <li>
-            <span className="font-medium text-ink">App usage telemetry</span>{" "}
-            &mdash; crash reports and basic event counts (screens opened,
-            notifications tapped). Used to fix bugs and prioritize features.
-            Does not include your preferences, pantry, or recalls viewed.
-          </li>
         </ul>
 
         <h3 className="mb-2 mt-6 text-sm font-medium text-ink">
           Information we do NOT collect
         </h3>
         <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-brown/80 sm:text-base">
+          <li>
+            We do not collect app usage telemetry, crash reports, or
+            analytics. If we ever add any of these to improve the App, we will
+            update this Privacy Policy before doing so.
+          </li>
           <li>
             We do not collect contacts, microphone, or photos (other than
             receipt photos you explicitly upload).
@@ -186,7 +185,6 @@ const RecallGuardPrivacy = () => {
             you subscribe.
           </li>
           <li>To respond to support requests you send us.</li>
-          <li>To improve the App via aggregated crash and usage metrics.</li>
           <li>
             To comply with legal obligations and protect our rights where
             necessary.
@@ -322,9 +320,6 @@ const RecallGuardPrivacy = () => {
           <li>
             Notification delivery logs are retained for up to 90 days for audit
             and debugging, then deleted.
-          </li>
-          <li>
-            Aggregated, anonymized usage metrics may be retained indefinitely.
           </li>
         </ul>
         <Paragraph>

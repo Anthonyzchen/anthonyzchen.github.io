@@ -381,15 +381,13 @@ const RecallGuardTerms = () => {
         <SectionHeading>13. Governing law and dispute resolution</SectionHeading>
         <Paragraph className="mb-3">
           These Terms are governed by the laws of the{" "}
-          <span className="font-medium text-ink">
-            State of Massachusetts
-          </span>
-          , USA, without regard to conflict-of-law principles.
+          <span className="font-medium text-ink">State of New York</span>, USA,
+          without regard to conflict-of-law principles.
         </Paragraph>
         <Paragraph className="mb-3">
           Any dispute arising from these Terms or the App shall be resolved
-          exclusively in the state or federal courts located in Middlesex
-          County, Massachusetts. You consent to personal jurisdiction in those
+          exclusively in the state or federal courts located in Suffolk
+          County, New York. You consent to personal jurisdiction in those
           courts.
         </Paragraph>
         <Paragraph>
