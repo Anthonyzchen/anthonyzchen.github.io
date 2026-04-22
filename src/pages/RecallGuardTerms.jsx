@@ -339,7 +339,7 @@ const RecallGuardTerms = () => {
         </ul>
         <Paragraph className="mb-3">
           Our total aggregate liability for any claim related to the App shall
-          not exceed the greater of (a) $50 USD or (b) the amount you paid us
+          not exceed the greater of (a) $49.99 USD or (b) the amount you paid us
           in subscription fees in the 12 months preceding the claim.
         </Paragraph>
         <Paragraph>
