@@ -150,25 +150,27 @@ const RecallGuardTerms = () => {
         </ul>
       </section>
 
-      {/* 4. Free tier and premium */}
+      {/* 4. Subscription and trial */}
       <section className="mb-8">
-        <SectionHeading>4. Free tier and premium subscription</SectionHeading>
+        <SectionHeading>4. Subscription and trial</SectionHeading>
         <Paragraph className="mb-3">
-          <span className="font-medium text-ink">Free tier</span> gives you a
-          personalized recall feed filtered by your state, food categories,
-          and brands, plus push notifications.
+          The App is a paid service. Access to the personalized recall feed,
+          pantry tracking, and push notifications requires an active
+          subscription or trial.
         </Paragraph>
         <Paragraph className="mb-3">
-          <span className="font-medium text-ink">Premium</span> ($49.99 USD
-          per year, subject to change) adds pantry matching against receipts
-          you import (email forwarding or photo upload) and the ability to
-          match recalls against specific products you&apos;ve bought.
+          <span className="font-medium text-ink">Subscription price</span>:
+          $49.99 USD per year (subject to change, with notice). Includes the
+          full app — personalized recall feed by state, food category, and
+          brand; persistent pantry via barcode scanning, receipt photo
+          capture, or manual entry; push notifications when a recall affects
+          products you&apos;ve added; and severity-filtered alerts.
         </Paragraph>
         <Paragraph className="mb-3">
-          <span className="font-medium text-ink">Trial</span>: New premium
-          subscribers may receive a free trial (typically 14 days). During the
-          trial, you have full premium access. If you do not cancel before the
-          trial ends, your subscription renews at the stated rate.
+          <span className="font-medium text-ink">Free trial</span>: New
+          subscribers receive a 14-day free trial with full app access.
+          If you do not cancel at least 24 hours before the trial ends, your
+          subscription automatically renews at the stated annual rate.
         </Paragraph>
         <Paragraph className="mb-3">
           <span className="font-medium text-ink">Billing</span>: Premium
