@@ -1,24 +1,43 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { EASE, DURATION } from "../../lib/motion";
 import logoUrl from "../../assets/images/logo.png";
 
 const Logo = () => {
   const logoRef = useRef();
 
+  // GSAP work runs inside useGSAP for proper context cleanup on unmount.
   useGSAP(
     () => {
-      // Fade in the logo after preloader finishes
-      gsap.from(".logo", {
-        opacity: 0,
-        y: -20,
-        duration: 0.8,
-        ease: "power2.out",
-        delay: 5.5, // After preloader (5s) + fade (0.8s)
-      });
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      gsap.set(".logo", { opacity: 0, y: -20 });
     },
     { scope: logoRef }
   );
+
+  // Window event listener lives in a real useEffect — useGSAP discards
+  // its callback's return value, so a listener registered there leaks.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const playEntrance = () => {
+      gsap.to(".logo", {
+        opacity: 1,
+        y: 0,
+        duration: DURATION.base,
+        ease: EASE,
+        delay: 0.3,
+      });
+    };
+
+    if (window.__preloaderDone) {
+      playEntrance();
+      return;
+    }
+    window.addEventListener("preloader:complete", playEntrance, { once: true });
+    return () => window.removeEventListener("preloader:complete", playEntrance);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

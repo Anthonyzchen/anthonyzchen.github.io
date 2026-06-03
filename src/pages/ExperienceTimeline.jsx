@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TechBadge } from "../components/ui";
 import experienceData from "../data/experience.json";
+import { EASE, DURATION } from "../lib/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -256,7 +257,7 @@ const VerticalTimeline = () => {
     <section className="min-h-screen bg-beige px-3 py-8 sm:px-6 sm:py-12">
       {/* Header */}
       <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
-        <h1 className="text-2xl font-medium text-brown sm:text-4xl md:text-5xl">
+        <h1 className="font-Fraunces text-2xl font-medium text-brown sm:text-4xl md:text-5xl">
           My Professional Journey
         </h1>
       </div>
@@ -655,10 +656,10 @@ const HorizontalTimeline = () => {
     if (autoScrollButtonRef.current) {
       bounceAnimationRef.current = gsap.to(autoScrollButtonRef.current, {
         y: 8,
-        duration: 1.2,
+        duration: DURATION.slow,
         repeat: -1,
         yoyo: true,
-        ease: "power1.inOut",
+        ease: EASE,
       });
     }
 
@@ -760,7 +761,7 @@ const HorizontalTimeline = () => {
       autoScrollTweenRef.current = gsap.to(window, {
         scrollTo: { y: triggerStart, autoKill: false },
         duration: duration,
-        ease: "power2.inOut",
+        ease: EASE,
         onComplete: () => {
           // Remove scroll blockers
           document.removeEventListener("wheel", blockScroll, { capture: true });
@@ -938,7 +939,7 @@ const HorizontalTimeline = () => {
           className="relative flex h-full flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8"
           style={{ width: `${screenWidth}px` }}
         >
-          <h1 className="mb-4 text-center text-4xl font-medium text-brown lg:mb-6 lg:text-5xl xl:text-6xl 2xl:text-7xl">
+          <h1 className="mb-4 text-center font-Fraunces text-4xl font-medium text-brown lg:mb-6 lg:text-5xl xl:text-6xl 2xl:text-7xl">
             My Professional Journey
           </h1>
           <p className="mb-3 text-center text-xl text-brown/70 lg:mb-4 lg:text-2xl">
@@ -1170,7 +1171,7 @@ const HorizontalTimeline = () => {
           className="flex h-full flex-shrink-0 flex-col items-center justify-center px-6 lg:px-8"
           style={{ width: `${screenWidth}px` }}
         >
-          <h2 className="mb-3 text-center text-4xl font-medium text-brown lg:mb-4 lg:text-5xl xl:text-6xl">
+          <h2 className="mb-3 text-center font-Fraunces text-4xl font-medium text-brown lg:mb-4 lg:text-5xl xl:text-6xl">
             Present Day
           </h2>
           <p className="mb-2 text-center text-xl text-brown/70 lg:mb-3 lg:text-2xl">

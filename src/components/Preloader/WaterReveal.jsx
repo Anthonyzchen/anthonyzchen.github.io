@@ -1,236 +1,162 @@
 import { useRef, useEffect } from "react";
+import { VERT, FRAG } from "./rainShaders";
 
 /**
- * Water ripple reveal effect for preloader
- * Raindrops hit the screen creating ripples that reveal content underneath
+ * Rain-on-glass preloader reveal.
+ *
+ * A full-screen WebGL canvas renders a frosted-beige glass cover; procedural
+ * rain beads and streaks down it, clearing trails that reveal the page
+ * behind. `u_progress` drives the reveal over `duration`; `onComplete` fires
+ * once the pane is clear. Falls back to a plain fade when WebGL is
+ * unavailable or the user prefers reduced motion.
  */
 const WaterReveal = ({ onComplete, duration = 5000 }) => {
   const canvasRef = useRef(null);
-  const fadeOutDuration = 800; // Smooth fade at the end
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Set canvas to full screen size
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    let rafId = null;
+    let done = false;
+    const timers = [];
 
-    const ctx = canvas.getContext("2d");
-    const width = canvas.width;
-    const height = canvas.height;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      if (onComplete) onComplete();
+    };
 
-    let isFadingOut = false;
-    let fadeStartTime = null;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-    // Ripple class for individual raindrops
-    class Ripple {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.radius = 0;
-        this.maxRadius = 60 + Math.random() * 100;
-        this.speed = 0.8 + Math.random() * 1.2; // Slower expansion
-        this.opacity = 1;
-        this.lineWidth = 2;
-      }
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const sizeCanvas = () => {
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+    };
+    sizeCanvas();
 
-      update() {
-        this.radius += this.speed;
-        this.opacity = 1 - this.radius / this.maxRadius;
-        return this.radius < this.maxRadius;
-      }
+    // --- Fallback: a plain beige cover that fades out ---
+    const runFallback = () => {
+      canvas.style.background = "#E2D7BB";
+      const hold = prefersReduced ? 150 : 450;
+      timers.push(
+        setTimeout(() => {
+          canvas.style.transition = "opacity 700ms ease";
+          canvas.style.opacity = "0";
+        }, hold)
+      );
+      timers.push(setTimeout(finish, hold + 760));
+    };
 
-      draw(ctx) {
-        if (this.opacity <= 0) return;
+    const gl =
+      !prefersReduced &&
+      canvas.getContext("webgl", {
+        alpha: true,
+        premultipliedAlpha: false,
+        antialias: true,
+      });
 
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * 0.6})`;
-        ctx.lineWidth = this.lineWidth * this.opacity;
-        ctx.stroke();
-
-        // Inner ripple
-        if (this.radius > 10) {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.radius * 0.6, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * 0.3})`;
-          ctx.lineWidth = this.lineWidth * this.opacity * 0.5;
-          ctx.stroke();
-        }
-      }
+    if (!gl) {
+      runFallback();
+      return () => timers.forEach(clearTimeout);
     }
 
-    // Store active ripples
-    const ripples = [];
+    // --- Compile + link ---
+    const compile = (type, src) => {
+      const sh = gl.createShader(type);
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        console.error(
+          "[WaterReveal] shader compile failed:",
+          gl.getShaderInfoLog(sh) ||
+            (gl.isContextLost() ? "(context lost)" : "(no info log)")
+        );
+        return null;
+      }
+      return sh;
+    };
 
-    // Revealed areas (circle centers and radii)
-    const revealedAreas = [];
+    const vs = compile(gl.VERTEX_SHADER, VERT);
+    const fs = compile(gl.FRAGMENT_SHADER, FRAG);
+    const program = vs && fs ? gl.createProgram() : null;
+    if (program) {
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+    }
+    if (!program || !gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      if (program) {
+        console.error(
+          "[WaterReveal] program link failed:",
+          gl.getProgramInfoLog(program)
+        );
+      }
+      runFallback();
+      return () => timers.forEach(clearTimeout);
+    }
 
-    // Animation state
-    let animationId = null;
-    const startTime = Date.now();
-    let lastDropTime = 0;
+    // --- Fullscreen quad ---
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+      gl.STATIC_DRAW
+    );
 
-    // Create offscreen canvas for the reveal mask
-    const maskCanvas = document.createElement("canvas");
-    maskCanvas.width = width;
-    maskCanvas.height = height;
-    const maskCtx = maskCanvas.getContext("2d");
+    const aPos = gl.getAttribLocation(program, "a_pos");
+    const uRes = gl.getUniformLocation(program, "u_resolution");
+    const uTime = gl.getUniformLocation(program, "u_time");
+    const uProg = gl.getUniformLocation(program, "u_progress");
 
-    // Start with fully opaque beige
-    maskCtx.fillStyle = "#E2D7BB";
-    maskCtx.fillRect(0, 0, width, height);
+    gl.useProgram(program);
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-    // Animation loop
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
+    const onResize = () => {
+      sizeCanvas();
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+    window.addEventListener("resize", onResize);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+
+    // --- Render loop ---
+    const start = performance.now();
+    const render = (now) => {
+      const elapsed = now - start;
       const progress = Math.min(1, elapsed / duration);
 
-      // Clear main canvas
-      ctx.clearRect(0, 0, width, height);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform1f(uTime, elapsed / 1000);
+      gl.uniform1f(uProg, progress);
 
-      // Add new raindrops - start slow, speed up, then slow down
-      const now = Date.now();
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-      // Calculate drop rate based on progress
-      // Slow start (0-20%), fast middle (20-70%), slow end (70-95%)
-      let dropInterval;
-      let numDrops;
-
-      if (progress < 0.2) {
-        // Slow start - few drops, long intervals
-        dropInterval = 300 - progress * 500; // 300ms -> 200ms
-        numDrops = 1 + Math.floor(Math.random() * 2); // 1-2 drops
-      } else if (progress < 0.7) {
-        // Speed up in the middle
-        const midProgress = (progress - 0.2) / 0.5; // 0 to 1 within middle phase
-        dropInterval = 200 - midProgress * 140; // 200ms -> 60ms
-        numDrops = 2 + Math.floor(midProgress * 4) + Math.floor(Math.random() * 3); // 2-8 drops
-      } else if (progress < 0.95) {
-        // Slow down at the end
-        const endProgress = (progress - 0.7) / 0.25; // 0 to 1 within end phase
-        dropInterval = 60 + endProgress * 300; // 60ms -> 360ms
-        numDrops = Math.max(1, Math.floor((1 - endProgress) * 4) + Math.floor(Math.random() * 2)); // 4-1 drops
-      } else {
-        dropInterval = Infinity; // Stop drops
-        numDrops = 0;
+      if (progress >= 1) {
+        finish();
+        return;
       }
-
-      if (now - lastDropTime > dropInterval && numDrops > 0) {
-        lastDropTime = now;
-
-        for (let i = 0; i < numDrops; i++) {
-          // Bias drops toward center, especially early on
-          // As progress increases, drops become more random across the screen
-          const centerBias = Math.max(0, 1 - progress * 1.5); // Strong center bias early, fades out
-
-          // Gaussian-like distribution centered on screen middle
-          const gaussianX = (Math.random() + Math.random() + Math.random()) / 3; // 0-1, clustered around 0.5
-          const gaussianY = (Math.random() + Math.random() + Math.random()) / 3;
-
-          // Blend between center-biased and fully random based on progress
-          const randomX = Math.random();
-          const randomY = Math.random();
-
-          const x = (gaussianX * centerBias + randomX * (1 - centerBias)) * width;
-          const y = (gaussianY * centerBias + randomY * (1 - centerBias)) * height;
-
-          ripples.push(new Ripple(x, y));
-
-          // Add to revealed areas with larger radius
-          revealedAreas.push({
-            x,
-            y,
-            radius: 0,
-            maxRadius: 80 + Math.random() * 100,
-            speed: 1 + Math.random() * 1.5 // Slower ripple expansion
-          });
-        }
-      }
-
-      // Update revealed areas on mask
-      maskCtx.globalCompositeOperation = "destination-out";
-      for (let i = revealedAreas.length - 1; i >= 0; i--) {
-        const area = revealedAreas[i];
-        area.radius += area.speed;
-
-        if (area.radius < area.maxRadius) {
-          // Stronger reveal effect
-          const gradient = maskCtx.createRadialGradient(
-            area.x, area.y, 0,
-            area.x, area.y, area.radius
-          );
-          gradient.addColorStop(0, "rgba(0, 0, 0, 0.15)");
-          gradient.addColorStop(0.7, "rgba(0, 0, 0, 0.05)");
-          gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-
-          maskCtx.fillStyle = gradient;
-          maskCtx.beginPath();
-          maskCtx.arc(area.x, area.y, area.radius, 0, Math.PI * 2);
-          maskCtx.fill();
-        } else {
-          revealedAreas.splice(i, 1);
-        }
-      }
-      maskCtx.globalCompositeOperation = "source-over";
-
-      // Handle fade out phase
-      if (progress >= 1 && !isFadingOut) {
-        isFadingOut = true;
-        fadeStartTime = Date.now();
-      }
-
-      let globalAlpha = 1;
-      if (isFadingOut) {
-        const fadeElapsed = Date.now() - fadeStartTime;
-        const fadeProgress = Math.min(1, fadeElapsed / fadeOutDuration);
-        globalAlpha = 1 - fadeProgress;
-
-        // Fade out completed
-        if (fadeProgress >= 1) {
-          if (onComplete) {
-            onComplete();
-          }
-          return;
-        }
-      }
-
-      // Apply global alpha for smooth fade
-      ctx.globalAlpha = globalAlpha;
-
-      // Draw the beige mask
-      ctx.drawImage(maskCanvas, 0, 0);
-
-      // Update and draw ripples on top
-      for (let i = ripples.length - 1; i >= 0; i--) {
-        const ripple = ripples[i];
-        ripple.draw(ctx);
-        if (!ripple.update()) {
-          ripples.splice(i, 1);
-        }
-      }
-
-      ctx.globalAlpha = 1;
-
-      animationId = requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(render);
     };
+    rafId = requestAnimationFrame(render);
 
-    // Start animation
-    animationId = requestAnimationFrame(animate);
-
-    // Handle resize
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", handleResize);
+    // Safety net — never let the site hang on the preloader.
+    timers.push(setTimeout(finish, duration + 2500));
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
+      if (rafId) cancelAnimationFrame(rafId);
+      timers.forEach(clearTimeout);
+      window.removeEventListener("resize", onResize);
+      // Deliberately NOT calling WEBGL_lose_context.loseContext(): React
+      // StrictMode double-invokes effects (mount -> cleanup -> mount), and
+      // losing the context here leaves it permanently dead for the second
+      // mount. The GPU context is released by GC on real unmount.
     };
   }, [duration, onComplete]);
 

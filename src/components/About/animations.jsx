@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { EASE, DURATION, STAGGER } from "../../lib/motion";
 
 /**
  * Scroll-triggered reveal animation for the projects section header
@@ -87,9 +88,9 @@ export const techBadgeAnimation = (containerRef) => {
     {
       opacity: 1,
       y: 0,
-      duration: 0.4,
-      stagger: 0.05,
-      ease: "power3.out",
+      duration: DURATION.fast,
+      stagger: STAGGER,
+      ease: EASE,
       scrollTrigger: {
         trigger: containerRef,
         start: "top 85%",

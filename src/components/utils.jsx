@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import SplitTextJS from "split-text-js";
+import { EASE, DURATION, STAGGER } from "../lib/motion";
 
 /**
  * Hook for staggered entrance animation on page mount.
@@ -24,9 +25,9 @@ export const usePageEntrance = () => {
           opacity: 1,
           y: 0,
           filter: "blur(0px)",
-          duration: 0.6,
-          stagger: 0.08,
-          ease: "power3.out",
+          duration: DURATION.base,
+          stagger: STAGGER,
+          ease: EASE,
         }
       );
     },

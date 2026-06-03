@@ -10,6 +10,11 @@ const Preloader = () => {
   const lenisRef = useRef(null);
 
   useLayoutEffect(() => {
+    // This preloader instance has not completed yet — reset the handoff flag
+    // so section entrances (Hero) wait for THIS reveal, not a prior one.
+    // Matters on back-navigation, when Preloader remounts and replays.
+    window.__preloaderDone = false;
+
     // Disable browser's automatic scroll restoration
     if ("scrollRestoration" in history) {
       history.scrollRestoration = "manual";
@@ -77,12 +82,17 @@ const Preloader = () => {
 
       gsap.ticker.lagSmoothing(0);
     }
+
+    // Hand off to section entrance animations (e.g. Hero) — a real signal
+    // instead of a blind timer, so they stay correct if this duration changes.
+    window.__preloaderDone = true;
+    window.dispatchEvent(new Event("preloader:complete"));
   };
 
   return (
     <div ref={preloaderRef}>
       {isRevealing && (
-        <WaterReveal onComplete={handleRevealComplete} duration={5000} />
+        <WaterReveal onComplete={handleRevealComplete} duration={2500} />
       )}
     </div>
   );

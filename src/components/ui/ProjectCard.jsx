@@ -95,7 +95,7 @@ const ProjectCard = forwardRef(({ project, imageUrl, posterUrl }, ref) => {
       />
 
       {/* Image */}
-      <div className="relative z-[1] aspect-[3/1] w-full overflow-hidden bg-dark-beige">
+      <div className="relative z-[1] aspect-[5/2] w-full overflow-hidden bg-dark-beige">
         <img
           className="h-full w-full object-cover transition-transform duration-900 ease-out group-hover:scale-105"
           src={imageUrl}

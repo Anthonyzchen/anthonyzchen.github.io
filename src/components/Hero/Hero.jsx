@@ -1,160 +1,159 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { EASE, DURATION, STAGGER } from "../../lib/motion";
 
 const Hero = () => {
-  // Create refs for text elements and scroll indicator
-  const nameRef = useRef();
-  const titleRef = useRef();
-  const aboutRef = useRef();
-  const decorLineRef = useRef();
   const sectionRef = useRef();
+  const eyebrowRef = useRef();
+  const line1Ref = useRef();
+  const line2Ref = useRef();
+  const decorLineRef = useRef();
+  const ledeRef = useRef();
+  const cueRef = useRef();
 
-  // Ref to store GSAP timeline for hero animations
-  const heroTL = useRef();
-
-  useGSAP(() => {
-    // The animation is delayed to play after the Preloader has finished
-    // Simple fade and slide up for each text element
-    heroTL.current = gsap
-      .timeline()
-      .from(nameRef.current, {
+  // Initial hidden state runs inside useGSAP so its context handles revert
+  // on unmount. Hide the TYPE so it doesn't flash through the preloader's
+  // ripple reveal — the painting stays visible on purpose, so the water
+  // reveal unveils it like a scene emerging on a rainy window.
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      gsap.set([line1Ref.current, line2Ref.current], { opacity: 0, y: 52 });
+      gsap.set([eyebrowRef.current, ledeRef.current, cueRef.current], {
         opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: "power3.out",
-      })
-      .from(
-        titleRef.current,
-        {
-          opacity: 0,
-          y: 20,
-          duration: 0.6,
-          ease: "power3.out",
-        },
-        "-=0.4"
-      )
-      .from(
-        aboutRef.current,
-        {
-          opacity: 0,
-          y: 20,
-          duration: 0.6,
-          ease: "power3.out",
-        },
-        "-=0.3"
-      )
-      .fromTo(
-        decorLineRef.current,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.8, ease: "power2.out" },
-        "-=0.4"
-      )
-      .delay(3);
+        y: 16,
+      });
+      gsap.set(decorLineRef.current, {
+        scaleX: 0,
+        transformOrigin: "left center",
+      });
+    },
+    { scope: sectionRef }
+  );
 
-    // Snapping logic between Hero and next section
-    let isSnapping = false;
-    let scrollTimeout;
+  // The preloader's water effect reveals the painting; the type then
+  // writes itself in on the shared ease after a short beat. Keyed off
+  // the real preloader handoff, not a blind timer.
+  //
+  // The window listener lives in a real useEffect — useGSAP discards its
+  // callback's return value, so a listener registered there would leak.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const checkSnap = () => {
-      if (isSnapping) return;
-
-      const scrollY = window.scrollY;
-      const heroHeight = window.innerHeight;
-
-      // Snap zone: if scrolled between 15% and 85% of hero height
-      if (scrollY > heroHeight * 0.15 && scrollY < heroHeight * 0.85) {
-        isSnapping = true;
-
-        // Determine snap direction based on position
-        const targetY = scrollY < heroHeight * 0.5 ? 0 : heroHeight;
-
-        gsap.to(window, {
-          scrollTo: { y: targetY, autoKill: true },
-          duration: 0.8,
-          ease: "power2.inOut",
-          onComplete: () => {
-            isSnapping = false;
-          },
-          onInterrupt: () => {
-            isSnapping = false;
-          },
-        });
-      }
+    let entranceTl;
+    const playEntrance = () => {
+      entranceTl = gsap
+        .timeline({
+          delay: 0.2,
+          defaults: { ease: EASE, duration: DURATION.base },
+        })
+        .to(eyebrowRef.current, { opacity: 1, y: 0 })
+        .to(
+          [line1Ref.current, line2Ref.current],
+          { opacity: 1, y: 0, stagger: STAGGER * 2 },
+          "-=0.45"
+        )
+        .to(decorLineRef.current, { scaleX: 1 }, "-=0.35")
+        .to(ledeRef.current, { opacity: 1, y: 0 }, "-=0.45")
+        .to(cueRef.current, { opacity: 1, y: 0 }, "-=0.4");
     };
 
-    // Detect when scrolling stops
-    ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top top",
-      end: "bottom top",
-      onUpdate: () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(checkSnap, 150);
-      },
-    });
-  });
+    if (window.__preloaderDone) {
+      playEntrance();
+    } else {
+      window.addEventListener("preloader:complete", playEntrance, {
+        once: true,
+      });
+    }
+
+    return () => {
+      window.removeEventListener("preloader:complete", playEntrance);
+      entranceTl?.kill();
+    };
+  }, []);
 
   return (
-    <section ref={sectionRef} className="relative">
-      <div className="relative flex h-screen w-full flex-col items-center justify-center bg-painting bg-cover bg-center px-6 sm:px-8">
-        {/* Edge fades - ink wash style vignette */}
-        {/* Left fade */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-beige/70 to-transparent sm:w-24 md:w-32 lg:w-40 xl:w-48" />
-        {/* Right fade */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-beige/70 to-transparent sm:w-24 md:w-32 lg:w-40 xl:w-48" />
-        {/* Bottom fade - stronger for transition to next section */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-beige via-beige/80 to-transparent sm:h-48 md:h-56 lg:h-64" />
-        {/* Top subtle fade */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-beige/40 to-transparent sm:h-24 md:h-32" />
+    <section
+      ref={sectionRef}
+      className="relative flex min-h-svh w-full items-center overflow-hidden bg-beige"
+    >
+      {/* Painting — a deliberate panel, not a flat backdrop. Its inner edge
+          dissolves into the page like a fading brushstroke. */}
+      <div
+        className="hero-painting absolute inset-y-0 right-0 z-0 w-full bg-painting bg-cover bg-center mask-ink-b lg:w-[58%] lg:mask-ink-l"
+        aria-hidden="true"
+      />
+      {/* Mobile-only beige scrim — keeps type readable over the full-bleed painting */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-t from-beige via-beige/78 to-beige/25 lg:hidden"
+        aria-hidden="true"
+      />
+      {/* Bottom seam — the section dissolves into the next */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-28 bg-gradient-to-t from-beige to-transparent sm:h-36"
+        aria-hidden="true"
+      />
+      {/* Paper grain — faint tooth under the type */}
+      <div className="paper-grain z-[1]" aria-hidden="true" />
 
-        {/* Main content container */}
-        <div className="relative flex flex-col items-center text-center">
-          {/* Name - larger and more prominent */}
-          <h1
-            ref={nameRef}
-            className="text-4xl font-light uppercase tracking-widest text-ink sm:text-5xl md:text-6xl lg:text-7xl"
-          >
-            Anthony Chen
-          </h1>
+      {/* Content */}
+      <div className="relative z-10 mx-auto w-full max-w-[1500px] px-gutter">
+        <p
+          ref={eyebrowRef}
+          className="mb-7 font-KoHo text-eyebrow font-medium uppercase leading-[1.7] text-balance text-brown/70"
+        >
+          Software Engineer &amp; App Developer
+        </p>
 
-          {/* Decorative wavy brush stroke */}
-          <svg
-            ref={decorLineRef}
-            width="60"
-            height="8"
-            viewBox="0 0 60 8"
-            className="my-6 origin-center text-vermillion/60 sm:my-8"
-          >
-            <path
-              d="M0 4 Q10 0 20 4 Q30 8 40 4 Q50 0 60 4"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              strokeLinecap="round"
-            />
-          </svg>
+        <h1 className="font-Fraunces text-display font-normal text-ink">
+          <span ref={line1Ref} className="block">
+            Anthony
+          </span>
+          <span ref={line2Ref} className="block italic lg:pl-[32vw]">
+            Chen
+          </span>
+        </h1>
 
-          {/* Title */}
-          <h2
-            ref={titleRef}
-            className="text-base font-medium tracking-wide text-brown/90 sm:text-lg md:text-xl"
-          >
-            Software Engineer & App Developer
-          </h2>
+        {/* Brush stroke — the signature, bridging name and statement */}
+        <svg
+          ref={decorLineRef}
+          width="90"
+          height="12"
+          viewBox="0 0 60 8"
+          className="mt-8 text-vermillion"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 4 Q10 0 20 4 Q30 8 40 4 Q50 0 60 4"
+            stroke="currentColor"
+            strokeWidth="2"
+            fill="none"
+            strokeLinecap="round"
+          />
+        </svg>
 
-          {/* About text */}
-          <p
-            ref={aboutRef}
-            className="mt-4 max-w-sm text-sm leading-relaxed text-brown/80 sm:mt-6 sm:max-w-md sm:text-base md:max-w-lg"
-          >
-            Building accessible, aesthetic, and adaptable solutions through
-            thoughtful software engineering.
-          </p>
-        </div>
+        <p
+          ref={ledeRef}
+          className="mt-8 max-w-[34ch] font-KoHo text-lede text-brown/85"
+        >
+          Building accessible, aesthetic, and adaptable solutions through
+          thoughtful software engineering.
+        </p>
+      </div>
+
+      {/* Scroll cue — quiet and static; calm by intent */}
+      <div
+        ref={cueRef}
+        className="absolute bottom-[clamp(1.25rem,4vh,2.75rem)] left-gutter z-10 flex items-center gap-3"
+      >
+        <span className="h-12 w-px bg-gradient-to-b from-transparent to-brown/35" />
+        <span className="font-KoHo text-eyebrow uppercase text-brown/55">
+          Scroll
+        </span>
       </div>
     </section>
   );
 };
+
 export default Hero;

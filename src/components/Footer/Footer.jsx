@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { EASE, DURATION, STAGGER } from "../../lib/motion";
 
 /**
  * BrushStroke - Decorative ink brush stroke SVG
@@ -59,9 +60,9 @@ const Footer = () => {
         opacity: 1,
         y: 0,
         filter: "blur(0px)",
-        duration: 0.7,
-        stagger: 0.1,
-        ease: "power3.out",
+        duration: DURATION.base,
+        stagger: STAGGER,
+        ease: EASE,
         scrollTrigger: {
           trigger: footerRef.current,
           start: "top 80%",
@@ -158,7 +159,7 @@ const Footer = () => {
       {/* Main content section - grows to fill available space */}
       <div ref={contentRef} className="relative flex flex-1 flex-col items-center justify-center px-6 sm:px-8">
         {/* Heading */}
-        <h2 className="mb-4 text-center text-3xl font-light uppercase tracking-widest text-ink sm:text-4xl">
+        <h2 className="mb-4 text-center font-Fraunces text-3xl font-light uppercase tracking-widest text-ink sm:text-4xl">
           Let's Connect
         </h2>
 

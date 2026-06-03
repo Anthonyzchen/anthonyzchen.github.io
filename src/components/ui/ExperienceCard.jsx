@@ -22,7 +22,7 @@ const ExperienceCard = ({ experience }) => {
           <h3 className="text-xl">
             {hasLink ? (
               <a
-                className="group/link inline-flex items-baseline leading-tight hover:text-red-700 focus-visible:text-red-700"
+                className="group/link inline-flex items-baseline leading-tight hover:text-vermillion focus-visible:text-vermillion"
                 href={experience.link}
                 target="_blank"
                 rel="noreferrer noopener"

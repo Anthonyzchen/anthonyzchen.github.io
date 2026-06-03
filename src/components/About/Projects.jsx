@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projectAnimation } from "./animations";
 import { ProjectCard } from "../ui";
 import projectsData from "../../data/projects.json";
+import { EASE, DURATION } from "../../lib/motion";
 
 // Import project images
 import project1Url from "../../assets/images/Project1_Cover1280.png";
@@ -124,8 +125,8 @@ const Projects = () => {
 
     tweenRef.current = gsap.to(trackRef.current, {
       x: snapTarget,
-      duration: 0.4,
-      ease: "power2.out",
+      duration: DURATION.fast,
+      ease: EASE,
       onUpdate: () => {
         if (!trackRef.current) return;
         offsetRef.current = gsap.getProperty(trackRef.current, "x");
@@ -155,8 +156,8 @@ const Projects = () => {
 
       tweenRef.current = gsap.to(trackRef.current, {
         x: target,
-        duration: 0.6,
-        ease: "power3.out",
+        duration: DURATION.base,
+        ease: EASE,
         onUpdate: () => {
           if (!trackRef.current) return;
           offsetRef.current = gsap.getProperty(trackRef.current, "x");
@@ -320,7 +321,7 @@ const Projects = () => {
       <div className="relative flex h-screen flex-col pb-16 pt-6 md:pb-20 md:pt-8">
         {/* Header */}
         <div ref={headerRef} className="shrink-0 px-4 pb-4 text-center sm:px-8 md:pb-6">
-          <h2 className="mb-2 text-3xl font-light uppercase tracking-wider text-ink sm:text-4xl md:text-5xl">
+          <h2 className="mb-2 font-Fraunces text-3xl font-light uppercase tracking-wider text-ink sm:text-4xl md:text-5xl">
             Featured Projects
           </h2>
 
