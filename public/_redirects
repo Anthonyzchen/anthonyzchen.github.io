@@ -1,1 +1,7 @@
+# RecallGuard's pages moved to the company domain. These must stay ABOVE the
+# SPA fallback — Cloudflare Pages takes the first matching rule, so a catch-all
+# placed first would swallow them.
+/apps/recallguard       https://azcstudios.com/recallguard         301
+/apps/recallguard/*     https://azcstudios.com/recallguard/:splat  301
+
 /*    /index.html   200
