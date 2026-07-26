@@ -62,9 +62,11 @@ const AppLayout = () => {
       {/* Minimal footer */}
       <footer className="border-t border-ink/10 px-6 py-6 sm:px-8">
         <div className="mx-auto flex max-w-3xl flex-col items-center justify-between gap-2 text-xs text-brown/60 sm:flex-row">
+          {/* Personal projects, not company products — no entity claimed here.
+              Company work lives on azcstudios.com under AZC Studios LLC. */}
           <p>
             <span className="mr-1">&copy;</span>
-            {new Date().getFullYear()} Anthonyzchen LLC
+            {new Date().getFullYear()} Anthony Chen
           </p>
           <CopyEmail email="support@anthonyzchen.com" />
         </div>
