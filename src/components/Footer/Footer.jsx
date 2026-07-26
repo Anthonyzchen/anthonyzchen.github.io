@@ -197,6 +197,16 @@ const Footer = () => {
           <CopyEmail email="support@anthonyzchen.com" />
           <span className="hidden text-brown/30 sm:inline">|</span>
           <span>Boston & New York</span>
+          <span className="hidden text-brown/30 sm:inline">|</span>
+          {/* Reciprocal link — the studio footer points back here. */}
+          <a
+            href="https://azcstudios.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-vermillion"
+          >
+            AZC Studios
+          </a>
         </div>
       </div>
 

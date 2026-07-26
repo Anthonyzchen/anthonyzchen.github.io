@@ -10,6 +10,7 @@ import { EASE, DURATION } from "../../lib/motion";
 import project1Url from "../../assets/images/Project1_Cover1280.png";
 import project2Url from "../../assets/images/Project2_Cover1280.png";
 import project5Url from "../../assets/images/Project5_Cover1280.png";
+import project6Url from "../../assets/images/Project6_Cover1280.png";
 
 // Import poster images
 import poster1Url from "../../assets/images/p1.png";
@@ -19,6 +20,7 @@ const projectImages = {
   project1: project1Url,
   project2: project2Url,
   project5: project5Url,
+  project6: project6Url,
 };
 
 const projectPosters = {

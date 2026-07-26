@@ -1,5 +1,31 @@
 [
   {
+    "id": "project6",
+    "title": "RecallGuard",
+    "description": "An iOS app that watches FDA food and pet-food recalls and alerts you only when one reaches your household. Users set the allergens they track and build a pantry by typing items, scanning barcodes, or photographing a grocery receipt; recalls are matched against that pantry and delivered on a severity tier so a labeling technicality never wakes you at 2am. Built end to end — ingestion pipeline, matching engine, receipt parsing, push delivery, and subscription handling.",
+    "shortDescription": "FDA recall alerts filtered to your allergens, your pantry, and your pets — not everyone else's.",
+    "techstack": "React Native via Expo with TypeScript, Supabase for Postgres, auth, and edge functions, direct APNs for push delivery, Claude Haiku Vision for receipt line-item extraction, and RevenueCat for subscriptions.",
+    "technologies": [
+      "TypeScript",
+      "React Native",
+      "Expo",
+      "Supabase",
+      "PostgreSQL",
+      "Edge Functions",
+      "APNs",
+      "Claude API",
+      "RevenueCat"
+    ],
+    "image": "Project6_Cover1280.png",
+    "github": null,
+    "demo": "https://azcstudios.com/recallguard",
+    "appPage": null,
+    "demoLabel": "View on AZC Studios",
+    "poster": null,
+    "theme": "default",
+    "hideTitle": true
+  },
+  {
     "id": "project1",
     "title": "Fishing Game Addition in Covey.Town",
     "description": "This project involved integrating an interactive Fishing Game Area into the pre-existing codebase, enhancing virtual exploration with engaging gameplay. In this feature, users are able to fish for rare catches, customize avatars, and compete for the highest score on a global leaderboard.",
