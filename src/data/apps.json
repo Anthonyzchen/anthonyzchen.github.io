@@ -1,16 +1,5 @@
 [
   {
-    "slug": "recallguard",
-    "name": "RecallGuard",
-    "tagline": "Personalized FDA food recall alerts.",
-    "description": "RecallGuard filters FDA food recalls against the brands, categories, and state you care about, and sends push notifications so you only hear about recalls that matter to you. Premium adds pantry matching via receipt import to check whether a recall affects products you've actually bought.",
-    "icon": null,
-    "screenshots": [],
-    "appStoreUrl": null,
-    "demoUrl": null,
-    "supportEmail": "support@anthonyzchen.com"
-  },
-  {
     "slug": "weekly-routine",
     "name": "Weekly Routine",
     "tagline": "Plan your week, track your meals, build your routine.",
@@ -53,7 +42,7 @@
         {
           "type": "Routine Data",
           "description": "Your scheduled items, categories, meals, supplements, workout plans, pantry items, and daily nutrition targets. Stored locally by default; synced to the cloud only if you create an account.",
-          "purpose": "Core app functionality — managing your weekly routine and nutrition"
+          "purpose": "Core app functionality \u2014 managing your weekly routine and nutrition"
         },
         {
           "type": "Web Server Logs",
@@ -61,7 +50,7 @@
           "purpose": "Infrastructure operation and security per Vercel's platform policies"
         }
       ],
-      "thirdPartySharing": "We do not sell or share your personal data with third parties. The following services are used solely for their stated purpose: Supabase (database and authentication, hosted on AWS infrastructure), Vercel (web hosting), Stripe (optional tip payments — your card details are never visible to us), and the USDA FoodData Central API (nutrition data lookups, no personal data sent).",
+      "thirdPartySharing": "We do not sell or share your personal data with third parties. The following services are used solely for their stated purpose: Supabase (database and authentication, hosted on AWS infrastructure), Vercel (web hosting), Stripe (optional tip payments \u2014 your card details are never visible to us), and the USDA FoodData Central API (nutrition data lookups, no personal data sent).",
       "dataRetention": "Local data is stored on your device until you clear it. Cloud data is retained for as long as your account is active. You can delete your account and all associated cloud data at any time from the Settings page. Account deletion is permanent and irreversible.",
       "userRights": "You may request access to, correction of, or deletion of your personal data by contacting us at the email below. You can also delete your account directly from the app's Settings page, which permanently removes all cloud-stored data and your authentication record.",
       "contactEmail": "support@anthonyzchen.com",
@@ -72,7 +61,7 @@
         },
         {
           "title": "Nutrition Label Scanning",
-          "content": "The optional nutrition label scanner uses Tesseract.js, which runs entirely in your browser. No images or scanned data are sent to external servers — all OCR processing happens locally on your device."
+          "content": "The optional nutrition label scanner uses Tesseract.js, which runs entirely in your browser. No images or scanned data are sent to external servers \u2014 all OCR processing happens locally on your device."
         },
         {
           "title": "Analytics & Tracking",
