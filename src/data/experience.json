@@ -8,16 +8,16 @@
     "workType": "Hybrid",
     "timeframe": "May 2025 - Present",
     "year": 2025,
-    "description": "Built real-time background job processing system using WebSocket-based JobManager with polling fallbacks, enabling non-blocking document downloads that persist across page navigation and user sessions. Delivered 4 major Document Hub features including TFN Declaration and T4 form integrations with database synchronization, centralized permission controls, and comprehensive BDD test infrastructure. Implemented secure OAuth grant revocation endpoints with ownership validation, company scope checks, and soft-delete persistence. Engineered Legal Hold functionality with document lock/unlock capabilities, API services, and observer pattern for dynamic tab switching.",
-    "shortDescription": "Building real-time job processing systems and major Document Hub features with comprehensive testing infrastructure.",
+    "description": "Full-stack engineer on the Ready Core team. Built a reusable WebSocket background-job framework in TypeScript with a long-polling fallback, turning mass document downloads into async jobs with live React progress that survives page navigation, now shared infrastructure other teams build on. Shipped passkey (WebAuthn) login end to end, both the React flows and the credential API behind them, plus OAuth grant revocation with owner and admin authorization. Expanded the platform's document features with per-document locking and Legal Hold. Overhauled the Hazelcast caching layer across 250+ core classes and added Grafana and Micrometer metrics. Tested with Playwright end-to-end suites, Jest, and BDD scenarios in CI.",
+    "shortDescription": "Building shared infrastructure and full-stack features for UKG's HR platform, from React UI down to the APIs behind it.",
     "highlights": [
-      "WebSocket-based JobManager with polling fallbacks",
-      "4 major Document Hub features delivered",
+      "WebSocket job framework with polling fallback, now shared infrastructure",
+      "Passkey (WebAuthn) login shipped end to end",
       "OAuth grant revocation with ownership validation",
-      "Legal Hold functionality with observer pattern"
+      "Document lock/unlock (Legal Hold) with API services"
     ],
     "link": "https://www.ukg.com/",
-    "technologies": ["React", "TypeScript", "WebSocket", "Playwright", "Jest", "Datadog"],
+    "technologies": ["React", "TypeScript", "WebSocket", "Hazelcast", "Playwright", "Jest", "Grafana", "Datadog"],
     "category": "engineering"
   },
   {
