@@ -8,7 +8,7 @@
     "screenshots": [],
     "appStoreUrl": null,
     "demoUrl": "https://weeklyroutine.vercel.app",
-    "supportEmail": "support@anthonyzchen.com",
+    "supportEmail": "anthonyzchen@yahoo.com",
     "supportFaqs": [
       {
         "question": "Do I need an account to use the app?",
@@ -53,7 +53,7 @@
       "thirdPartySharing": "We do not sell or share your personal data with third parties. The following services are used solely for their stated purpose: Supabase (database and authentication, hosted on AWS infrastructure), Vercel (web hosting), Stripe (optional tip payments \u2014 your card details are never visible to us), and the USDA FoodData Central API (nutrition data lookups, no personal data sent).",
       "dataRetention": "Local data is stored on your device until you clear it. Cloud data is retained for as long as your account is active. You can delete your account and all associated cloud data at any time from the Settings page. Account deletion is permanent and irreversible.",
       "userRights": "You may request access to, correction of, or deletion of your personal data by contacting us at the email below. You can also delete your account directly from the app's Settings page, which permanently removes all cloud-stored data and your authentication record.",
-      "contactEmail": "support@anthonyzchen.com",
+      "contactEmail": "anthonyzchen@yahoo.com",
       "additionalSections": [
         {
           "title": "Local Storage",

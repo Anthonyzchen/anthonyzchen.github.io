@@ -88,7 +88,7 @@ const AppPrivacy = () => {
       {/* Introduction */}
       <section className="mb-8">
         <p className="text-sm leading-relaxed text-brown/80 sm:text-base">
-          Anthonyzchen LLC (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;)
+          AZC Studios LLC (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;)
           operates {app.name}. This Privacy Policy explains how we collect, use,
           and protect your information when you use our application.
         </p>

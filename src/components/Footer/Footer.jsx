@@ -194,7 +194,7 @@ const Footer = () => {
 
         {/* Contact info */}
         <div className="mt-12 flex flex-col items-center gap-4 text-center text-sm text-brown/70 sm:flex-row sm:gap-8">
-          <CopyEmail email="support@anthonyzchen.com" />
+          <CopyEmail email="anthonyzchen@yahoo.com" />
           <span className="hidden text-brown/30 sm:inline">|</span>
           <span>Boston & New York</span>
           <span className="hidden text-brown/30 sm:inline">|</span>
@@ -216,7 +216,7 @@ const Footer = () => {
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 text-xs text-brown/60 sm:flex-row">
             <p>
               <span className="mr-1">&copy;</span>
-              {new Date().getFullYear()} Anthonyzchen LLC
+              {new Date().getFullYear()} AZC Studios LLC
             </p>
             <p className="font-medium text-ink/70">
               Software Engineering & App Development
