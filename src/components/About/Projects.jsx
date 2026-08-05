@@ -363,7 +363,7 @@ const Projects = () => {
             {/* GSAP-driven track */}
             <div
               ref={trackRef}
-              className="flex h-full items-stretch"
+              className="flex h-full items-stretch py-4"
               style={{ gap: `${CARD_GAP}px` }}
             >
               {tripledCards.map((project, index) => (
