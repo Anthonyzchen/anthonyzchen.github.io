@@ -4,7 +4,9 @@ import TechBadge from "./TechBadge";
 
 /**
  * Get theme-specific accent colors for the card
- * Uses jade (nature/water) and gold (prestige/stars) to match overall palette
+ * Uses jade (nature/water) and gold (prestige/stars) to match overall palette.
+ * RecallGuard is the exception — ultramarine is its actual app-icon blue, so the
+ * card carries the product's brand rather than a palette-derived accent.
  */
 const getThemeStyles = (theme) => {
   switch (theme) {
@@ -19,6 +21,12 @@ const getThemeStyles = (theme) => {
         border: "border-gold/30 hover:border-gold/60",
         gradient: "from-gold/10 via-gold/5 to-transparent",
         accent: "text-gold",
+      };
+    case "recallguard":
+      return {
+        border: "border-ultramarine/30 hover:border-ultramarine/60",
+        gradient: "from-ultramarine/10 via-ultramarine/5 to-transparent",
+        accent: "text-ultramarine",
       };
     default:
       return {

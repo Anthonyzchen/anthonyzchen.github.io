@@ -41,6 +41,7 @@ export default {
         'terracotta': '#A65D4C',
         'jade': '#5B7E6B',
         'gold': '#B8964B',
+        'ultramarine': '#204EFA',
         'mist': '#F5F2EB',
       },
     },
