@@ -77,6 +77,7 @@ src/
 | terracotta | #A65D4C | Hover states for vermillion |
 | jade | #5B7E6B | Fishing project theme (nature/water) |
 | gold | #B8964B | Michelin project theme (prestige/stars) |
+| ultramarine | #5B637E | RecallGuard project theme (app-icon hue at jade's saturation) |
 
 ## Animation Timing
 
@@ -129,7 +130,7 @@ The preloader uses a canvas-based water ripple simulation:
 - Displays project with image, title, description, and tech stack
 - **Tech stack**: Shows first 5 technologies, clickable "+N" expands to show all
 - **Action buttons**: View Poster (if poster exists), Live Demo (if demo exists)
-- **Theme-based borders**: jade for fishing theme, gold for Michelin theme
+- **Theme-based borders**: jade for fishing theme, gold for Michelin theme, ultramarine for RecallGuard (at higher opacity — 70%/100% vs 30%/60%, since the blue washes out on beige)
 
 ### ExperienceTimeline
 - **Desktop (1024px+)**: Horizontal scrolling timeline with animated SVG path
